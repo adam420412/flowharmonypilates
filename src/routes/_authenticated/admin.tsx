@@ -87,6 +87,7 @@ function AdminPage() {
 
         <SettingsCard />
         <ClassesCard />
+        <NotificationTestCard />
       </main>
       <Footer />
     </div>
