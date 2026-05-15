@@ -839,9 +839,9 @@ function FieldText({
 function StatusBadge({ status, error }: { status: string; error: string | null }) {
   const cls =
     status === "sent"
-      ? "bg-emerald-100 text-emerald-800"
+      ? "bg-forest/15 text-forest"
       : status === "failed"
-      ? "bg-rose-100 text-rose-800"
+      ? "bg-destructive/15 text-destructive"
       : "bg-foreground/10 text-foreground/80";
   return (
     <span
