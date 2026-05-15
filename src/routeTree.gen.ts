@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StudioRouteImport } from './routes/studio'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GrafikRouteImport } from './routes/grafik'
@@ -19,6 +20,11 @@ import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
+const StudioRoute = StudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RejestracjaRoute = RejestracjaRouteImport.update({
   id: '/rejestracja',
   path: '/rejestracja',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/studio': typeof StudioRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByTo {
   '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/studio': typeof StudioRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -93,6 +101,7 @@ export interface FileRoutesById {
   '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/studio': typeof StudioRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/login'
     | '/rejestracja'
+    | '/studio'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/login'
     | '/rejestracja'
+    | '/studio'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/login'
     | '/rejestracja'
+    | '/studio'
     | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
@@ -138,11 +150,19 @@ export interface RootRouteChildren {
   GrafikRoute: typeof GrafikRoute
   LoginRoute: typeof LoginRoute
   RejestracjaRoute: typeof RejestracjaRoute
+  StudioRoute: typeof StudioRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/studio': {
+      id: '/studio'
+      path: '/studio'
+      fullPath: '/studio'
+      preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rejestracja': {
       id: '/rejestracja'
       path: '/rejestracja'
@@ -231,8 +251,19 @@ const rootRouteChildren: RootRouteChildren = {
   GrafikRoute: GrafikRoute,
   LoginRoute: LoginRoute,
   RejestracjaRoute: RejestracjaRoute,
+  StudioRoute: StudioRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
