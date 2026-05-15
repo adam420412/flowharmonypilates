@@ -128,8 +128,22 @@ function GrafikPage() {
 
   const MAX_SEATS = 4;
 
+  function typeCapBySlug(slug?: string): number {
+    switch (slug) {
+      case "intro":
+      case "vip-1on1":
+      case "cadillac-1on1":
+        return 1;
+      case "vip-duo":
+        return 2;
+      default:
+        return MAX_SEATS;
+    }
+  }
+
   function effectiveCapacity(c: ClassRow) {
-    return Math.min(c.capacity, MAX_SEATS);
+    const slug = ctMap[c.class_type_id]?.slug;
+    return Math.min(c.capacity, typeCapBySlug(slug));
   }
 
   function statusOf(c: ClassRow): "available" | "waitlist" | "full" | "cancelled" {
