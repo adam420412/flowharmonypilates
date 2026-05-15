@@ -8,7 +8,7 @@ import aboutImg from "@/assets/about-pilates.jpg";
 import classReformer from "@/assets/class-reformer.jpg";
 import classVip from "@/assets/class-vip.jpg";
 import classIntro from "@/assets/class-intro.jpg";
-import logo from "@/assets/logo-flow-harmony.png";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -75,12 +75,10 @@ function HomePage() {
             <span className="text-xs uppercase tracking-widest text-mocha">
               Studio Pilates · Reformery
             </span>
-            <img
-              src={logo}
-              alt="Flow & Harmony"
-              className="mt-8 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl [filter:var(--logo-filter,none)]"
-            />
-            <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink/80 md:text-3xl">
+            <h1 className="mt-8 font-display text-6xl leading-[0.95] text-ink md:text-8xl lg:text-9xl">
+              Flow <em className="italic text-terracotta">&</em> Harmony
+            </h1>
+            <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink md:text-3xl">
               Twoja przestrzeń <span className="text-terracotta">ruchu</span> i wytchnienia.
             </p>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/70 md:text-lg">
@@ -90,14 +88,14 @@ function HomePage() {
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
                 to="/grafik"
-                className="group inline-flex items-center gap-3 rounded-full bg-foreground px-8 py-4 text-xs uppercase tracking-widest text-cream transition-all hover:bg-terracotta"
+                className="group inline-flex items-center gap-3 rounded-full bg-ink px-8 py-4 text-xs font-semibold uppercase tracking-widest text-cream shadow-lg shadow-ink/30 transition-all hover:bg-terracotta hover:shadow-terracotta/40"
               >
                 Zarezerwuj zajęcia
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 to="/zajecia"
-                className="text-xs uppercase tracking-widest text-foreground underline-offset-8 hover:underline"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-ink/80 bg-cream/60 px-6 py-3 text-xs font-semibold uppercase tracking-widest text-ink backdrop-blur-sm transition-all hover:bg-ink hover:text-cream"
               >
                 Poznaj zajęcia
               </Link>
@@ -144,7 +142,7 @@ function HomePage() {
             </div>
             <Link
               to="/studio"
-              className="mt-10 inline-flex items-center gap-3 text-xs uppercase tracking-widest text-foreground hover:text-terracotta"
+              className="mt-10 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-ink underline-offset-8 hover:text-terracotta hover:underline"
             >
               Poznaj naszą historię <ArrowRight size={14} />
             </Link>
@@ -164,7 +162,7 @@ function HomePage() {
             </div>
             <Link
               to="/zajecia"
-              className="text-xs uppercase tracking-widest text-foreground hover:text-terracotta"
+              className="text-xs font-semibold uppercase tracking-widest text-ink underline-offset-8 hover:text-terracotta hover:underline"
             >
               Wszystkie zajęcia →
             </Link>
@@ -224,7 +222,7 @@ function HomePage() {
             </div>
             <Link
               to="/cennik"
-              className="text-xs uppercase tracking-widest text-cream/80 hover:text-cream"
+              className="text-xs font-semibold uppercase tracking-widest text-cream underline underline-offset-8 decoration-nude hover:text-nude"
             >
               Pełny cennik →
             </Link>
@@ -258,7 +256,7 @@ function HomePage() {
           </p>
           <Link
             to="/grafik"
-            className="mt-10 inline-flex items-center gap-3 rounded-full bg-foreground px-10 py-4 text-xs uppercase tracking-widest text-cream transition-all hover:bg-terracotta"
+            className="mt-10 inline-flex items-center gap-3 rounded-full bg-ink px-10 py-4 text-xs font-semibold uppercase tracking-widest text-cream shadow-lg shadow-ink/30 transition-all hover:bg-terracotta hover:shadow-terracotta/40"
           >
             Zarezerwuj sesję Intro
             <ArrowRight size={16} />
