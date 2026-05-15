@@ -26,6 +26,7 @@ type BookingRow = {
   id: string;
   status: "confirmed" | "waitlist" | "cancelled";
   created_at: string;
+  waitlist_position?: number | null;
   classes: {
     id: string;
     starts_at: string;
