@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin, Phone, Instagram, ArrowRight, Send, Loader2 } from "lucide-react";
+import { Mail, MapPin, Phone, Instagram, ArrowRight, Send, Loader2, MessageCircle } from "lucide-react";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { toast } from "sonner";
@@ -54,8 +54,24 @@ function KontaktPage() {
           <div className="space-y-10">
             <ContactRow icon={MapPin} label="Adres" lines={["ul. Poznańska 117", "62-023 Kamionki"]} />
             <ContactRow icon={Phone} label="Telefon" lines={["+48 501 817 979", "Joanna Konieczna"]} href="tel:+48501817979" />
+            <ContactRow
+              icon={MessageCircle}
+              label="WhatsApp"
+              lines={["Napisz do nas — odpowiadamy w ciągu kilku minut"]}
+              href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
+            />
             <ContactRow icon={Mail} label="E-mail" lines={["hello@flowharmony.pl"]} href="mailto:hello@flowharmony.pl" />
             <ContactRow icon={Instagram} label="Instagram" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
+
+            <a
+              href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-3 rounded-full bg-[#25D366] px-6 py-3 text-xs uppercase tracking-widest text-white shadow-sm transition-all hover:bg-[#1ebe5d]"
+            >
+              <MessageCircle size={16} strokeWidth={2} />
+              Napisz na WhatsApp
+            </a>
 
             <div className="border-t border-foreground/10 pt-10">
               <h3 className="text-xs uppercase tracking-widest text-mocha">Godziny otwarcia</h3>
@@ -184,6 +200,16 @@ function KontaktPage() {
           </Link>
         </div>
       </section>
+
+      <a
+        href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="Napisz na WhatsApp"
+        className="fixed bottom-6 right-6 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#1ebe5d] md:bottom-8 md:right-8"
+      >
+        <MessageCircle size={26} strokeWidth={2} />
+      </a>
 
       <Footer />
     </div>
