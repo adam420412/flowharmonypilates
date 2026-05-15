@@ -188,6 +188,23 @@ function GrafikPage() {
     setBookingLoading(true);
     const desired = pendingSlot.slot.status === "available" ? "confirmed" : "waitlist";
 
+    // Re-check capacity at confirm time (anti-race)
+    if (desired === "confirmed") {
+      const { data: fresh } = await supabase.rpc("class_booked_counts", {
+        _from: pendingSlot.classRow.starts_at,
+        _to: new Date(new Date(pendingSlot.classRow.starts_at).getTime() + 60_000).toISOString(),
+      });
+      const row = (fresh ?? []).find((r: { class_id: string }) => r.class_id === pendingSlot.classRow.id);
+      const confirmedNow = row?.confirmed_count ?? counts[pendingSlot.classRow.id]?.confirmed ?? 0;
+      const cap = effectiveCapacity(pendingSlot.classRow);
+      if (confirmedNow >= cap) {
+        setBookingLoading(false);
+        toast.error(`Brak wolnych miejsc — limit ${cap} osób na zajęciach został osiągnięty. Możesz dopisać się na listę rezerwową.`);
+        refreshAll();
+        return;
+      }
+    }
+
     // Zapisz telefon + zgodę, jeśli klient właśnie je podał
     if (extras.phone || extras.smsOptIn !== undefined) {
       await supabase.from("profiles").update({
@@ -207,7 +224,11 @@ function GrafikPage() {
 
     if (error) {
       setBookingLoading(false);
-      toast.error(error.message);
+      const msg = /Brak wolnych miejsc|check_violation|capacity/i.test(error.message)
+        ? `Brak wolnych miejsc — limit ${effectiveCapacity(pendingSlot.classRow)} osób na zajęciach został osiągnięty.`
+        : error.message;
+      toast.error(msg);
+      refreshAll();
       return;
     }
     toast.success(desired === "confirmed" ? "Zarezerwowano!" : "Dopisano do listy rezerwowej");
