@@ -8,7 +8,7 @@ import aboutImg from "@/assets/about-pilates.jpg";
 import classReformer from "@/assets/class-reformer.jpg";
 import classVip from "@/assets/class-vip.jpg";
 import classIntro from "@/assets/class-intro.jpg";
-import logo from "@/assets/logo-flow-harmony.png";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
