@@ -9,10 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ZajeciaRouteImport } from './routes/zajecia'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as GrafikRouteImport } from './routes/grafik'
+import { Route as CennikRouteImport } from './routes/cennik'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
@@ -20,6 +23,11 @@ import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
+const ZajeciaRoute = ZajeciaRouteImport.update({
+  id: '/zajecia',
+  path: '/zajecia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
@@ -35,9 +43,19 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KontaktRoute = KontaktRouteImport.update({
+  id: '/kontakt',
+  path: '/kontakt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GrafikRoute = GrafikRouteImport.update({
   id: '/grafik',
   path: '/grafik',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CennikRoute = CennikRouteImport.update({
+  id: '/cennik',
+  path: '/cennik',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -74,10 +92,13 @@ const ApiPublicHooksProcessRemindersRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cennik': typeof CennikRoute
   '/grafik': typeof GrafikRoute
+  '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/studio': typeof StudioRoute
+  '/zajecia': typeof ZajeciaRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -85,10 +106,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cennik': typeof CennikRoute
   '/grafik': typeof GrafikRoute
+  '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/studio': typeof StudioRoute
+  '/zajecia': typeof ZajeciaRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -98,10 +122,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/cennik': typeof CennikRoute
   '/grafik': typeof GrafikRoute
+  '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/studio': typeof StudioRoute
+  '/zajecia': typeof ZajeciaRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -111,10 +138,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cennik'
     | '/grafik'
+    | '/kontakt'
     | '/login'
     | '/rejestracja'
     | '/studio'
+    | '/zajecia'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
@@ -122,10 +152,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cennik'
     | '/grafik'
+    | '/kontakt'
     | '/login'
     | '/rejestracja'
     | '/studio'
+    | '/zajecia'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
@@ -134,10 +167,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/cennik'
     | '/grafik'
+    | '/kontakt'
     | '/login'
     | '/rejestracja'
     | '/studio'
+    | '/zajecia'
     | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
@@ -147,15 +183,25 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CennikRoute: typeof CennikRoute
   GrafikRoute: typeof GrafikRoute
+  KontaktRoute: typeof KontaktRoute
   LoginRoute: typeof LoginRoute
   RejestracjaRoute: typeof RejestracjaRoute
   StudioRoute: typeof StudioRoute
+  ZajeciaRoute: typeof ZajeciaRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/zajecia': {
+      id: '/zajecia'
+      path: '/zajecia'
+      fullPath: '/zajecia'
+      preLoaderRoute: typeof ZajeciaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/studio': {
       id: '/studio'
       path: '/studio'
@@ -177,11 +223,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kontakt': {
+      id: '/kontakt'
+      path: '/kontakt'
+      fullPath: '/kontakt'
+      preLoaderRoute: typeof KontaktRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/grafik': {
       id: '/grafik'
       path: '/grafik'
       fullPath: '/grafik'
       preLoaderRoute: typeof GrafikRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cennik': {
+      id: '/cennik'
+      path: '/cennik'
+      fullPath: '/cennik'
+      preLoaderRoute: typeof CennikRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -248,10 +308,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CennikRoute: CennikRoute,
   GrafikRoute: GrafikRoute,
+  KontaktRoute: KontaktRoute,
   LoginRoute: LoginRoute,
   RejestracjaRoute: RejestracjaRoute,
   StudioRoute: StudioRoute,
+  ZajeciaRoute: ZajeciaRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
 }
 export const routeTree = rootRouteImport

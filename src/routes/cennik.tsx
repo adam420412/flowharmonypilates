@@ -1,0 +1,161 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Check } from "lucide-react";
+import { Navigation } from "@/components/site/Navigation";
+import { Footer } from "@/components/site/Footer";
+
+export const Route = createFileRoute("/cennik")({
+  head: () => ({
+    meta: [
+      { title: "Cennik karnetów — Flow & Harmony" },
+      { name: "description", content: "Karnety na zajęcia reformer pilates. Pakiety 4, 8 i no limit oraz pierwsza sesja Intro za 79 zł." },
+      { property: "og:title", content: "Cennik — Flow & Harmony" },
+      { property: "og:description", content: "Wybierz pakiet, który odpowiada Twojemu rytmowi." },
+    ],
+  }),
+  component: CennikPage,
+});
+
+const memberships = [
+  {
+    name: "Wejście Intro",
+    price: "79",
+    note: "Pierwsza wizyta",
+    desc: "Sesja próbna dla nowych klientek — poznaj reformer i naszą metodę.",
+    perks: ["Sesja 55 min", "Indywidualne wprowadzenie", "Ważność 7 dni"],
+  },
+  {
+    name: "4 wejścia",
+    price: "350",
+    note: "87,50 zł / sesja",
+    desc: "Komfortowy wybór dla osób zaczynających regularną praktykę.",
+    perks: ["4 sesje grupowe", "Ważność 30 dni", "Rezerwacja online"],
+  },
+  {
+    name: "8 wejść",
+    price: "590",
+    note: "73,75 zł / sesja",
+    highlight: true,
+    desc: "Najpopularniejszy pakiet — dwie sesje w tygodniu przez miesiąc.",
+    perks: ["8 sesji grupowych", "Ważność 30 dni", "Pierwszeństwo rezerwacji"],
+  },
+  {
+    name: "No Limit",
+    price: "990",
+    note: "Bez limitu sesji",
+    desc: "Dla osób, dla których pilates to codzienny rytuał.",
+    perks: ["Bez limitu zajęć grupowych", "Ważność 30 dni", "Rabat 10% na VIP"],
+  },
+];
+
+const vip = [
+  { name: "VIP Solo · 1 sesja", price: "260", note: "Trening 1:1" },
+  { name: "VIP Solo · pakiet 5", price: "1 200", note: "240 zł / sesja" },
+  { name: "VIP Duo · 1 sesja", price: "320", note: "Trening 1:2 (160 zł / os.)" },
+  { name: "VIP Duo · pakiet 5", price: "1 450", note: "145 zł / os. / sesja" },
+];
+
+function CennikPage() {
+  return (
+    <div className="min-h-screen bg-cream text-foreground">
+      <Navigation />
+
+      <section className="px-6 pb-12 pt-32 md:px-10 md:pt-40">
+        <div className="mx-auto max-w-6xl">
+          <span className="text-xs uppercase tracking-widest text-mocha">Cennik</span>
+          <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
+            Wybierz <em className="italic text-terracotta">swój</em> rytm.
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/70">
+            Karnety i sesje VIP — wszystkie ceny zawierają podatek. Karnety są imienne i ważne
+            zgodnie z opisem od daty zakupu.
+          </p>
+        </div>
+      </section>
+
+      <section className="px-6 pb-16 md:px-10 md:pb-24">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {memberships.map((m) => (
+            <article
+              key={m.name}
+              className={`flex flex-col border p-8 ${m.highlight ? "border-terracotta bg-background" : "border-foreground/10 bg-background"}`}
+            >
+              {m.highlight && (
+                <span className="mb-4 inline-block self-start rounded-full bg-terracotta/10 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta">
+                  Najczęściej wybierany
+                </span>
+              )}
+              <h3 className="font-display text-2xl">{m.name}</h3>
+              <div className="mt-6 flex items-baseline gap-1.5">
+                <span className="font-display text-5xl text-foreground">{m.price}</span>
+                <span className="text-sm text-foreground/60">zł</span>
+              </div>
+              <p className="mt-2 text-xs uppercase tracking-widest text-mocha">{m.note}</p>
+              <p className="mt-4 text-sm leading-relaxed text-foreground/70">{m.desc}</p>
+              <ul className="mt-6 space-y-2 border-t border-foreground/10 pt-6 text-sm text-foreground/75">
+                {m.perks.map((p) => (
+                  <li key={p} className="flex items-start gap-2">
+                    <Check size={16} className="mt-0.5 shrink-0 text-terracotta" /> {p}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/rejestracja"
+                className="mt-8 inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta"
+              >
+                Załóż konto
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-ink px-6 py-20 text-cream md:px-10 md:py-28">
+        <div className="mx-auto max-w-6xl">
+          <span className="text-xs uppercase tracking-widest text-nude">Sesje VIP</span>
+          <h2 className="mt-4 max-w-2xl font-display text-4xl leading-tight md:text-5xl">
+            Trening 1:1 lub w parze.
+          </h2>
+          <div className="mt-12 grid gap-px bg-cream/10 md:grid-cols-2 lg:grid-cols-4">
+            {vip.map((v) => (
+              <div key={v.name} className="bg-ink p-8">
+                <h3 className="font-display text-lg text-cream">{v.name}</h3>
+                <div className="mt-5 flex items-baseline gap-1">
+                  <span className="font-display text-4xl text-nude">{v.price}</span>
+                  <span className="text-sm text-cream/60">zł</span>
+                </div>
+                <p className="mt-2 text-xs uppercase tracking-widest text-cream/50">{v.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 py-24 md:px-10 md:py-32">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="font-display text-4xl leading-tight md:text-6xl">
+            Gotowa, by zacząć?
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-foreground/70">
+            Załóż konto online — w 2 minuty wybierzesz termin pierwszej sesji Intro.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              to="/rejestracja"
+              className="inline-flex items-center gap-3 rounded-full bg-foreground px-8 py-4 text-xs uppercase tracking-widest text-cream hover:bg-terracotta"
+            >
+              Załóż konto <ArrowRight size={16} />
+            </Link>
+            <Link
+              to="/grafik"
+              className="text-xs uppercase tracking-widest text-foreground hover:text-terracotta"
+            >
+              Zobacz grafik →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+}
