@@ -272,7 +272,7 @@ function ClassesCard() {
     const { data, error } = await supabase
       .from("classes")
       .select(
-        "id,starts_at,capacity,waitlist_capacity,is_cancelled,class_type:class_types(name),instructor:instructors(full_name)",
+        "id,starts_at,capacity,waitlist_capacity,is_cancelled,class_type:class_types(name,slug),instructor:instructors(full_name)",
       )
       .gte("starts_at", new Date().toISOString())
       .order("starts_at", { ascending: true })
