@@ -116,3 +116,35 @@ export function formatReminderSms(opts: { className: string; startsAt: string })
   });
   return `Flow & Harmony: przypominamy o zajęciach ${opts.className} dziś o ${date}. Do zobaczenia!`;
 }
+
+export function formatWaitlistPromotedEmail(opts: {
+  studioName: string;
+  className: string;
+  instructorName: string;
+  startsAt: string;
+}) {
+  const date = new Date(opts.startsAt).toLocaleString("pl-PL", {
+    timeZone: "Europe/Warsaw",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return {
+    subject: `Świetna wiadomość – masz miejsce na ${opts.className}!`,
+    body: `Zwolniło się miejsce i Twoja rezerwacja z listy rezerwowej została automatycznie potwierdzona.\n\nZajęcia: ${opts.className}\nProwadzi: ${opts.instructorName}\nTermin: ${date}\n\nDo zobaczenia w ${opts.studioName} 🌿\n\nJeśli nie możesz przyjść — odwołaj rezerwację w panelu Moje rezerwacje, by zwolnić miejsce kolejnej osobie.`,
+  };
+}
+
+export function formatWaitlistPromotedSms(opts: { className: string; startsAt: string }) {
+  const date = new Date(opts.startsAt).toLocaleString("pl-PL", {
+    timeZone: "Europe/Warsaw",
+    weekday: "short",
+    day: "numeric",
+    month: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `Flow & Harmony: zwolnilo sie miejsce! Twoja rezerwacja na ${opts.className} (${date}) zostala potwierdzona z listy rezerwowej.`;
+}
