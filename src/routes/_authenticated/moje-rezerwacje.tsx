@@ -24,11 +24,18 @@ export const Route = createFileRoute("/_authenticated/moje-rezerwacje")({
   component: MyBookingsPage,
 });
 
+type PromotionNotice = {
+  channel: "email" | "sms";
+  status: string;
+  created_at: string;
+};
+
 type BookingRow = {
   id: string;
   status: "confirmed" | "waitlist" | "cancelled";
   created_at: string;
   waitlist_position?: number | null;
+  promotion_notices?: PromotionNotice[];
   classes: {
     id: string;
     starts_at: string;
@@ -67,11 +74,28 @@ function MyBookingsPage() {
       supabase.from("app_settings").select("value").eq("key", "cancellation_hours_before").maybeSingle(),
     ]);
     const rows = ((data ?? []) as unknown as BookingRow[]);
+    const bookingIds = rows.map((b) => b.id);
+    const { data: notices } = bookingIds.length
+      ? await supabase
+          .from("notification_log")
+          .select("booking_id, channel, status, created_at")
+          .eq("user_id", user.id)
+          .eq("kind", "waitlist_promoted")
+          .in("booking_id", bookingIds)
+      : { data: [] as Array<{ booking_id: string; channel: string; status: string; created_at: string }> };
+    const noticesByBooking = new Map<string, PromotionNotice[]>();
+    for (const n of notices ?? []) {
+      if (!n.booking_id) continue;
+      const arr = noticesByBooking.get(n.booking_id) ?? [];
+      arr.push({ channel: n.channel as "email" | "sms", status: n.status, created_at: n.created_at });
+      noticesByBooking.set(n.booking_id, arr);
+    }
     const withPositions = await Promise.all(
       rows.map(async (b) => {
-        if (b.status !== "waitlist") return b;
+        const promotion_notices = noticesByBooking.get(b.id);
+        if (b.status !== "waitlist") return { ...b, promotion_notices };
         const { data: pos } = await supabase.rpc("waitlist_position", { _booking_id: b.id });
-        return { ...b, waitlist_position: typeof pos === "number" ? pos : null };
+        return { ...b, waitlist_position: typeof pos === "number" ? pos : null, promotion_notices };
       })
     );
     setBookings(withPositions);
@@ -222,6 +246,28 @@ function BookingCard({
           <p className="mt-1 text-xs text-amber-800">
             Jesteś na <strong>{booking.waitlist_position}.</strong> miejscu listy rezerwowej. Powiadomimy Cię, gdy zwolni się miejsce.
           </p>
+        )}
+        {booking.promotion_notices && booking.promotion_notices.length > 0 && (
+          <div className="mt-2 rounded-lg border border-emerald-200 bg-emerald-50/60 p-2.5">
+            <p className="text-[11px] font-medium uppercase tracking-widest text-emerald-900">
+              Powiadomienie o awansie z listy rezerwowej
+            </p>
+            <ul className="mt-1 space-y-0.5">
+              {booking.promotion_notices.map((n, i) => {
+                const ok = n.status === "sent";
+                return (
+                  <li key={i} className="flex items-center gap-2 text-xs text-emerald-900">
+                    <span className={`inline-block h-1.5 w-1.5 rounded-full ${ok ? "bg-emerald-500" : "bg-rose-500"}`} />
+                    <span className="uppercase tracking-widest text-[10px]">{n.channel}</span>
+                    <span>{ok ? "wysłano" : `błąd (${n.status})`}</span>
+                    <span className="text-emerald-900/60">
+                      · {format(new Date(n.created_at), "d MMM, HH:mm", { locale: pl })}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         )}
       </div>
       {!pastView && booking.status !== "cancelled" && (
