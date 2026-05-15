@@ -622,7 +622,7 @@ function NotificationTestCard() {
             Wpisy trafiają do dziennika powiadomień (notification_log).
           </p>
         </div>
-        <span className="rounded-full bg-amber-100 px-3 py-1 text-[10px] uppercase tracking-widest text-amber-900">
+        <span className="rounded-full bg-terracotta/15 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta">
           Tryb mock — wysyłka logowana w konsoli
         </span>
       </div>
