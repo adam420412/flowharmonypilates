@@ -275,7 +275,7 @@ function BookingCard({
           {canCancel ? (
             <button
               onClick={onCancel}
-              className="rounded-full border border-foreground/20 px-4 py-2 text-xs uppercase tracking-widest text-foreground transition-all hover:border-rose-500 hover:text-rose-600"
+              className="rounded-full border border-foreground/20 px-4 py-2 text-xs uppercase tracking-widest text-foreground transition-all hover:border-destructive hover:text-destructive"
             >
               Odwołaj
             </button>
