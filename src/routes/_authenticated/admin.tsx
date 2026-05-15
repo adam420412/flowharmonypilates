@@ -629,6 +629,44 @@ function NotificationTestCard() {
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <div className="space-y-4">
+          <label className="block">
+            <span className="flex items-center justify-between text-xs uppercase tracking-widest text-foreground/70">
+              <span>Wybierz prawdziwą rezerwację (opcjonalnie)</span>
+              <button
+                type="button"
+                onClick={() => void loadOptions()}
+                className="inline-flex items-center gap-1 text-[10px] normal-case tracking-normal text-foreground/50 hover:text-terracotta"
+              >
+                <RefreshCw className={`h-3 w-3 ${loadingOptions ? "animate-spin" : ""}`} /> odśwież
+              </button>
+            </span>
+            <select
+              value={form.bookingId}
+              onChange={(e) => pickBooking(e.target.value)}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-terracotta"
+            >
+              <option value="">— wpisz dane ręcznie —</option>
+              {options.map((o) => {
+                const when = new Date(o.startsAt).toLocaleString("pl-PL", {
+                  day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+                });
+                const tag = o.status === "waitlist" ? "[L. rez.]" : "[Potwierdz.]";
+                const who = o.displayName || o.email || o.userId.slice(0, 8);
+                return (
+                  <option key={o.bookingId} value={o.bookingId}>
+                    {tag} {when} · {o.className} · {who}
+                  </option>
+                );
+              })}
+            </select>
+            {form.bookingId ? (
+              <span className="mt-1 block text-[10px] text-foreground/50">
+                booking_id: <span className="font-mono">{form.bookingId}</span>
+                {" · "}log zostanie powiązany z tą rezerwacją.
+              </span>
+            ) : null}
+          </label>
+
           <FieldText
             label="Nazwa zajęć"
             value={form.className}
