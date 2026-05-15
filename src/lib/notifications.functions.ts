@@ -267,6 +267,8 @@ export const sendTestWaitlistPromoted = createServerFn({ method: "POST" })
       });
       results.email = await sendNotification({
         userId,
+        bookingId: data.bookingId,
+        classId: data.classId,
         channel: "email",
         kind: "waitlist_promoted",
         recipient: data.recipientEmail,
@@ -282,6 +284,8 @@ export const sendTestWaitlistPromoted = createServerFn({ method: "POST" })
       });
       results.sms = await sendNotification({
         userId,
+        bookingId: data.bookingId,
+        classId: data.classId,
         channel: "sms",
         kind: "waitlist_promoted",
         recipient: data.recipientPhone,
@@ -290,6 +294,91 @@ export const sendTestWaitlistPromoted = createServerFn({ method: "POST" })
     }
 
     return { ok: true, ...results };
+  });
+
+/** Lista bookingów na liście rezerwowej (oraz ostatnio awansowanych) — do wyboru w panelu admina. */
+export const listWaitlistBookings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { limit?: number }) =>
+    z.object({ limit: z.number().int().min(1).max(200).optional() }).parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+
+    const { data: bookings } = await supabaseAdmin
+      .from("bookings")
+      .select("id,user_id,class_id,status,created_at,updated_at")
+      .in("status", ["waitlist", "confirmed"])
+      .order("created_at", { ascending: false })
+      .limit(data.limit ?? 100);
+
+    if (!bookings?.length) return { bookings: [] };
+
+    const classIds = Array.from(new Set(bookings.map((b) => b.class_id)));
+    const userIds = Array.from(new Set(bookings.map((b) => b.user_id)));
+
+    const [{ data: classes }, { data: profiles }] = await Promise.all([
+      supabaseAdmin
+        .from("classes")
+        .select("id,starts_at,class_type_id,instructor_id,is_cancelled")
+        .in("id", classIds)
+        .eq("is_cancelled", false)
+        .gte("starts_at", new Date(Date.now() - 7 * 24 * 3600_000).toISOString()),
+      supabaseAdmin
+        .from("profiles")
+        .select("id,display_name,phone,sms_opt_in")
+        .in("id", userIds),
+    ]);
+
+    const classMap = new Map((classes ?? []).map((c) => [c.id, c]));
+    if (!classMap.size) return { bookings: [] };
+
+    const ctIds = Array.from(new Set((classes ?? []).map((c) => c.class_type_id)));
+    const insIds = Array.from(new Set((classes ?? []).map((c) => c.instructor_id)));
+    const [{ data: cts }, { data: inss }] = await Promise.all([
+      supabaseAdmin.from("class_types").select("id,name").in("id", ctIds),
+      supabaseAdmin.from("instructors").select("id,full_name").in("id", insIds),
+    ]);
+    const ctMap = new Map((cts ?? []).map((c) => [c.id, c.name]));
+    const insMap = new Map((inss ?? []).map((i) => [i.id, i.full_name]));
+    const profileMap = new Map((profiles ?? []).map((p) => [p.id, p]));
+
+    // Pobierz emaile użytkowników (admin API)
+    const emailMap = new Map<string, string | null>();
+    await Promise.all(
+      userIds.map(async (uid) => {
+        const { data: au } = await supabaseAdmin.auth.admin.getUserById(uid);
+        emailMap.set(uid, au?.user?.email ?? null);
+      }),
+    );
+
+    const result = bookings
+      .filter((b) => classMap.has(b.class_id))
+      .map((b) => {
+        const cls = classMap.get(b.class_id)!;
+        const profile = profileMap.get(b.user_id);
+        return {
+          bookingId: b.id,
+          status: b.status as "waitlist" | "confirmed",
+          createdAt: b.created_at,
+          classId: cls.id,
+          startsAt: cls.starts_at,
+          className: ctMap.get(cls.class_type_id) ?? "Pilates",
+          instructorName: insMap.get(cls.instructor_id) ?? "Instruktor",
+          userId: b.user_id,
+          displayName: profile?.display_name ?? null,
+          email: emailMap.get(b.user_id) ?? null,
+          phone: profile?.phone ?? null,
+          smsOptIn: profile?.sms_opt_in ?? false,
+        };
+      })
+      .sort((a, b) => {
+        // waitlist najpierw, potem po starts_at rosnąco
+        if (a.status !== b.status) return a.status === "waitlist" ? -1 : 1;
+        return new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime();
+      });
+
+    return { bookings: result };
   });
 
 /** Ostatnie wpisy z notification_log dla awansu z listy rezerwowej. */
