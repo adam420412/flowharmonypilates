@@ -14,6 +14,173 @@ export type Database = {
   }
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          class_id: string
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["booking_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_id: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_id?: string
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["booking_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_types: {
+        Row: {
+          color: string
+          created_at: string
+          description: string | null
+          duration_minutes: number
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      classes: {
+        Row: {
+          capacity: number
+          class_type_id: string
+          created_at: string
+          duration_minutes: number
+          id: string
+          instructor_id: string
+          is_cancelled: boolean
+          notes: string | null
+          starts_at: string
+          updated_at: string
+          waitlist_capacity: number
+        }
+        Insert: {
+          capacity?: number
+          class_type_id: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          instructor_id: string
+          is_cancelled?: boolean
+          notes?: string | null
+          starts_at: string
+          updated_at?: string
+          waitlist_capacity?: number
+        }
+        Update: {
+          capacity?: number
+          class_type_id?: string
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          instructor_id?: string
+          is_cancelled?: boolean
+          notes?: string | null
+          starts_at?: string
+          updated_at?: string
+          waitlist_capacity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "classes_class_type_id_fkey"
+            columns: ["class_type_id"]
+            isOneToOne: false
+            referencedRelation: "class_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "classes_instructor_id_fkey"
+            columns: ["instructor_id"]
+            isOneToOne: false
+            referencedRelation: "instructors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      instructors: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          full_name: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -67,6 +234,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      class_booked_counts: {
+        Args: { _from: string; _to: string }
+        Returns: {
+          class_id: string
+          confirmed_count: number
+          waitlist_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -77,6 +252,7 @@ export type Database = {
     }
     Enums: {
       app_role: "client" | "admin" | "instructor"
+      booking_status: "confirmed" | "waitlist" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -205,6 +381,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["client", "admin", "instructor"],
+      booking_status: ["confirmed", "waitlist", "cancelled"],
     },
   },
 } as const
