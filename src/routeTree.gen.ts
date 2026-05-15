@@ -16,6 +16,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
 const RejestracjaRoute = RejestracjaRouteImport.update({
@@ -53,6 +54,11 @@ const AuthenticatedKontoRoute = AuthenticatedKontoRouteImport.update({
   path: '/konto',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const ApiPublicHooksProcessRemindersRoute =
   ApiPublicHooksProcessRemindersRouteImport.update({
     id: '/api/public/hooks/process-reminders',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/login'
     | '/rejestracja'
+    | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
     | '/api/public/hooks/process-reminders'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/login'
     | '/rejestracja'
+    | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
     | '/api/public/hooks/process-reminders'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/login'
     | '/rejestracja'
+    | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
     | '/api/public/hooks/process-reminders'
@@ -180,6 +192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKontoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/public/hooks/process-reminders': {
       id: '/api/public/hooks/process-reminders'
       path: '/api/public/hooks/process-reminders'
@@ -191,11 +210,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedKontoRoute: typeof AuthenticatedKontoRoute
   AuthenticatedMojeRezerwacjeRoute: typeof AuthenticatedMojeRezerwacjeRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedKontoRoute: AuthenticatedKontoRoute,
   AuthenticatedMojeRezerwacjeRoute: AuthenticatedMojeRezerwacjeRoute,
 }
