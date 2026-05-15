@@ -24,11 +24,18 @@ export const Route = createFileRoute("/_authenticated/moje-rezerwacje")({
   component: MyBookingsPage,
 });
 
+type PromotionNotice = {
+  channel: "email" | "sms";
+  status: string;
+  created_at: string;
+};
+
 type BookingRow = {
   id: string;
   status: "confirmed" | "waitlist" | "cancelled";
   created_at: string;
   waitlist_position?: number | null;
+  promotion_notices?: PromotionNotice[];
   classes: {
     id: string;
     starts_at: string;
