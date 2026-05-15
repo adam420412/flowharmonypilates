@@ -75,12 +75,10 @@ function HomePage() {
             <span className="text-xs uppercase tracking-widest text-mocha">
               Studio Pilates · Reformery
             </span>
-            <img
-              src={logo}
-              alt="Flow & Harmony"
-              className="mt-8 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl [filter:var(--logo-filter,none)]"
-            />
-            <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink/80 md:text-3xl">
+            <h1 className="mt-8 font-display text-6xl leading-[0.95] text-ink md:text-8xl lg:text-9xl">
+              Flow <em className="italic text-terracotta">&</em> Harmony
+            </h1>
+            <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink md:text-3xl">
               Twoja przestrzeń <span className="text-terracotta">ruchu</span> i wytchnienia.
             </p>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/70 md:text-lg">
