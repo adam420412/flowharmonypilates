@@ -162,7 +162,7 @@ function HomePage() {
             </div>
             <Link
               to="/zajecia"
-              className="text-xs uppercase tracking-widest text-foreground hover:text-terracotta"
+              className="text-xs font-semibold uppercase tracking-widest text-ink underline-offset-8 hover:text-terracotta hover:underline"
             >
               Wszystkie zajęcia →
             </Link>
