@@ -289,9 +289,9 @@ function GrafikPage() {
           )}
 
           <div className="ml-auto flex items-center gap-3 text-xs">
-            <Legend color="bg-emerald-500" label="Dostępne" />
-            <Legend color="bg-amber-500" label="Rezerwa" />
-            <Legend color="bg-rose-500" label="Pełne" />
+            <Legend color="bg-forest" label="Dostępne" />
+            <Legend color="bg-terracotta" label="Rezerwa" />
+            <Legend color="bg-destructive" label="Pełne" />
           </div>
         </div>
 
