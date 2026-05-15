@@ -408,9 +408,9 @@ function GrafikPage() {
 
 function StatusDot({ status }: { status: "available" | "waitlist" | "full" | "cancelled" }) {
   const cls =
-    status === "available" ? "bg-emerald-500" :
-    status === "waitlist" ? "bg-amber-500" :
-    status === "full" ? "bg-rose-500" : "bg-muted-foreground";
+    status === "available" ? "bg-forest" :
+    status === "waitlist" ? "bg-terracotta" :
+    status === "full" ? "bg-destructive" : "bg-muted-foreground";
   return <span className={`mt-1 h-2 w-2 rounded-full ${cls}`} aria-label={status} />;
 }
 
