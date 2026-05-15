@@ -201,6 +201,16 @@ function KontaktPage() {
         </div>
       </section>
 
+      <a
+        href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
+        target="_blank"
+        rel="noreferrer noopener"
+        aria-label="Napisz na WhatsApp"
+        className="fixed bottom-6 right-6 z-50 inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-transform hover:scale-105 hover:bg-[#1ebe5d] md:bottom-8 md:right-8"
+      >
+        <MessageCircle size={26} strokeWidth={2} />
+      </a>
+
       <Footer />
     </div>
   );
