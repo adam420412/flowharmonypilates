@@ -49,8 +49,8 @@ function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-cream px-6 py-16">
       <div className="w-full max-w-md">
-        <Link to="/" className="flex justify-center">
-          <img src={new URL("@/assets/logo-flow-harmony.png", import.meta.url).href} alt="Flow & Harmony" className="h-16 w-auto" />
+        <Link to="/" className="flex justify-center section-light">
+          <Logo variant="auto" className="h-16" />
         </Link>
         <h1 className="mt-10 text-center font-display text-3xl text-foreground">Zaloguj się</h1>
         <p className="mt-2 text-center text-sm text-muted-foreground">
