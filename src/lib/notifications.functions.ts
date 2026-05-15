@@ -199,6 +199,114 @@ export const notifyWaitlistPromoted = createServerFn({ method: "POST" })
     return { ok: true, ...results };
   });
 
+/* -------------------- Admin: test/preview waitlist promotion -------------------- */
+
+async function assertAdmin(userId: string) {
+  const { data } = await supabaseAdmin
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId);
+  if (!data?.some((r) => r.role === "admin")) {
+    throw new Error("forbidden");
+  }
+}
+
+const sampleSchema = z.object({
+  className: z.string().min(1).max(120),
+  instructorName: z.string().min(1).max(120),
+  startsAt: z.string().min(1),
+});
+
+/** Renderuje treść email + SMS dla awansu z listy rezerwowej (bez wysyłki). */
+export const previewWaitlistPromoted = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: z.infer<typeof sampleSchema>) => sampleSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const studioName = await getStudioName();
+    const email = formatWaitlistPromotedEmail({
+      studioName,
+      className: data.className,
+      instructorName: data.instructorName,
+      startsAt: data.startsAt,
+    });
+    const sms = formatWaitlistPromotedSms({
+      className: data.className,
+      startsAt: data.startsAt,
+    });
+    return { email, sms, studioName };
+  });
+
+const testSendSchema = z.object({
+  className: z.string().min(1).max(120),
+  instructorName: z.string().min(1).max(120),
+  startsAt: z.string().min(1),
+  recipientEmail: z.string().email().optional().or(z.literal("")).transform((v) => v || undefined),
+  recipientPhone: z.string().regex(/^\+?\d{9,15}$/).optional().or(z.literal("")).transform((v) => v || undefined),
+});
+
+/** Wysyła testowy email i/lub SMS na podany adres / numer. Loguje do notification_log. */
+export const sendTestWaitlistPromoted = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: z.infer<typeof testSendSchema>) => testSendSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { userId } = context;
+    const studioName = await getStudioName();
+
+    const results: Record<string, unknown> = {};
+
+    if (data.recipientEmail) {
+      const { subject, body } = formatWaitlistPromotedEmail({
+        studioName,
+        className: data.className,
+        instructorName: data.instructorName,
+        startsAt: data.startsAt,
+      });
+      results.email = await sendNotification({
+        userId,
+        channel: "email",
+        kind: "waitlist_promoted",
+        recipient: data.recipientEmail,
+        subject,
+        body,
+      });
+    }
+
+    if (data.recipientPhone) {
+      const body = formatWaitlistPromotedSms({
+        className: data.className,
+        startsAt: data.startsAt,
+      });
+      results.sms = await sendNotification({
+        userId,
+        channel: "sms",
+        kind: "waitlist_promoted",
+        recipient: data.recipientPhone,
+        body,
+      });
+    }
+
+    return { ok: true, ...results };
+  });
+
+/** Ostatnie wpisy z notification_log dla awansu z listy rezerwowej. */
+export const getWaitlistPromotedLogs = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { limit?: number }) =>
+    z.object({ limit: z.number().int().min(1).max(100).optional() }).parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { data: rows } = await supabaseAdmin
+      .from("notification_log")
+      .select("id,channel,kind,recipient,status,error,created_at,booking_id")
+      .eq("kind", "waitlist_promoted")
+      .order("created_at", { ascending: false })
+      .limit(data.limit ?? 25);
+    return { logs: rows ?? [] };
+  });
+
 /**
  * Cron: wysyła przypomnienia email 24h przed i SMS ~2h przed.
  * Wywoływane co 5–15 minut przez pg_cron.
