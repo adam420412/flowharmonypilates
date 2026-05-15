@@ -7,6 +7,8 @@ import {
   formatBookingEmail,
   formatReminderEmail,
   formatReminderSms,
+  formatWaitlistPromotedEmail,
+  formatWaitlistPromotedSms,
 } from "./notifications.server";
 
 async function getSetting(key: string): Promise<unknown> {
