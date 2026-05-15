@@ -81,7 +81,7 @@ function HomePage() {
             <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink md:text-3xl">
               Twoja przestrzeń <span className="text-terracotta">ruchu</span> i wytchnienia.
             </p>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/70 md:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/85 md:text-lg">
               Butikowe studio reformer pilates. Kameralne sesje, doświadczone instruktorki,
               atmosfera spa.
             </p>
@@ -186,7 +186,7 @@ function HomePage() {
                   <span className="text-xs uppercase tracking-widest text-mocha">0{i + 1}</span>
                 </div>
                 <p className="mt-1 text-xs uppercase tracking-widest text-terracotta">{c.sub}</p>
-                <p className="mt-4 text-sm leading-relaxed text-foreground/70">{c.desc}</p>
+                <p className="mt-4 text-sm leading-relaxed text-foreground/80">{c.desc}</p>
               </article>
             ))}
           </div>
@@ -204,7 +204,7 @@ function HomePage() {
             <div key={f.title} className="border-t border-border pt-8">
               <f.icon size={24} className="text-terracotta" strokeWidth={1.25} />
               <h3 className="mt-6 font-display text-2xl">{f.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-foreground/70">{f.text}</p>
+              <p className="mt-3 text-sm leading-relaxed text-foreground/80">{f.text}</p>
             </div>
           ))}
         </div>
@@ -234,9 +234,9 @@ function HomePage() {
                 <h3 className="font-display text-xl text-cream">{m.name}</h3>
                 <div className="mt-6 flex items-baseline gap-1">
                   <span className="font-display text-5xl text-nude">{m.price}</span>
-                  <span className="text-sm text-cream/60">zł</span>
+                  <span className="text-sm text-cream/90">zł</span>
                 </div>
-                <p className="mt-3 text-xs uppercase tracking-widest text-cream/50">{m.note}</p>
+                <p className="mt-3 text-xs uppercase tracking-widest text-cream/75">{m.note}</p>
               </div>
             ))}
           </div>
@@ -251,7 +251,7 @@ function HomePage() {
             Zacznij <em className="italic text-terracotta">dziś</em>.
             <br />Pierwsza sesja za 79 zł.
           </h2>
-          <p className="mx-auto mt-8 max-w-xl text-foreground/70">
+          <p className="mx-auto mt-8 max-w-xl text-foreground/80">
             Pakiet Intro dla nowych klientek — poznaj reformer, naszą filozofię i atmosferę studia.
           </p>
           <Link

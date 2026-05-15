@@ -42,7 +42,7 @@ function KontaktPage() {
           <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
             Porozmawiajmy.
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/70">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
             Masz pytanie o zajęcia, karnet albo chcesz zorganizować sesję dla grupy? Napisz do nas,
             zadzwoń lub po prostu wpadnij — drzwi są otwarte.
           </p>
@@ -67,7 +67,7 @@ function KontaktPage() {
             </div>
 
             <div className="border-t border-foreground/10 pt-10">
-              <p className="text-sm text-foreground/70">
+              <p className="text-sm text-foreground/80">
                 Najszybciej zarezerwujesz zajęcia online —{" "}
                 <Link to="/grafik" className="text-terracotta underline-offset-4 hover:underline">
                   zobacz grafik
@@ -83,25 +83,25 @@ function KontaktPage() {
 
           <form onSubmit={handleSubmit} className="rounded-2xl border border-foreground/10 bg-background p-8 md:p-10">
             <h2 className="font-display text-2xl">Napisz do nas</h2>
-            <p className="mt-2 text-sm text-foreground/60">Odpowiadamy w ciągu 24 godzin (w dni robocze).</p>
+            <p className="mt-2 text-sm text-foreground/80">Odpowiadamy w ciągu 24 godzin (w dni robocze).</p>
 
             <div className="mt-8 space-y-5">
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">Imię</label>
+                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Imię</label>
                 <input
                   type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
                   className="w-full rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">E-mail</label>
+                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">E-mail</label>
                 <input
                   type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="w-full rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">Wiadomość</label>
+                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Wiadomość</label>
                 <textarea
                   required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
                   className="w-full resize-none rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
@@ -122,7 +122,7 @@ function KontaktPage() {
       <section className="bg-sand px-6 py-20 md:px-10 md:py-28">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl leading-tight md:text-5xl">Wpadnij na sesję Intro</h2>
-          <p className="mx-auto mt-6 max-w-xl text-foreground/70">
+          <p className="mx-auto mt-6 max-w-xl text-foreground/80">
             Pierwsza wizyta tylko 79 zł. Załóż konto, wybierz termin i zacznij dziś.
           </p>
           <Link
@@ -165,7 +165,7 @@ function ContactRow({
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between border-b border-foreground/10 pb-2">
-      <dt className="text-foreground/60">{label}</dt>
+      <dt className="text-foreground/80">{label}</dt>
       <dd>{value}</dd>
     </div>
   );

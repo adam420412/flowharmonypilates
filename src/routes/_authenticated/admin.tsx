@@ -74,7 +74,7 @@ function AdminPage() {
         <div className="mx-auto flex max-w-2xl flex-col items-center px-6 pt-40 text-center">
           <ShieldAlert className="h-10 w-10 text-terracotta" strokeWidth={1.25} />
           <h1 className="mt-6 font-display text-4xl">Brak dostępu</h1>
-          <p className="mt-3 text-foreground/70">
+          <p className="mt-3 text-foreground/80">
             Ta sekcja jest dostępna tylko dla administratorów.
           </p>
           <Link
@@ -96,7 +96,7 @@ function AdminPage() {
         <header className="mb-12">
           <span className="text-xs uppercase tracking-widest text-terracotta">Administracja</span>
           <h1 className="mt-3 font-display text-5xl md:text-6xl">Panel zarządzania</h1>
-          <p className="mt-3 text-foreground/70">
+          <p className="mt-3 text-foreground/80">
             Edytuj limity miejsc na zajęciach oraz reguły rezerwacji studia.
           </p>
         </header>
@@ -179,12 +179,12 @@ function SettingsCard() {
   return (
     <section className="mb-16 rounded-2xl border border-border bg-background p-8 md:p-10">
       <h2 className="font-display text-3xl">Ustawienia studia</h2>
-      <p className="mt-2 text-sm text-foreground/60">
+      <p className="mt-2 text-sm text-foreground/80">
         Wartości w godzinach. Anulowanie blokowane jest, jeśli do zajęć pozostało mniej niż podana liczba godzin.
       </p>
 
       {loading ? (
-        <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
+        <div className="mt-8 flex items-center gap-3 text-sm text-foreground/80">
           <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie…
         </div>
       ) : (
@@ -240,7 +240,7 @@ function SettingField({
 }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-widest text-foreground/70">{label}</span>
+      <span className="text-xs uppercase tracking-widest text-foreground/80">{label}</span>
       <input
         type="number"
         min={0}
@@ -249,7 +249,7 @@ function SettingField({
         onChange={(e) => onChange(Number(e.target.value))}
         className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 font-display text-2xl outline-none focus:border-terracotta"
       />
-      {hint && !error && <span className="mt-1 block text-xs text-foreground/50">{hint}</span>}
+      {hint && !error && <span className="mt-1 block text-xs text-foreground/75">{hint}</span>}
       {error && <span className="mt-1 block text-xs text-destructive">{error}</span>}
     </label>
   );
@@ -353,24 +353,24 @@ function ClassesCard() {
       <div className="flex items-end justify-between">
         <div>
           <h2 className="font-display text-3xl">Limity miejsc na zajęciach</h2>
-          <p className="mt-2 text-sm text-foreground/60">
+          <p className="mt-2 text-sm text-foreground/80">
             Najbliższe nadchodzące zajęcia. Edytuj liczbę miejsc i wielkość listy rezerwowej.
           </p>
         </div>
         <button
           onClick={() => void load()}
-          className="text-xs uppercase tracking-widest text-foreground/60 hover:text-terracotta"
+          className="text-xs uppercase tracking-widest text-foreground/80 hover:text-terracotta"
         >
           Odśwież
         </button>
       </div>
 
       {loading ? (
-        <div className="mt-8 flex items-center gap-3 text-sm text-foreground/60">
+        <div className="mt-8 flex items-center gap-3 text-sm text-foreground/80">
           <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie…
         </div>
       ) : rows.length === 0 ? (
-        <p className="mt-8 text-sm text-foreground/60">Brak nadchodzących zajęć.</p>
+        <p className="mt-8 text-sm text-foreground/80">Brak nadchodzących zajęć.</p>
       ) : (
         <div className="mt-8 space-y-10">
           {grouped.map(([day, items]) => (
@@ -401,7 +401,7 @@ function ClassesCard() {
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-foreground/60">
+                        <div className="text-xs text-foreground/80">
                           {row.instructor?.full_name ?? "—"}
                         </div>
                       </div>
@@ -454,7 +454,7 @@ function NumberCell({
 }) {
   return (
     <label className="block">
-      <span className="text-[10px] uppercase tracking-widest text-foreground/50">{label}</span>
+      <span className="text-[10px] uppercase tracking-widest text-foreground/75">{label}</span>
       <input
         type="number"
         min={min}
@@ -617,7 +617,7 @@ function NotificationTestCard() {
       <div className="flex items-end justify-between gap-6 flex-wrap">
         <div>
           <h2 className="font-display text-3xl">Test powiadomień — awans z listy rezerwowej</h2>
-          <p className="mt-2 max-w-2xl text-sm text-foreground/60">
+          <p className="mt-2 max-w-2xl text-sm text-foreground/80">
             Podgląd treści e-maila i SMS-a oraz testowa wysyłka na wskazany adres / numer.
             Wpisy trafiają do dziennika powiadomień (notification_log).
           </p>
@@ -630,12 +630,12 @@ function NotificationTestCard() {
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <div className="space-y-4">
           <label className="block">
-            <span className="flex items-center justify-between text-xs uppercase tracking-widest text-foreground/70">
+            <span className="flex items-center justify-between text-xs uppercase tracking-widest text-foreground/80">
               <span>Wybierz prawdziwą rezerwację (opcjonalnie)</span>
               <button
                 type="button"
                 onClick={() => void loadOptions()}
-                className="inline-flex items-center gap-1 text-[10px] normal-case tracking-normal text-foreground/50 hover:text-terracotta"
+                className="inline-flex items-center gap-1 text-[10px] normal-case tracking-normal text-foreground/75 hover:text-terracotta"
               >
                 <RefreshCw className={`h-3 w-3 ${loadingOptions ? "animate-spin" : ""}`} /> odśwież
               </button>
@@ -660,7 +660,7 @@ function NotificationTestCard() {
               })}
             </select>
             {form.bookingId ? (
-              <span className="mt-1 block text-[10px] text-foreground/50">
+              <span className="mt-1 block text-[10px] text-foreground/75">
                 booking_id: <span className="font-mono">{form.bookingId}</span>
                 {" · "}log zostanie powiązany z tą rezerwacją.
               </span>
@@ -678,7 +678,7 @@ function NotificationTestCard() {
             onChange={(v) => setForm({ ...form, instructorName: v })}
           />
           <label className="block">
-            <span className="text-xs uppercase tracking-widest text-foreground/70">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">
               Termin (ISO 8601)
             </span>
             <input
@@ -732,18 +732,18 @@ function NotificationTestCard() {
         <div className="rounded-xl border border-border bg-cream/40 p-5">
           <h3 className="text-xs uppercase tracking-widest text-mocha">Podgląd treści</h3>
           {!preview ? (
-            <p className="mt-4 text-sm text-foreground/60">Kliknij „Podgląd" aby zobaczyć treść.</p>
+            <p className="mt-4 text-sm text-foreground/80">Kliknij „Podgląd" aby zobaczyć treść.</p>
           ) : (
             <div className="mt-4 space-y-5">
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-foreground/50">E-mail · temat</div>
+                <div className="text-[10px] uppercase tracking-widest text-foreground/75">E-mail · temat</div>
                 <div className="mt-1 font-medium">{preview.email.subject}</div>
                 <pre className="mt-2 whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed text-foreground/80">
                   {preview.email.body}
                 </pre>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-widest text-foreground/50">SMS</div>
+                <div className="text-[10px] uppercase tracking-widest text-foreground/75">SMS</div>
                 <pre className="mt-2 whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed text-foreground/80">
                   {preview.sms}
                 </pre>
@@ -758,22 +758,22 @@ function NotificationTestCard() {
           <h3 className="font-display text-xl">Ostatnie powiadomienia o awansie</h3>
           <button
             onClick={() => void loadLogs()}
-            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-foreground/60 hover:text-terracotta"
+            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-foreground/80 hover:text-terracotta"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loadingLogs ? "animate-spin" : ""}`} /> Odśwież
           </button>
         </div>
 
         {loadingLogs && logs.length === 0 ? (
-          <div className="mt-4 flex items-center gap-3 text-sm text-foreground/60">
+          <div className="mt-4 flex items-center gap-3 text-sm text-foreground/80">
             <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie…
           </div>
         ) : logs.length === 0 ? (
-          <p className="mt-4 text-sm text-foreground/60">Brak wpisów w dzienniku.</p>
+          <p className="mt-4 text-sm text-foreground/80">Brak wpisów w dzienniku.</p>
         ) : (
           <div className="mt-4 overflow-x-auto rounded-md border border-border">
             <table className="w-full text-sm">
-              <thead className="bg-cream/40 text-[10px] uppercase tracking-widest text-foreground/60">
+              <thead className="bg-cream/40 text-[10px] uppercase tracking-widest text-foreground/80">
                 <tr>
                   <th className="px-3 py-2 text-left">Kiedy</th>
                   <th className="px-3 py-2 text-left">Kanał</th>
@@ -785,17 +785,17 @@ function NotificationTestCard() {
               <tbody>
                 {logs.map((row) => (
                   <tr key={row.id} className="border-t border-border">
-                    <td className="px-3 py-2 text-foreground/70">
+                    <td className="px-3 py-2 text-foreground/80">
                       {new Date(row.created_at).toLocaleString("pl-PL")}
                     </td>
-                    <td className="px-3 py-2 uppercase text-[10px] tracking-widest text-foreground/70">
+                    <td className="px-3 py-2 uppercase text-[10px] tracking-widest text-foreground/80">
                       {row.channel}
                     </td>
                     <td className="px-3 py-2 font-mono text-xs">{row.recipient}</td>
                     <td className="px-3 py-2">
                       <StatusBadge status={row.status} error={row.error} />
                     </td>
-                    <td className="px-3 py-2 font-mono text-[10px] text-foreground/50">
+                    <td className="px-3 py-2 font-mono text-[10px] text-foreground/75">
                       {row.booking_id ? row.booking_id.slice(0, 8) + "…" : "— (test)"}
                     </td>
                   </tr>
@@ -824,7 +824,7 @@ function FieldText({
 }) {
   return (
     <label className="block">
-      <span className="text-xs uppercase tracking-widest text-foreground/70">{label}</span>
+      <span className="text-xs uppercase tracking-widest text-foreground/80">{label}</span>
       <input
         type={type}
         value={value}
@@ -842,7 +842,7 @@ function StatusBadge({ status, error }: { status: string; error: string | null }
       ? "bg-emerald-100 text-emerald-800"
       : status === "failed"
       ? "bg-rose-100 text-rose-800"
-      : "bg-foreground/10 text-foreground/70";
+      : "bg-foreground/10 text-foreground/80";
   return (
     <span
       title={error ?? undefined}

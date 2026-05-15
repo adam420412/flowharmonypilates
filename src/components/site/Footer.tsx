@@ -10,7 +10,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <Logo variant="light" className="h-16" alt="Flow & Harmony — Studio Pilates Reformery" />
             <p className="mt-3 text-xs uppercase tracking-widest text-nude">Studio Pilates · Reformery</p>
-            <p className="mt-6 max-w-md font-display text-xl italic text-cream/70">
+            <p className="mt-6 max-w-md font-display text-xl italic text-cream/85">
               Twoja przestrzeń ruchu i wytchnienia.
             </p>
             <div className="mt-8 flex items-center gap-4">
@@ -26,7 +26,7 @@ export function Footer() {
 
           <div>
             <h4 className="text-xs uppercase tracking-widest text-nude">Studio</h4>
-            <ul className="mt-6 space-y-3 text-sm text-cream/80">
+            <ul className="mt-6 space-y-3 text-sm text-cream/90">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="mt-1 shrink-0" />
                 <span>ul. Poznańska 117<br />Kamionki</span>
@@ -43,16 +43,16 @@ export function Footer() {
           <div>
             <h4 className="text-xs uppercase tracking-widest text-nude">Nawigacja</h4>
             <ul className="mt-6 space-y-3 text-sm">
-              <li><Link to="/studio" className="text-cream/80 hover:text-cream">O studiu</Link></li>
-              <li><Link to="/zajecia" className="text-cream/80 hover:text-cream">Zajęcia</Link></li>
-              <li><Link to="/grafik" className="text-cream/80 hover:text-cream">Grafik</Link></li>
-              <li><Link to="/cennik" className="text-cream/80 hover:text-cream">Cennik</Link></li>
-              <li><Link to="/kontakt" className="text-cream/80 hover:text-cream">Kontakt</Link></li>
+              <li><Link to="/studio" className="text-cream/90 hover:text-cream">O studiu</Link></li>
+              <li><Link to="/zajecia" className="text-cream/90 hover:text-cream">Zajęcia</Link></li>
+              <li><Link to="/grafik" className="text-cream/90 hover:text-cream">Grafik</Link></li>
+              <li><Link to="/cennik" className="text-cream/90 hover:text-cream">Cennik</Link></li>
+              <li><Link to="/kontakt" className="text-cream/90 hover:text-cream">Kontakt</Link></li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-cream/10 pt-8 text-xs uppercase tracking-widest text-cream/50 md:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-cream/10 pt-8 text-xs uppercase tracking-widest text-cream/75 md:flex-row">
           <span>© {new Date().getFullYear()} Flow & Harmony</span>
           <span>Studio Pilates · Reformery</span>
         </div>

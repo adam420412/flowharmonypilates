@@ -70,21 +70,21 @@ function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">Imię i nazwisko</label>
+            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Imię i nazwisko</label>
             <input
               type="text" required value={name} onChange={(e) => setName(e.target.value)}
               className="w-full rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">E-mail</label>
+            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">E-mail</label>
             <input
               type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">Hasło</label>
+            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Hasło</label>
             <input
               type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"

@@ -69,7 +69,7 @@ function ZajeciaPage() {
           <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
             Wybierz format, który <em className="italic text-terracotta">odpowiada Tobie</em>.
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/70">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
             Trzy formaty zajęć dopasowane do różnych etapów Twojej drogi z pilatesem reformer.
             Niezależnie od poziomu zaawansowania — znajdziemy sesję dla Ciebie.
           </p>
@@ -130,7 +130,7 @@ function ZajeciaPage() {
             <div key={f.title} className="border-t border-foreground/15 pt-8">
               <f.icon size={26} className="text-terracotta" strokeWidth={1.25} />
               <h3 className="mt-6 font-display text-2xl">{f.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-foreground/70">{f.text}</p>
+              <p className="mt-3 text-sm leading-relaxed text-foreground/80">{f.text}</p>
             </div>
           ))}
         </div>
