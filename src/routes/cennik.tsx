@@ -65,7 +65,7 @@ function CennikPage() {
           <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
             Wybierz <em className="italic text-terracotta">swój</em> rytm.
           </h1>
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/70">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
             Karnety i sesje VIP — wszystkie ceny zawierają podatek. Karnety są imienne i ważne
             zgodnie z opisem od daty zakupu.
           </p>
@@ -87,10 +87,10 @@ function CennikPage() {
               <h3 className="font-display text-2xl">{m.name}</h3>
               <div className="mt-6 flex items-baseline gap-1.5">
                 <span className="font-display text-5xl text-foreground">{m.price}</span>
-                <span className="text-sm text-foreground/60">zł</span>
+                <span className="text-sm text-foreground/80">zł</span>
               </div>
               <p className="mt-2 text-xs uppercase tracking-widest text-mocha">{m.note}</p>
-              <p className="mt-4 text-sm leading-relaxed text-foreground/70">{m.desc}</p>
+              <p className="mt-4 text-sm leading-relaxed text-foreground/80">{m.desc}</p>
               <ul className="mt-6 space-y-2 border-t border-foreground/10 pt-6 text-sm text-foreground/75">
                 {m.perks.map((p) => (
                   <li key={p} className="flex items-start gap-2">
@@ -121,9 +121,9 @@ function CennikPage() {
                 <h3 className="font-display text-lg text-cream">{v.name}</h3>
                 <div className="mt-5 flex items-baseline gap-1">
                   <span className="font-display text-4xl text-nude">{v.price}</span>
-                  <span className="text-sm text-cream/60">zł</span>
+                  <span className="text-sm text-cream/90">zł</span>
                 </div>
-                <p className="mt-2 text-xs uppercase tracking-widest text-cream/50">{v.note}</p>
+                <p className="mt-2 text-xs uppercase tracking-widest text-cream/75">{v.note}</p>
               </div>
             ))}
           </div>
@@ -135,7 +135,7 @@ function CennikPage() {
           <h2 className="font-display text-4xl leading-tight md:text-6xl">
             Gotowa, by zacząć?
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-foreground/70">
+          <p className="mx-auto mt-6 max-w-xl text-foreground/80">
             Załóż konto online — w 2 minuty wybierzesz termin pierwszej sesji Intro.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

@@ -74,7 +74,7 @@ function StudioPage() {
               <div key={f.title} className="border-t border-foreground/15 pt-8">
                 <f.icon size={26} className="text-terracotta" strokeWidth={1.25} />
                 <h3 className="mt-6 font-display text-2xl">{f.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-foreground/70">{f.text}</p>
+                <p className="mt-3 text-sm leading-relaxed text-foreground/80">{f.text}</p>
               </div>
             ))}
           </div>
@@ -87,7 +87,7 @@ function StudioPage() {
           <h2 className="mt-8 font-display text-4xl leading-tight md:text-6xl">
             Odwiedź nas
           </h2>
-          <p className="mt-6 text-foreground/70">
+          <p className="mt-6 text-foreground/80">
             ul. Poznańska 117 · Kamionki<br />Pn–Pt 7:00–21:00 · Sb 9:00–14:00
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">

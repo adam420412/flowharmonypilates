@@ -372,7 +372,7 @@ function GrafikPage() {
             <p className="font-display text-2xl text-foreground">
               Załóż darmowe konto, by zarezerwować zajęcia.
             </p>
-            <p className="text-sm text-foreground/70">
+            <p className="text-sm text-foreground/80">
               Rejestracja zajmuje minutę — od razu wybierzesz termin i otrzymasz potwierdzenie e-mail.
             </p>
             <div className="mt-2 flex flex-wrap justify-center gap-3">

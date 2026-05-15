@@ -74,7 +74,7 @@ function LoginPage() {
 
         <form onSubmit={handleEmail} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">E-mail</label>
+            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">E-mail</label>
             <input
               type="email"
               required
@@ -84,7 +84,7 @@ function LoginPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/70">Hasło</label>
+            <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Hasło</label>
             <input
               type="password"
               required
