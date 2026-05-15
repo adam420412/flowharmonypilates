@@ -16,6 +16,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
+import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
 const RejestracjaRoute = RejestracjaRouteImport.update({
   id: '/rejestracja',
@@ -52,6 +53,12 @@ const AuthenticatedKontoRoute = AuthenticatedKontoRouteImport.update({
   path: '/konto',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiPublicHooksProcessRemindersRoute =
+  ApiPublicHooksProcessRemindersRouteImport.update({
+    id: '/api/public/hooks/process-reminders',
+    path: '/api/public/hooks/process-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/rejestracja': typeof RejestracjaRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesByTo {
   '/rejestracja': typeof RejestracjaRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,6 +87,7 @@ export interface FileRoutesById {
   '/rejestracja': typeof RejestracjaRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/rejestracja'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/api/public/hooks/process-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/rejestracja'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/api/public/hooks/process-reminders'
   id:
     | '__root__'
     | '/'
@@ -105,6 +117,7 @@ export interface FileRouteTypes {
     | '/rejestracja'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
+    | '/api/public/hooks/process-reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -113,6 +126,7 @@ export interface RootRouteChildren {
   GrafikRoute: typeof GrafikRoute
   LoginRoute: typeof LoginRoute
   RejestracjaRoute: typeof RejestracjaRoute
+  ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -166,6 +180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKontoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/hooks/process-reminders': {
+      id: '/api/public/hooks/process-reminders'
+      path: '/api/public/hooks/process-reminders'
+      fullPath: '/api/public/hooks/process-reminders'
+      preLoaderRoute: typeof ApiPublicHooksProcessRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -189,6 +210,7 @@ const rootRouteChildren: RootRouteChildren = {
   GrafikRoute: GrafikRoute,
   LoginRoute: LoginRoute,
   RejestracjaRoute: RejestracjaRoute,
+  ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
