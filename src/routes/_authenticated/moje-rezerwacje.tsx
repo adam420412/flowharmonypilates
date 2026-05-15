@@ -223,7 +223,7 @@ function BookingCard({
         <div className="flex items-center gap-2">
           <span
             className="inline-block rounded-sm px-2 py-0.5 text-[10px] uppercase tracking-widest text-cream"
-            style={{ backgroundColor: c.class_types?.color ?? "#C2725A" }}
+            style={{ backgroundColor: c.class_types?.color ?? "var(--terracotta)" }}
           >
             {c.class_types?.name ?? "—"}
           </span>

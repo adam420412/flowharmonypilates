@@ -151,7 +151,7 @@ function GrafikPage() {
         classId: c.id,
         startsAt: c.starts_at,
         className: ct?.name ?? "—",
-        classColor: ct?.color ?? "#C2725A",
+        classColor: ct?.color ?? "var(--terracotta)",
         instructorName: ins?.full_name ?? "—",
         durationMinutes: c.duration_minutes,
         status: status === "available" ? "available" : "waitlist",
@@ -343,7 +343,7 @@ function GrafikPage() {
                           </div>
                           <div
                             className="mt-1 inline-block rounded-sm px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream"
-                            style={{ backgroundColor: ct?.color ?? "#C2725A" }}
+                            style={{ backgroundColor: ct?.color ?? "var(--terracotta)" }}
                           >
                             {ct?.name ?? "—"}
                           </div>
