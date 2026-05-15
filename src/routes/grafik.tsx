@@ -126,10 +126,16 @@ function GrafikPage() {
   const ctMap = Object.fromEntries(classTypes.map((c) => [c.id, c]));
   const inMap = Object.fromEntries(instructors.map((i) => [i.id, i]));
 
+  const MAX_SEATS = 4;
+
+  function effectiveCapacity(c: ClassRow) {
+    return Math.min(c.capacity, MAX_SEATS);
+  }
+
   function statusOf(c: ClassRow): "available" | "waitlist" | "full" | "cancelled" {
     if (c.is_cancelled) return "cancelled";
     const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
-    if (cnt.confirmed < c.capacity) return "available";
+    if (cnt.confirmed < effectiveCapacity(c)) return "available";
     if (cnt.waitlist < c.waitlist_capacity) return "waitlist";
     return "full";
   }
