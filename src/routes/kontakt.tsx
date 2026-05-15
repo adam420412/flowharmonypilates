@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin, Phone, Instagram, ArrowRight, Send, Loader2 } from "lucide-react";
+import { Mail, MapPin, Phone, Instagram, ArrowRight, Send, Loader2, MessageCircle } from "lucide-react";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { toast } from "sonner";
