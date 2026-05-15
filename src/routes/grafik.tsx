@@ -376,8 +376,14 @@ function GrafikPage() {
                           </div>
                           <div className="mt-1 text-xs text-muted-foreground">{ins?.full_name}</div>
                           <div className="mt-1 text-[11px] text-muted-foreground">
-                            {cnt.confirmed}/{c.capacity} miejsc
-                            {status === "waitlist" && ` · rezerwa ${cnt.waitlist}/${c.waitlist_capacity}`}
+                            {(() => {
+                              const cap = effectiveCapacity(c);
+                              const free = Math.max(0, cap - cnt.confirmed);
+                              if (status === "cancelled") return "Zajęcia odwołane";
+                              if (status === "full") return `Komplet · ${cap}/${cap} miejsc`;
+                              if (status === "waitlist") return `Komplet ${cnt.confirmed}/${cap} · rezerwa ${cnt.waitlist}/${c.waitlist_capacity}`;
+                              return `Wolne: ${free} z ${cap}`;
+                            })()}
                           </div>
                           {mine && (
                             <div className="mt-1 text-[11px] font-medium text-terracotta">
