@@ -68,7 +68,8 @@ function HomePage() {
           height={1080}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/15 to-cream/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/80 via-cream/30 to-cream/95" />
+        <div className="absolute inset-0 bg-gradient-to-r from-cream/70 via-cream/20 to-transparent" />
 
         <div className="section-gradient relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
           <div className="max-w-5xl animate-fade-up">
