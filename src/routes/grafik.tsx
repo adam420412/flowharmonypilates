@@ -151,7 +151,7 @@ function GrafikPage() {
         classId: c.id,
         startsAt: c.starts_at,
         className: ct?.name ?? "—",
-        classColor: ct?.color ?? "#C2725A",
+        classColor: ct?.color ?? "var(--terracotta)",
         instructorName: ins?.full_name ?? "—",
         durationMinutes: c.duration_minutes,
         status: status === "available" ? "available" : "waitlist",
@@ -289,9 +289,9 @@ function GrafikPage() {
           )}
 
           <div className="ml-auto flex items-center gap-3 text-xs">
-            <Legend color="bg-emerald-500" label="Dostępne" />
-            <Legend color="bg-amber-500" label="Rezerwa" />
-            <Legend color="bg-rose-500" label="Pełne" />
+            <Legend color="bg-forest" label="Dostępne" />
+            <Legend color="bg-terracotta" label="Rezerwa" />
+            <Legend color="bg-destructive" label="Pełne" />
           </div>
         </div>
 
@@ -343,7 +343,7 @@ function GrafikPage() {
                           </div>
                           <div
                             className="mt-1 inline-block rounded-sm px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream"
-                            style={{ backgroundColor: ct?.color ?? "#C2725A" }}
+                            style={{ backgroundColor: ct?.color ?? "var(--terracotta)" }}
                           >
                             {ct?.name ?? "—"}
                           </div>
@@ -408,9 +408,9 @@ function GrafikPage() {
 
 function StatusDot({ status }: { status: "available" | "waitlist" | "full" | "cancelled" }) {
   const cls =
-    status === "available" ? "bg-emerald-500" :
-    status === "waitlist" ? "bg-amber-500" :
-    status === "full" ? "bg-rose-500" : "bg-muted-foreground";
+    status === "available" ? "bg-forest" :
+    status === "waitlist" ? "bg-terracotta" :
+    status === "full" ? "bg-destructive" : "bg-muted-foreground";
   return <span className={`mt-1 h-2 w-2 rounded-full ${cls}`} aria-label={status} />;
 }
 

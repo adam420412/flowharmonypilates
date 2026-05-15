@@ -212,10 +212,10 @@ function BookingCard({
   const canCancel = !pastView && booking.status !== "cancelled" && hoursUntil >= hoursBefore && !c.is_cancelled;
 
   const statusBadge =
-    c.is_cancelled ? { label: "Zajęcia odwołane", cls: "bg-rose-100 text-rose-800" }
+    c.is_cancelled ? { label: "Zajęcia odwołane", cls: "bg-destructive/15 text-destructive" }
     : booking.status === "cancelled" ? { label: "Odwołana", cls: "bg-muted text-muted-foreground" }
-    : booking.status === "waitlist" ? { label: "Lista rezerwowa", cls: "bg-amber-100 text-amber-800" }
-    : { label: "Potwierdzona", cls: "bg-emerald-100 text-emerald-800" };
+    : booking.status === "waitlist" ? { label: "Lista rezerwowa", cls: "bg-terracotta/15 text-terracotta" }
+    : { label: "Potwierdzona", cls: "bg-forest/15 text-forest" };
 
   return (
     <li className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-foreground/10 bg-background p-5">
@@ -223,7 +223,7 @@ function BookingCard({
         <div className="flex items-center gap-2">
           <span
             className="inline-block rounded-sm px-2 py-0.5 text-[10px] uppercase tracking-widest text-cream"
-            style={{ backgroundColor: c.class_types?.color ?? "#C2725A" }}
+            style={{ backgroundColor: c.class_types?.color ?? "var(--terracotta)" }}
           >
             {c.class_types?.name ?? "—"}
           </span>
@@ -231,7 +231,7 @@ function BookingCard({
             {statusBadge.label}
           </span>
           {booking.status === "waitlist" && booking.waitlist_position != null && (
-            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] uppercase tracking-widest text-amber-900 ring-1 ring-amber-200">
+            <span className="rounded-full bg-terracotta/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-terracotta ring-1 ring-terracotta/30">
               Pozycja #{booking.waitlist_position}
             </span>
           )}
@@ -243,24 +243,24 @@ function BookingCard({
           {c.instructors?.full_name} · {c.duration_minutes} min
         </div>
         {booking.status === "waitlist" && booking.waitlist_position != null && !pastView && (
-          <p className="mt-1 text-xs text-amber-800">
+          <p className="mt-1 text-xs text-terracotta">
             Jesteś na <strong>{booking.waitlist_position}.</strong> miejscu listy rezerwowej. Powiadomimy Cię, gdy zwolni się miejsce.
           </p>
         )}
         {booking.promotion_notices && booking.promotion_notices.length > 0 && (
-          <div className="mt-2 rounded-lg border border-emerald-200 bg-emerald-50/60 p-2.5">
-            <p className="text-[11px] font-medium uppercase tracking-widest text-emerald-900">
+          <div className="mt-2 rounded-lg border border-forest/30 bg-forest/10 p-2.5">
+            <p className="text-[11px] font-medium uppercase tracking-widest text-forest">
               Powiadomienie o awansie z listy rezerwowej
             </p>
             <ul className="mt-1 space-y-0.5">
               {booking.promotion_notices.map((n, i) => {
                 const ok = n.status === "sent";
                 return (
-                  <li key={i} className="flex items-center gap-2 text-xs text-emerald-900">
-                    <span className={`inline-block h-1.5 w-1.5 rounded-full ${ok ? "bg-emerald-500" : "bg-rose-500"}`} />
+                  <li key={i} className="flex items-center gap-2 text-xs text-forest">
+                    <span className={`inline-block h-1.5 w-1.5 rounded-full ${ok ? "bg-forest" : "bg-destructive"}`} />
                     <span className="uppercase tracking-widest text-[10px]">{n.channel}</span>
                     <span>{ok ? "wysłano" : `błąd (${n.status})`}</span>
-                    <span className="text-emerald-900/60">
+                    <span className="text-forest/70">
                       · {format(new Date(n.created_at), "d MMM, HH:mm", { locale: pl })}
                     </span>
                   </li>
@@ -275,7 +275,7 @@ function BookingCard({
           {canCancel ? (
             <button
               onClick={onCancel}
-              className="rounded-full border border-foreground/20 px-4 py-2 text-xs uppercase tracking-widest text-foreground transition-all hover:border-rose-500 hover:text-rose-600"
+              className="rounded-full border border-foreground/20 px-4 py-2 text-xs uppercase tracking-widest text-foreground transition-all hover:border-destructive hover:text-destructive"
             >
               Odwołaj
             </button>

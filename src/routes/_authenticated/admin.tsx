@@ -622,7 +622,7 @@ function NotificationTestCard() {
             Wpisy trafiają do dziennika powiadomień (notification_log).
           </p>
         </div>
-        <span className="rounded-full bg-amber-100 px-3 py-1 text-[10px] uppercase tracking-widest text-amber-900">
+        <span className="rounded-full bg-terracotta/15 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta">
           Tryb mock — wysyłka logowana w konsoli
         </span>
       </div>
@@ -839,9 +839,9 @@ function FieldText({
 function StatusBadge({ status, error }: { status: string; error: string | null }) {
   const cls =
     status === "sent"
-      ? "bg-emerald-100 text-emerald-800"
+      ? "bg-forest/15 text-forest"
       : status === "failed"
-      ? "bg-rose-100 text-rose-800"
+      ? "bg-destructive/15 text-destructive"
       : "bg-foreground/10 text-foreground/80";
   return (
     <span
