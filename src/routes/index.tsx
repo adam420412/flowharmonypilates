@@ -35,7 +35,7 @@ const classes = [
   },
   {
     name: "VIP Training",
-    sub: "Solo lub Duo",
+    sub: "Solo lub w parach",
     desc: "Indywidualna opieka instruktora w prywatnej sali — solo lub w parze.",
     img: classVip,
   },

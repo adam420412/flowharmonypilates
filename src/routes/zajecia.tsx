@@ -34,7 +34,7 @@ const offers = [
   },
   {
     name: "VIP Training",
-    sub: "Solo lub Duo",
+    sub: "Solo lub w parach",
     duration: "55 min",
     img: classVip,
     desc: "Indywidualna opieka instruktora w prywatnej sali — solo lub w parze. Plan szyty pod Ciebie, dla osób chcących pracować z konkretnym celem.",
