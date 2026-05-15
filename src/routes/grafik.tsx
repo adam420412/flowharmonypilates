@@ -297,7 +297,7 @@ function GrafikPage() {
                       return (
                         <button
                           key={c.id}
-                          onClick={() => book(c)}
+                          onClick={() => openBooking(c)}
                           disabled={status === "full" || status === "cancelled" || !!mine}
                           className="group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all hover:border-terracotta/40 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
                         >
@@ -343,6 +343,14 @@ function GrafikPage() {
         )}
       </main>
       <Footer />
+
+      <BookingConfirmModal
+        open={!!pendingSlot}
+        onOpenChange={(o) => { if (!o) setPendingSlot(null); }}
+        slot={pendingSlot?.slot ?? null}
+        onConfirm={confirmBooking}
+        loading={bookingLoading}
+      />
     </div>
   );
 }
