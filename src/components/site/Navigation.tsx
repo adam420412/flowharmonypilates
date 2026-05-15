@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 const links = [
   { to: "/", label: "Strona główna" },
@@ -13,6 +14,7 @@ const links = [
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50">
@@ -35,7 +37,14 @@ export function Navigation() {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            to={isAuthenticated ? "/konto" : "/login"}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20 text-foreground transition-all hover:bg-foreground/5"
+            aria-label={isAuthenticated ? "Moje konto" : "Zaloguj się"}
+          >
+            <User className="h-4 w-4" />
+          </Link>
           <Link
             to="/grafik"
             className="rounded-full border border-foreground/30 px-6 py-2.5 text-xs uppercase tracking-widest text-foreground transition-all hover:bg-foreground hover:text-cream"
