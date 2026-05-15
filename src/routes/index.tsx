@@ -142,7 +142,7 @@ function HomePage() {
             </div>
             <Link
               to="/studio"
-              className="mt-10 inline-flex items-center gap-3 text-xs uppercase tracking-widest text-foreground hover:text-terracotta"
+              className="mt-10 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-ink underline-offset-8 hover:text-terracotta hover:underline"
             >
               Poznaj naszą historię <ArrowRight size={14} />
             </Link>
