@@ -141,3 +141,17 @@
 .animate-fade-up {
   animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* Section theme helpers — let descendants (e.g. <Logo variant="auto" />)
+   adapt to the surrounding background via the --logo-filter variable. */
+.section-light {
+  --logo-filter: none;
+}
+.section-dark {
+  --logo-filter: brightness(0) invert(1);
+}
+.section-gradient {
+  /* Keep mark dark but lift it off busy backgrounds with a subtle shadow. */
+  --logo-filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.18))
+    drop-shadow(0 0 12px rgb(255 255 255 / 0.25));
+}
