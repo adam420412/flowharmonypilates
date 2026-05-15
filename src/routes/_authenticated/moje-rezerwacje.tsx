@@ -63,7 +63,15 @@ function MyBookingsPage() {
         .order("created_at", { ascending: false }),
       supabase.from("app_settings").select("value").eq("key", "cancellation_hours_before").maybeSingle(),
     ]);
-    setBookings((data ?? []) as unknown as BookingRow[]);
+    const rows = ((data ?? []) as unknown as BookingRow[]);
+    const withPositions = await Promise.all(
+      rows.map(async (b) => {
+        if (b.status !== "waitlist") return b;
+        const { data: pos } = await supabase.rpc("waitlist_position", { _booking_id: b.id });
+        return { ...b, waitlist_position: typeof pos === "number" ? pos : null };
+      })
+    );
+    setBookings(withPositions);
     if (settings?.value) setHoursBefore(Number(settings.value));
     setLoading(false);
   }
