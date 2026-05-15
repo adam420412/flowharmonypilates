@@ -192,6 +192,11 @@ function BookingCard({
           <span className={`rounded-full px-2 py-0.5 text-[10px] uppercase tracking-widest ${statusBadge.cls}`}>
             {statusBadge.label}
           </span>
+          {booking.status === "waitlist" && booking.waitlist_position != null && (
+            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] uppercase tracking-widest text-amber-900 ring-1 ring-amber-200">
+              Pozycja #{booking.waitlist_position}
+            </span>
+          )}
         </div>
         <div className="mt-2 font-display text-xl text-foreground">
           {format(startsAt, "EEEE, d MMM · HH:mm", { locale: pl })}
@@ -199,6 +204,11 @@ function BookingCard({
         <div className="text-sm text-muted-foreground">
           {c.instructors?.full_name} · {c.duration_minutes} min
         </div>
+        {booking.status === "waitlist" && booking.waitlist_position != null && !pastView && (
+          <p className="mt-1 text-xs text-amber-800">
+            Jesteś na <strong>{booking.waitlist_position}.</strong> miejscu listy rezerwowej. Powiadomimy Cię, gdy zwolni się miejsce.
+          </p>
+        )}
       </div>
       {!pastView && booking.status !== "cancelled" && (
         <div className="flex flex-col items-end gap-1">
