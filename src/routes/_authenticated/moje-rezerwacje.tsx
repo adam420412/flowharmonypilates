@@ -231,7 +231,7 @@ function BookingCard({
             {statusBadge.label}
           </span>
           {booking.status === "waitlist" && booking.waitlist_position != null && (
-            <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] uppercase tracking-widest text-amber-900 ring-1 ring-amber-200">
+            <span className="rounded-full bg-terracotta/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-terracotta ring-1 ring-terracotta/30">
               Pozycja #{booking.waitlist_position}
             </span>
           )}
