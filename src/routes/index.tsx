@@ -256,7 +256,7 @@ function HomePage() {
           </p>
           <Link
             to="/grafik"
-            className="mt-10 inline-flex items-center gap-3 rounded-full bg-foreground px-10 py-4 text-xs uppercase tracking-widest text-cream transition-all hover:bg-terracotta"
+            className="mt-10 inline-flex items-center gap-3 rounded-full bg-ink px-10 py-4 text-xs font-semibold uppercase tracking-widest text-cream shadow-lg shadow-ink/30 transition-all hover:bg-terracotta hover:shadow-terracotta/40"
           >
             Zarezerwuj sesję Intro
             <ArrowRight size={16} />
