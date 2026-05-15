@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Mail, MapPin, Phone } from "lucide-react";
-import logo from "@/assets/logo-flow-harmony.png";
+import { Logo } from "@/components/site/Logo";
 
 export function Footer() {
   return (
