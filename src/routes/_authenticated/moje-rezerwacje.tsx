@@ -247,6 +247,28 @@ function BookingCard({
             Jesteś na <strong>{booking.waitlist_position}.</strong> miejscu listy rezerwowej. Powiadomimy Cię, gdy zwolni się miejsce.
           </p>
         )}
+        {booking.promotion_notices && booking.promotion_notices.length > 0 && (
+          <div className="mt-2 rounded-lg border border-emerald-200 bg-emerald-50/60 p-2.5">
+            <p className="text-[11px] font-medium uppercase tracking-widest text-emerald-900">
+              Powiadomienie o awansie z listy rezerwowej
+            </p>
+            <ul className="mt-1 space-y-0.5">
+              {booking.promotion_notices.map((n, i) => {
+                const ok = n.status === "sent";
+                return (
+                  <li key={i} className="flex items-center gap-2 text-xs text-emerald-900">
+                    <span className={`inline-block h-1.5 w-1.5 rounded-full ${ok ? "bg-emerald-500" : "bg-rose-500"}`} />
+                    <span className="uppercase tracking-widest text-[10px]">{n.channel}</span>
+                    <span>{ok ? "wysłano" : `błąd (${n.status})`}</span>
+                    <span className="text-emerald-900/60">
+                      · {format(new Date(n.created_at), "d MMM, HH:mm", { locale: pl })}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
       {!pastView && booking.status !== "cancelled" && (
         <div className="flex flex-col items-end gap-1">
