@@ -5,13 +5,96 @@ import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { toast } from "sonner";
 
+const KONTAKT_URL = "https://flowharmonypilates.lovable.app/kontakt";
+
+const localBusinessJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HealthClub",
+  "@id": `${KONTAKT_URL}#studio`,
+  name: "Flow & Harmony — Studio Pilates Reformery",
+  description:
+    "Kameralne studio pilates na reformerach w Kamionkach pod Poznaniem. Zajęcia solo, w parach i grupowe (max 4 osoby), Cadillac 1:1.",
+  url: "https://flowharmonypilates.lovable.app",
+  telephone: "+48501817979",
+  email: "hello@flowharmony.pl",
+  image: "https://flowharmonypilates.lovable.app/og-image.jpg",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "ul. Poznańska 117",
+    addressLocality: "Kamionki",
+    postalCode: "62-023",
+    addressRegion: "wielkopolskie",
+    addressCountry: "PL",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 52.3399,
+    longitude: 17.0223,
+  },
+  areaServed: ["Kamionki", "Poznań", "Kórnik", "Borówiec"],
+  founder: { "@type": "Person", name: "Joanna Konieczna" },
+  sameAs: ["https://www.instagram.com/asia_konieczna/"],
+  hasMap:
+    "https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki",
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "07:00",
+      closes: "21:00",
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: "Saturday",
+      opens: "09:00",
+      closes: "14:00",
+    },
+  ],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      telephone: "+48501817979",
+      contactType: "customer service",
+      areaServed: "PL",
+      availableLanguage: ["Polish", "English"],
+    },
+  ],
+};
+
 export const Route = createFileRoute("/kontakt")({
   head: () => ({
     meta: [
-      { title: "Kontakt — Flow & Harmony" },
-      { name: "description", content: "Studio pilates Flow & Harmony, ul. Poznańska 117, Kamionki. Napisz, zadzwoń lub odwiedź nas." },
-      { property: "og:title", content: "Kontakt — Flow & Harmony" },
-      { property: "og:description", content: "Skontaktuj się ze studiem Flow & Harmony." },
+      { title: "Kontakt — Studio Pilates Flow & Harmony, Kamionki" },
+      {
+        name: "description",
+        content:
+          "Studio Pilates Flow & Harmony — ul. Poznańska 117, 62-023 Kamionki k. Poznania. Tel. +48 501 817 979 (Joanna Konieczna). Rezerwacja online, WhatsApp, e-mail.",
+      },
+      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Kamionki" },
+      {
+        property: "og:description",
+        content:
+          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Poznańska 117, Kamionki. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
+      },
+      { property: "og:url", content: KONTAKT_URL },
+      { property: "og:type", content: "website" },
+
+      // Kontakt + lokalizacja (czytelne dla wyszukiwarek i parserów)
+      { name: "contact", content: "+48 501 817 979" },
+      { name: "telephone", content: "+48 501 817 979" },
+      { name: "email", content: "hello@flowharmony.pl" },
+      { name: "geo.region", content: "PL-30" },
+      { name: "geo.placename", content: "Kamionki, Poznań" },
+      { name: "geo.position", content: "52.3399;17.0223" },
+      { name: "ICBM", content: "52.3399, 17.0223" },
+    ],
+    links: [{ rel: "canonical", href: KONTAKT_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(localBusinessJsonLd),
+      },
     ],
   }),
   component: KontaktPage,
