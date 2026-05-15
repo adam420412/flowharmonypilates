@@ -114,5 +114,5 @@ export function formatReminderSms(opts: { className: string; startsAt: string })
     hour: "2-digit",
     minute: "2-digit",
   });
-  return `Mimosa Pilates: przypominamy o zajęciach ${opts.className} dziś o ${date}. Do zobaczenia!`;
+  return `Flow & Harmony: przypominamy o zajęciach ${opts.className} dziś o ${date}. Do zobaczenia!`;
 }

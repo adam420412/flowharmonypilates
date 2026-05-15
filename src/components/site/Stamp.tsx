@@ -4,7 +4,7 @@ interface StampProps {
 }
 
 export function Stamp({
-  text = "MIMOSA PILATES • REFORMER STUDIO • KAMIONKI • ",
+  text = "FLOW & HARMONY • STUDIO PILATES REFORMERY • ",
   className = "",
 }: StampProps) {
   const chars = text.split("");

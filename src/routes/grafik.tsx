@@ -15,10 +15,10 @@ import { sendBookingConfirmation } from "@/lib/notifications.functions";
 export const Route = createFileRoute("/grafik")({
   head: () => ({
     meta: [
-      { title: "Grafik zajęć — Mimosa Pilates" },
+      { title: "Grafik zajęć — Flow & Harmony" },
       { name: "description", content: "Sprawdź dostępne zajęcia reformer pilates i zarezerwuj swój slot online." },
-      { property: "og:title", content: "Grafik zajęć — Mimosa Pilates" },
-      { property: "og:description", content: "Tygodniowy grafik zajęć w studio Mimosa Pilates w Kamionkach." },
+      { property: "og:title", content: "Grafik zajęć — Flow & Harmony" },
+      { property: "og:description", content: "Tygodniowy grafik zajęć w studio Flow & Harmony — pilates reformery." },
     ],
   }),
   component: GrafikPage,

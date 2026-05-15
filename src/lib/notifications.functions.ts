@@ -20,7 +20,7 @@ async function getSetting(key: string): Promise<unknown> {
 
 async function getStudioName(): Promise<string> {
   const v = await getSetting("studio_name");
-  return typeof v === "string" ? v : "Mimosa Pilates";
+  return typeof v === "string" ? v : "Flow & Harmony";
 }
 
 /**
