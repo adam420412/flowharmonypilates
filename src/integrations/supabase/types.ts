@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_settings: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           class_id: string
@@ -234,6 +255,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cancel_booking: { Args: { _booking_id: string }; Returns: Json }
       class_booked_counts: {
         Args: { _from: string; _to: string }
         Returns: {
