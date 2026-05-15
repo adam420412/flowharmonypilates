@@ -1,4 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
+import { AuthProvider } from "@/hooks/use-auth";
 import {
   Outlet,
   Link,
@@ -112,7 +114,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AuthProvider>
+        <Outlet />
+        <Toaster position="top-right" />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
