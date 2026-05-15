@@ -382,6 +382,7 @@ function GrafikPage() {
         slot={pendingSlot?.slot ?? null}
         onConfirm={confirmBooking}
         loading={bookingLoading}
+        askPhone={!profile?.phone}
       />
     </div>
   );
