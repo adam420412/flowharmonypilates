@@ -46,6 +46,18 @@ const offers = [
     ],
   },
   {
+    name: "Cadillac 1:1",
+    sub: "Indywidualne • rozbudowane urządzenie",
+    duration: "55 min",
+    img: classCadillac,
+    desc: "Sesja indywidualna na Cadillacu — rozbudowanym urządzeniu z trapezem, sprężynami i drążkami. Pełen wachlarz ćwiczeń mobilizacyjnych, wzmacniających i rehabilitacyjnych w pracy 1:1 z instruktorem.",
+    bullets: [
+      "Praca 1:1 na pełnowymiarowym Cadillacu",
+      "Idealne przy bólach pleców i ograniczeniach mobilności",
+      "Indywidualny plan i dobór ćwiczeń",
+    ],
+  },
+  {
     name: "Pilates Intro",
     sub: "Dla początkujących",
     duration: "55 min",
