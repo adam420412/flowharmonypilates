@@ -8,7 +8,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-20 md:px-10">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
-            <img src={logo} alt="Flow & Harmony — Studio Pilates Reformery" className="h-16 w-auto brightness-0 invert" />
+            <Logo variant="light" className="h-16" alt="Flow & Harmony — Studio Pilates Reformery" />
             <p className="mt-3 text-xs uppercase tracking-widest text-nude">Studio Pilates · Reformery</p>
             <p className="mt-6 max-w-md font-display text-xl italic text-cream/70">
               Twoja przestrzeń ruchu i wytchnienia.
