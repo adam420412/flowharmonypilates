@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { addDays, addWeeks, format, startOfWeek } from "date-fns";
 import { pl } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon } from "lucide-react";
@@ -9,6 +10,7 @@ import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { BookingConfirmModal, type SlotInfo } from "@/components/booking/BookingConfirmModal";
+import { sendBookingConfirmation } from "@/lib/notifications.functions";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
@@ -49,6 +51,8 @@ function GrafikPage() {
   const [loading, setLoading] = useState(true);
   const [pendingSlot, setPendingSlot] = useState<{ slot: SlotInfo; classRow: ClassRow } | null>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [profile, setProfile] = useState<{ phone: string | null; sms_opt_in: boolean } | null>(null);
+  const sendConfirm = useServerFn(sendBookingConfirmation);
 
   const weekDays = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
@@ -64,6 +68,12 @@ function GrafikPage() {
       setInstructors(i.data ?? []);
     });
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) { setProfile(null); return; }
+    supabase.from("profiles").select("phone,sms_opt_in").eq("id", user.id).maybeSingle()
+      .then(({ data }) => setProfile(data ? { phone: data.phone, sms_opt_in: data.sms_opt_in } : { phone: null, sms_opt_in: false }));
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     setLoading(true);
@@ -165,22 +175,44 @@ function GrafikPage() {
     setMyBookings(mm);
   }
 
-  async function confirmBooking() {
+  async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean }) {
     if (!pendingSlot || !user) return;
     setBookingLoading(true);
     const desired = pendingSlot.slot.status === "available" ? "confirmed" : "waitlist";
-    const { error } = await supabase.from("bookings").upsert(
+
+    // Zapisz telefon + zgodę, jeśli klient właśnie je podał
+    if (extras.phone || extras.smsOptIn !== undefined) {
+      await supabase.from("profiles").update({
+        ...(extras.phone ? { phone: extras.phone } : {}),
+        ...(extras.smsOptIn !== undefined ? { sms_opt_in: extras.smsOptIn, sms_opt_in_at: extras.smsOptIn ? new Date().toISOString() : null } : {}),
+      }).eq("id", user.id);
+      setProfile((p) => ({
+        phone: extras.phone ?? p?.phone ?? null,
+        sms_opt_in: extras.smsOptIn ?? p?.sms_opt_in ?? false,
+      }));
+    }
+
+    const { data: inserted, error } = await supabase.from("bookings").upsert(
       { class_id: pendingSlot.classRow.id, user_id: user.id, status: desired },
       { onConflict: "class_id,user_id" },
-    );
-    setBookingLoading(false);
+    ).select("id").single();
+
     if (error) {
+      setBookingLoading(false);
       toast.error(error.message);
       return;
     }
     toast.success(desired === "confirmed" ? "Zarezerwowano!" : "Dopisano do listy rezerwowej");
     setPendingSlot(null);
     refreshAll();
+
+    // Mock potwierdzenie email (nie blokuje UX)
+    if (inserted?.id) {
+      sendConfirm({ data: { bookingId: inserted.id } }).catch((e) => {
+        console.warn("send confirmation failed:", e);
+      });
+    }
+    setBookingLoading(false);
   }
 
 
