@@ -3,6 +3,7 @@ import { useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
+import { Logo } from "@/components/site/Logo";
 
 export const Route = createFileRoute("/rejestracja")({
   component: SignupPage,
