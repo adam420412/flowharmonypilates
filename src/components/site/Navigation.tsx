@@ -48,6 +48,14 @@ export function Navigation() {
               Admin
             </Link>
           )}
+          {!isAuthenticated && (
+            <Link
+              to="/rejestracja"
+              className="text-xs uppercase tracking-widest text-foreground/80 hover:text-terracotta"
+            >
+              Załóż konto
+            </Link>
+          )}
           <Link
             to={isAuthenticated ? "/konto" : "/login"}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20 text-foreground transition-all hover:bg-foreground/5"
@@ -92,6 +100,15 @@ export function Navigation() {
             >
               Rezerwuj zajęcia
             </Link>
+            {!isAuthenticated && (
+              <Link
+                to="/rejestracja"
+                onClick={() => setOpen(false)}
+                className="mt-3 rounded-full border border-foreground/30 px-6 py-3 text-center text-xs uppercase tracking-widest text-foreground"
+              >
+                Załóż konto
+              </Link>
+            )}
           </nav>
         </div>
       )}
