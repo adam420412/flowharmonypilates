@@ -8,6 +8,7 @@ import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import { BookingConfirmModal, type SlotInfo } from "@/components/booking/BookingConfirmModal";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
@@ -46,6 +47,8 @@ function GrafikPage() {
   const [filterType, setFilterType] = useState<string>("all");
   const [filterInstructor, setFilterInstructor] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [pendingSlot, setPendingSlot] = useState<{ slot: SlotInfo; classRow: ClassRow } | null>(null);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const weekDays = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
@@ -120,25 +123,32 @@ function GrafikPage() {
     return "full";
   }
 
-  async function book(c: ClassRow) {
+  function openBooking(c: ClassRow) {
     if (!isAuthenticated || !user) {
       toast.error("Zaloguj się, aby zarezerwować zajęcia");
       return;
     }
     const status = statusOf(c);
     if (status === "full" || status === "cancelled") return;
-    const desiredStatus: "confirmed" | "waitlist" = status === "available" ? "confirmed" : "waitlist";
-    const { error } = await supabase.from("bookings").upsert({
-      class_id: c.id,
-      user_id: user.id,
-      status: desiredStatus,
-    }, { onConflict: "class_id,user_id" });
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success(desiredStatus === "confirmed" ? "Zarezerwowano!" : "Dopisano do listy rezerwowej");
-    // refresh counts + my bookings
+    if (myBookings[c.id]) return;
+    const ct = ctMap[c.class_type_id];
+    const ins = inMap[c.instructor_id];
+    setPendingSlot({
+      classRow: c,
+      slot: {
+        classId: c.id,
+        startsAt: c.starts_at,
+        className: ct?.name ?? "—",
+        classColor: ct?.color ?? "#C2725A",
+        instructorName: ins?.full_name ?? "—",
+        durationMinutes: c.duration_minutes,
+        status: status === "available" ? "available" : "waitlist",
+      },
+    });
+  }
+
+  async function refreshAll() {
+    if (!user) return;
     const from = weekStart.toISOString();
     const to = addDays(weekStart, 7).toISOString();
     const [{ data: cnt }, { data: mine }] = await Promise.all([
@@ -151,11 +161,28 @@ function GrafikPage() {
     });
     setCounts(map);
     const mm: Record<string, string> = {};
-    (mine ?? []).forEach((b) => {
-      mm[b.class_id] = b.status;
-    });
+    (mine ?? []).forEach((b) => { mm[b.class_id] = b.status; });
     setMyBookings(mm);
   }
+
+  async function confirmBooking() {
+    if (!pendingSlot || !user) return;
+    setBookingLoading(true);
+    const desired = pendingSlot.slot.status === "available" ? "confirmed" : "waitlist";
+    const { error } = await supabase.from("bookings").upsert(
+      { class_id: pendingSlot.classRow.id, user_id: user.id, status: desired },
+      { onConflict: "class_id,user_id" },
+    );
+    setBookingLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(desired === "confirmed" ? "Zarezerwowano!" : "Dopisano do listy rezerwowej");
+    setPendingSlot(null);
+    refreshAll();
+  }
+
 
   return (
     <div className="min-h-screen bg-cream">
@@ -270,7 +297,7 @@ function GrafikPage() {
                       return (
                         <button
                           key={c.id}
-                          onClick={() => book(c)}
+                          onClick={() => openBooking(c)}
                           disabled={status === "full" || status === "cancelled" || !!mine}
                           className="group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all hover:border-terracotta/40 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
                         >
@@ -316,6 +343,14 @@ function GrafikPage() {
         )}
       </main>
       <Footer />
+
+      <BookingConfirmModal
+        open={!!pendingSlot}
+        onOpenChange={(o) => { if (!o) setPendingSlot(null); }}
+        slot={pendingSlot?.slot ?? null}
+        onConfirm={confirmBooking}
+        loading={bookingLoading}
+      />
     </div>
   );
 }

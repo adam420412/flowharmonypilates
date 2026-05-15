@@ -29,6 +29,10 @@ function AccountPage() {
             </div>
           </div>
 
+          <Link to="/moje-rezerwacje" className="block rounded-md border border-foreground/15 px-4 py-2.5 text-center text-xs uppercase tracking-widest text-foreground transition-all hover:bg-foreground/5">
+            Moje rezerwacje
+          </Link>
+
           {roles.includes("admin") && (
             <Link to="/admin" className="block rounded-md bg-foreground px-4 py-2.5 text-center text-xs uppercase tracking-widest text-cream">
               Panel administratora
