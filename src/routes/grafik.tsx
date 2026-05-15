@@ -316,9 +316,9 @@ function GrafikPage() {
           )}
 
           <div className="ml-auto flex items-center gap-3 text-xs">
-            <Legend color="bg-forest" label="Dostępne" />
-            <Legend color="bg-terracotta" label="Rezerwa" />
-            <Legend color="bg-destructive" label="Pełne" />
+            <Legend color="bg-forest" label="Wolne miejsca" />
+            <Legend color="bg-terracotta" label="Lista rezerwowa" />
+            <Legend color="bg-destructive" label="Komplet" />
           </div>
         </div>
 
@@ -376,8 +376,14 @@ function GrafikPage() {
                           </div>
                           <div className="mt-1 text-xs text-muted-foreground">{ins?.full_name}</div>
                           <div className="mt-1 text-[11px] text-muted-foreground">
-                            {cnt.confirmed}/{c.capacity} miejsc
-                            {status === "waitlist" && ` · rezerwa ${cnt.waitlist}/${c.waitlist_capacity}`}
+                            {(() => {
+                              const cap = effectiveCapacity(c);
+                              const free = Math.max(0, cap - cnt.confirmed);
+                              if (status === "cancelled") return "Zajęcia odwołane";
+                              if (status === "full") return `Komplet · ${cap}/${cap} miejsc`;
+                              if (status === "waitlist") return `Komplet ${cnt.confirmed}/${cap} · rezerwa ${cnt.waitlist}/${c.waitlist_capacity}`;
+                              return `Wolne: ${free} z ${cap}`;
+                            })()}
                           </div>
                           {mine && (
                             <div className="mt-1 text-[11px] font-medium text-terracotta">
