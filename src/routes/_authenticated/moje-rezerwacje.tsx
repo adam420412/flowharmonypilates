@@ -212,10 +212,10 @@ function BookingCard({
   const canCancel = !pastView && booking.status !== "cancelled" && hoursUntil >= hoursBefore && !c.is_cancelled;
 
   const statusBadge =
-    c.is_cancelled ? { label: "Zajęcia odwołane", cls: "bg-rose-100 text-rose-800" }
+    c.is_cancelled ? { label: "Zajęcia odwołane", cls: "bg-destructive/15 text-destructive" }
     : booking.status === "cancelled" ? { label: "Odwołana", cls: "bg-muted text-muted-foreground" }
-    : booking.status === "waitlist" ? { label: "Lista rezerwowa", cls: "bg-amber-100 text-amber-800" }
-    : { label: "Potwierdzona", cls: "bg-emerald-100 text-emerald-800" };
+    : booking.status === "waitlist" ? { label: "Lista rezerwowa", cls: "bg-terracotta/15 text-terracotta" }
+    : { label: "Potwierdzona", cls: "bg-forest/15 text-forest" };
 
   return (
     <li className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-foreground/10 bg-background p-5">
