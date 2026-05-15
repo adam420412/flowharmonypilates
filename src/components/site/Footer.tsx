@@ -34,7 +34,8 @@ export function Footer() {
                 <span>ul. Poznańska 117<br />Kamionki</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={16} /> +48 123 456 789
+                <Phone size={16} />
+                <a href="tel:+48501817979" className="hover:text-cream">+48 501 817 979 · Joanna Konieczna</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} /> hello@flowharmony.pl
