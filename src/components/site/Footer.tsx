@@ -15,8 +15,10 @@ export function Footer() {
             </p>
             <div className="mt-8 flex items-center gap-4">
               <a
-                href="https://instagram.com"
-                aria-label="Instagram"
+                href="https://www.instagram.com/asia_konieczna/"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Instagram Joanny Koniecznej"
                 className="rounded-full border border-cream/20 p-3 transition-colors hover:bg-cream hover:text-ink"
               >
                 <Instagram size={18} />
@@ -32,7 +34,8 @@ export function Footer() {
                 <span>ul. Poznańska 117<br />Kamionki</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={16} /> +48 123 456 789
+                <Phone size={16} />
+                <a href="tel:+48501817979" className="hover:text-cream">+48 501 817 979 · Joanna Konieczna</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={16} /> hello@flowharmony.pl

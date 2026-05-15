@@ -53,9 +53,9 @@ function KontaktPage() {
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
           <div className="space-y-10">
             <ContactRow icon={MapPin} label="Adres" lines={["ul. Poznańska 117", "62-023 Kamionki"]} />
-            <ContactRow icon={Phone} label="Telefon" lines={["+48 123 456 789"]} href="tel:+48123456789" />
+            <ContactRow icon={Phone} label="Telefon" lines={["+48 501 817 979", "Joanna Konieczna"]} href="tel:+48501817979" />
             <ContactRow icon={Mail} label="E-mail" lines={["hello@flowharmony.pl"]} href="mailto:hello@flowharmony.pl" />
-            <ContactRow icon={Instagram} label="Instagram" lines={["@flowharmony.studio"]} href="https://instagram.com" />
+            <ContactRow icon={Instagram} label="Instagram" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
 
             <div className="border-t border-foreground/10 pt-10">
               <h3 className="text-xs uppercase tracking-widest text-mocha">Godziny otwarcia</h3>
