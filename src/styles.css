@@ -54,13 +54,14 @@
 :root {
   --radius: 0.25rem;
 
-  /* Brand palette in oklch */
+  /* Brand palette in oklch — punched up for stronger contrast */
   --cream: oklch(0.972 0.014 80);          /* #FAF5EE */
   --sand: oklch(0.948 0.020 75);           /* #F5EFE6 */
   --nude: oklch(0.880 0.030 55);           /* #E8D5C4 */
-  --terracotta: oklch(0.585 0.085 45);     /* #A47551 */
-  --mocha: oklch(0.490 0.060 50);          /* #8B6F47 */
-  --ink: oklch(0.230 0.025 55);            /* #2B2118 */
+  --terracotta: oklch(0.555 0.180 35);     /* deep saturated terracotta */
+  --mocha: oklch(0.420 0.090 50);          /* richer mocha brown */
+  --ink: oklch(0.160 0.020 55);            /* near-black ink for max contrast */
+  --forest: oklch(0.420 0.110 165);        /* contrasting deep emerald */
 
   --background: var(--cream);
   --foreground: var(--ink);
