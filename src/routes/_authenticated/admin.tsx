@@ -556,17 +556,6 @@ function NotificationTestCard() {
     }
   }
 
-  async function loadLogs() {
-    setLoadingLogs(true);
-    try {
-      const r = await logsFn({ data: { limit: 25 } });
-      setLogs(r.logs as LogRow[]);
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Nie udało się pobrać logów");
-    } finally {
-      setLoadingLogs(false);
-    }
-  }
 
   async function handlePreview() {
     setLoadingPreview(true);
