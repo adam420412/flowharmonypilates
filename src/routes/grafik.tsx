@@ -316,9 +316,9 @@ function GrafikPage() {
           )}
 
           <div className="ml-auto flex items-center gap-3 text-xs">
-            <Legend color="bg-forest" label="Dostępne" />
-            <Legend color="bg-terracotta" label="Rezerwa" />
-            <Legend color="bg-destructive" label="Pełne" />
+            <Legend color="bg-forest" label="Wolne miejsca" />
+            <Legend color="bg-terracotta" label="Lista rezerwowa" />
+            <Legend color="bg-destructive" label="Komplet" />
           </div>
         </div>
 
