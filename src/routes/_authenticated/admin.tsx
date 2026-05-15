@@ -43,7 +43,7 @@ type ClassRow = {
   capacity: number;
   waitlist_capacity: number;
   is_cancelled: boolean;
-  class_type: { name: string } | null;
+  class_type: { name: string; slug: string } | null;
   instructor: { full_name: string } | null;
 };
 
@@ -54,6 +54,19 @@ const settingsSchema = z.object({
 });
 
 type SettingsForm = z.infer<typeof settingsSchema>;
+
+function typeCapBySlug(slug?: string | null): number {
+  switch (slug) {
+    case "intro":
+    case "vip-1on1":
+    case "cadillac-1on1":
+      return 1;
+    case "vip-duo":
+      return 2;
+    default:
+      return 4;
+  }
+}
 
 function AdminPage() {
   const { hasRole, loading: authLoading } = useAuth();
@@ -272,7 +285,7 @@ function ClassesCard() {
     const { data, error } = await supabase
       .from("classes")
       .select(
-        "id,starts_at,capacity,waitlist_capacity,is_cancelled,class_type:class_types(name),instructor:instructors(full_name)",
+        "id,starts_at,capacity,waitlist_capacity,is_cancelled,class_type:class_types(name,slug),instructor:instructors(full_name)",
       )
       .gte("starts_at", new Date().toISOString())
       .order("starts_at", { ascending: true })
@@ -301,13 +314,14 @@ function ClassesCard() {
 
   async function save(row: ClassRow) {
     const draft = getEdit(row);
+    const maxCap = typeCapBySlug(row.class_type?.slug);
     const schema = z.object({
-      capacity: z.coerce.number().int().min(1).max(4),
+      capacity: z.coerce.number().int().min(1).max(maxCap),
       waitlist_capacity: z.coerce.number().int().min(0).max(50),
     });
     const parsed = schema.safeParse(draft);
     if (!parsed.success) {
-      toast.error("Limit miejsc: 1–4 (maks. 4 osoby na zajęciach), rezerwa: 0–50");
+      toast.error(`Limit miejsc: 1–${maxCap} dla "${row.class_type?.name ?? "tych zajęć"}", rezerwa: 0–50`);
       return;
     }
     setSavingId(row.id);
@@ -406,16 +420,18 @@ function ClassesCard() {
                         </div>
                       </div>
                       <NumberCell
-                        label="Miejsca"
+                        label={`Miejsca (max ${typeCapBySlug(row.class_type?.slug)})`}
                         value={draft.capacity}
                         onChange={(v) => setEdit(row.id, { capacity: v })}
                         min={1}
+                        max={typeCapBySlug(row.class_type?.slug)}
                       />
                       <NumberCell
                         label="Rezerwa"
                         value={draft.waitlist_capacity}
                         onChange={(v) => setEdit(row.id, { waitlist_capacity: v })}
                         min={0}
+                        max={50}
                       />
                       <button
                         disabled={!dirty || savingId === row.id}
@@ -446,11 +462,13 @@ function NumberCell({
   value,
   onChange,
   min,
+  max = 50,
 }: {
   label: string;
   value: number;
   onChange: (v: number) => void;
   min: number;
+  max?: number;
 }) {
   return (
     <label className="block">
@@ -458,7 +476,7 @@ function NumberCell({
       <input
         type="number"
         min={min}
-        max={50}
+        max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-terracotta"
