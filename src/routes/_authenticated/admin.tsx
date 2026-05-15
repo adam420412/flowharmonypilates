@@ -1,12 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
-import { Loader2, Save, ShieldAlert } from "lucide-react";
+import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw } from "lucide-react";
+import {
+  previewWaitlistPromoted,
+  sendTestWaitlistPromoted,
+  getWaitlistPromotedLogs,
+} from "@/lib/notifications.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -81,6 +87,7 @@ function AdminPage() {
 
         <SettingsCard />
         <ClassesCard />
+        <NotificationTestCard />
       </main>
       <Footer />
     </div>
@@ -442,4 +449,313 @@ function NumberCell({
       />
     </label>
   );
+}
+
+/* -------------------- Notification Test (Waitlist Promotion) -------------------- */
+
+type LogRow = {
+  id: string;
+  channel: string;
+  kind: string;
+  recipient: string;
+  status: string;
+  error: string | null;
+  created_at: string;
+  booking_id: string | null;
+};
+
+function defaultStartsAt() {
+  const d = new Date(Date.now() + 24 * 3600 * 1000);
+  d.setMinutes(0, 0, 0);
+  return d.toISOString();
+}
+
+function NotificationTestCard() {
+  const previewFn = useServerFn(previewWaitlistPromoted);
+  const sendFn = useServerFn(sendTestWaitlistPromoted);
+  const logsFn = useServerFn(getWaitlistPromotedLogs);
+
+  const [form, setForm] = useState({
+    className: "Pilates Reformer",
+    instructorName: "Anna Kowalska",
+    startsAt: defaultStartsAt(),
+    recipientEmail: "",
+    recipientPhone: "",
+  });
+  const [preview, setPreview] = useState<{
+    email: { subject: string; body: string };
+    sms: string;
+  } | null>(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [logs, setLogs] = useState<LogRow[]>([]);
+  const [loadingLogs, setLoadingLogs] = useState(false);
+
+  async function loadLogs() {
+    setLoadingLogs(true);
+    try {
+      const r = await logsFn({ data: { limit: 25 } });
+      setLogs(r.logs as LogRow[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Nie udało się pobrać logów");
+    } finally {
+      setLoadingLogs(false);
+    }
+  }
+
+  async function handlePreview() {
+    setLoadingPreview(true);
+    try {
+      const r = await previewFn({
+        data: {
+          className: form.className,
+          instructorName: form.instructorName,
+          startsAt: form.startsAt,
+        },
+      });
+      setPreview(r);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Błąd podglądu");
+    } finally {
+      setLoadingPreview(false);
+    }
+  }
+
+  async function handleSend() {
+    if (!form.recipientEmail && !form.recipientPhone) {
+      toast.error("Podaj e-mail lub numer telefonu odbiorcy testu");
+      return;
+    }
+    setSending(true);
+    try {
+      const r = await sendFn({
+        data: {
+          className: form.className,
+          instructorName: form.instructorName,
+          startsAt: form.startsAt,
+          recipientEmail: form.recipientEmail || undefined,
+          recipientPhone: form.recipientPhone || undefined,
+        },
+      });
+      toast.success("Wysłano test (mock — sprawdź logi serwera i log poniżej)");
+      console.log("[test send]", r);
+      void loadLogs();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Błąd wysyłki testu");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  useEffect(() => {
+    void loadLogs();
+  }, []);
+
+  return (
+    <section className="mt-16 rounded-2xl border border-border bg-background p-8 md:p-10">
+      <div className="flex items-end justify-between gap-6 flex-wrap">
+        <div>
+          <h2 className="font-display text-3xl">Test powiadomień — awans z listy rezerwowej</h2>
+          <p className="mt-2 max-w-2xl text-sm text-foreground/60">
+            Podgląd treści e-maila i SMS-a oraz testowa wysyłka na wskazany adres / numer.
+            Wpisy trafiają do dziennika powiadomień (notification_log).
+          </p>
+        </div>
+        <span className="rounded-full bg-amber-100 px-3 py-1 text-[10px] uppercase tracking-widest text-amber-900">
+          Tryb mock — wysyłka logowana w konsoli
+        </span>
+      </div>
+
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <div className="space-y-4">
+          <FieldText
+            label="Nazwa zajęć"
+            value={form.className}
+            onChange={(v) => setForm({ ...form, className: v })}
+          />
+          <FieldText
+            label="Instruktor"
+            value={form.instructorName}
+            onChange={(v) => setForm({ ...form, instructorName: v })}
+          />
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/70">
+              Termin (ISO 8601)
+            </span>
+            <input
+              type="datetime-local"
+              value={toLocalDatetimeInput(form.startsAt)}
+              onChange={(e) =>
+                setForm({ ...form, startsAt: new Date(e.target.value).toISOString() })
+              }
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-terracotta"
+            />
+          </label>
+
+          <div className="border-t border-border pt-4">
+            <FieldText
+              label="E-mail odbiorcy testu"
+              value={form.recipientEmail}
+              onChange={(v) => setForm({ ...form, recipientEmail: v })}
+              placeholder="test@example.com"
+              type="email"
+            />
+            <div className="mt-3" />
+            <FieldText
+              label="Telefon odbiorcy testu (opcjonalnie)"
+              value={form.recipientPhone}
+              onChange={(v) => setForm({ ...form, recipientPhone: v })}
+              placeholder="+48600000000"
+              type="tel"
+            />
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={() => void handlePreview()}
+              disabled={loadingPreview}
+              className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-5 py-2.5 text-xs uppercase tracking-widest text-foreground hover:border-terracotta hover:text-terracotta disabled:opacity-50"
+            >
+              {loadingPreview ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+              Podgląd
+            </button>
+            <button
+              onClick={() => void handleSend()}
+              disabled={sending}
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-xs uppercase tracking-widest text-cream hover:bg-terracotta disabled:opacity-50"
+            >
+              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              Wyślij test
+            </button>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-border bg-cream/40 p-5">
+          <h3 className="text-xs uppercase tracking-widest text-mocha">Podgląd treści</h3>
+          {!preview ? (
+            <p className="mt-4 text-sm text-foreground/60">Kliknij „Podgląd" aby zobaczyć treść.</p>
+          ) : (
+            <div className="mt-4 space-y-5">
+              <div>
+                <div className="text-[10px] uppercase tracking-widest text-foreground/50">E-mail · temat</div>
+                <div className="mt-1 font-medium">{preview.email.subject}</div>
+                <pre className="mt-2 whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed text-foreground/80">
+                  {preview.email.body}
+                </pre>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-widest text-foreground/50">SMS</div>
+                <pre className="mt-2 whitespace-pre-wrap rounded-md border border-border bg-background p-3 text-xs leading-relaxed text-foreground/80">
+                  {preview.sms}
+                </pre>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-10">
+        <div className="flex items-center justify-between">
+          <h3 className="font-display text-xl">Ostatnie powiadomienia o awansie</h3>
+          <button
+            onClick={() => void loadLogs()}
+            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-foreground/60 hover:text-terracotta"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${loadingLogs ? "animate-spin" : ""}`} /> Odśwież
+          </button>
+        </div>
+
+        {loadingLogs && logs.length === 0 ? (
+          <div className="mt-4 flex items-center gap-3 text-sm text-foreground/60">
+            <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie…
+          </div>
+        ) : logs.length === 0 ? (
+          <p className="mt-4 text-sm text-foreground/60">Brak wpisów w dzienniku.</p>
+        ) : (
+          <div className="mt-4 overflow-x-auto rounded-md border border-border">
+            <table className="w-full text-sm">
+              <thead className="bg-cream/40 text-[10px] uppercase tracking-widest text-foreground/60">
+                <tr>
+                  <th className="px-3 py-2 text-left">Kiedy</th>
+                  <th className="px-3 py-2 text-left">Kanał</th>
+                  <th className="px-3 py-2 text-left">Odbiorca</th>
+                  <th className="px-3 py-2 text-left">Status</th>
+                  <th className="px-3 py-2 text-left">Booking</th>
+                </tr>
+              </thead>
+              <tbody>
+                {logs.map((row) => (
+                  <tr key={row.id} className="border-t border-border">
+                    <td className="px-3 py-2 text-foreground/70">
+                      {new Date(row.created_at).toLocaleString("pl-PL")}
+                    </td>
+                    <td className="px-3 py-2 uppercase text-[10px] tracking-widest text-foreground/70">
+                      {row.channel}
+                    </td>
+                    <td className="px-3 py-2 font-mono text-xs">{row.recipient}</td>
+                    <td className="px-3 py-2">
+                      <StatusBadge status={row.status} error={row.error} />
+                    </td>
+                    <td className="px-3 py-2 font-mono text-[10px] text-foreground/50">
+                      {row.booking_id ? row.booking_id.slice(0, 8) + "…" : "— (test)"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function FieldText({
+  label,
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  type?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs uppercase tracking-widest text-foreground/70">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-terracotta"
+      />
+    </label>
+  );
+}
+
+function StatusBadge({ status, error }: { status: string; error: string | null }) {
+  const cls =
+    status === "sent"
+      ? "bg-emerald-100 text-emerald-800"
+      : status === "failed"
+      ? "bg-rose-100 text-rose-800"
+      : "bg-foreground/10 text-foreground/70";
+  return (
+    <span
+      title={error ?? undefined}
+      className={`inline-block rounded-full px-2 py-0.5 text-[10px] uppercase tracking-widest ${cls}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+function toLocalDatetimeInput(iso: string) {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
