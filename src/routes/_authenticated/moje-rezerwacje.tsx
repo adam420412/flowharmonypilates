@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { format, differenceInHours } from "date-fns";
 import { pl } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import { notifyWaitlistPromoted } from "@/lib/notifications.functions";
 import {
   AlertDialog,
   AlertDialogAction,
