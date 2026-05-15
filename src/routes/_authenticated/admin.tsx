@@ -462,11 +462,13 @@ function NumberCell({
   value,
   onChange,
   min,
+  max = 50,
 }: {
   label: string;
   value: number;
   onChange: (v: number) => void;
   min: number;
+  max?: number;
 }) {
   return (
     <label className="block">
@@ -474,7 +476,7 @@ function NumberCell({
       <input
         type="number"
         min={min}
-        max={50}
+        max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-terracotta"
