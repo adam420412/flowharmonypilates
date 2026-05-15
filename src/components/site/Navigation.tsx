@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import logo from "@/assets/logo-flow-harmony.png";
 
 const links = [
   { to: "/", label: "Strona główna" },
@@ -19,9 +20,8 @@ export function Navigation() {
   return (
     <header className="absolute top-0 left-0 right-0 z-50">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10 md:py-8">
-        <Link to="/" className="font-display text-2xl tracking-wider-2 text-foreground">
-          MIMOSA
-          <span className="ml-2 text-sm tracking-widest text-mocha">PILATES</span>
+        <Link to="/" className="flex items-center" aria-label="Flow & Harmony — Studio Pilates Reformery">
+          <img src={logo} alt="Flow & Harmony" className="h-12 w-auto md:h-14" />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">

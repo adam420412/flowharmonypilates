@@ -74,8 +74,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Mimosa Pilates" },
-      { name: "description", content: "Designerskie studio reformer pilates w Kamionkach." },
+      { title: "Flow & Harmony — Studio Pilates Reformery" },
+      { name: "description", content: "Butikowe studio pilates na reformerach. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

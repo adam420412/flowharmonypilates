@@ -113,7 +113,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
                 className="mt-0.5"
               />
               <span>
-                Wyrażam zgodę na otrzymywanie SMS-ów przypominających o zajęciach od Mimosa Pilates. Zgodę mogę wycofać w panelu konta.
+                Wyrażam zgodę na otrzymywanie SMS-ów przypominających o zajęciach od Flow & Harmony. Zgodę mogę wycofać w panelu konta.
               </span>
             </label>
           </div>

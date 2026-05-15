@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Mail, MapPin, Phone } from "lucide-react";
+import logo from "@/assets/logo-flow-harmony.png";
 
 export function Footer() {
   return (
@@ -7,10 +8,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-20 md:px-10">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
-            <div className="font-display text-3xl tracking-wider-2">
-              MIMOSA
-              <span className="ml-2 text-base tracking-widest text-nude">PILATES</span>
-            </div>
+            <img src={logo} alt="Flow & Harmony — Studio Pilates Reformery" className="h-16 w-auto brightness-0 invert" />
+            <p className="mt-3 text-xs uppercase tracking-widest text-nude">Studio Pilates · Reformery</p>
             <p className="mt-6 max-w-md font-display text-xl italic text-cream/70">
               Twoja przestrzeń ruchu i wytchnienia.
             </p>
@@ -36,7 +35,7 @@ export function Footer() {
                 <Phone size={16} /> +48 123 456 789
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={16} /> hello@mimosapilates.pl
+                <Mail size={16} /> hello@flowharmony.pl
               </li>
             </ul>
           </div>
@@ -54,8 +53,8 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-cream/10 pt-8 text-xs uppercase tracking-widest text-cream/50 md:flex-row">
-          <span>© {new Date().getFullYear()} Mimosa Pilates</span>
-          <span>Designerskie studio reformer pilates</span>
+          <span>© {new Date().getFullYear()} Flow & Harmony</span>
+          <span>Studio Pilates · Reformery</span>
         </div>
       </div>
     </footer>
