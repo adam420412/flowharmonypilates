@@ -81,6 +81,8 @@ function MyBookingsPage() {
   async function cancel() {
     if (!confirmId) return;
     setCancelling(true);
+    const cancelledBooking = bookings.find((b) => b.id === confirmId);
+    const classId = cancelledBooking?.classes?.id;
     const { data, error } = await supabase.rpc("cancel_booking", { _booking_id: confirmId });
     setCancelling(false);
     setConfirmId(null);
@@ -88,7 +90,7 @@ function MyBookingsPage() {
       toast.error(error.message);
       return;
     }
-    const result = data as { ok: boolean; error?: string; hours_before?: number };
+    const result = data as { ok: boolean; error?: string; hours_before?: number; promoted_user_id?: string | null };
     if (!result.ok) {
       if (result.error === "too_late") {
         toast.error(`Rezerwację można odwołać najpóźniej ${result.hours_before} h przed zajęciami.`);
@@ -98,6 +100,15 @@ function MyBookingsPage() {
       return;
     }
     toast.success("Rezerwacja odwołana");
+    if (result.promoted_user_id && classId) {
+      try {
+        await notifyWaitlistPromotedFn({
+          data: { classId, promotedUserId: result.promoted_user_id },
+        });
+      } catch (e) {
+        console.error("waitlist promoted notification failed:", e);
+      }
+    }
     load();
   }
 
