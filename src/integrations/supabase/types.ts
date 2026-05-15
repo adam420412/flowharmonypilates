@@ -316,6 +316,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      waitlist_position: { Args: { _booking_id: string }; Returns: number }
     }
     Enums: {
       app_role: "client" | "admin" | "instructor"
