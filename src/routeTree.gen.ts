@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GrafikRouteImport } from './routes/grafik'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
@@ -23,6 +24,11 @@ const RejestracjaRoute = RejestracjaRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GrafikRoute = GrafikRouteImport.update({
+  id: '/grafik',
+  path: '/grafik',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -42,12 +48,14 @@ const AuthenticatedKontoRoute = AuthenticatedKontoRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/konto': typeof AuthenticatedKontoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/konto': typeof AuthenticatedKontoRoute
@@ -56,19 +64,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/grafik': typeof GrafikRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/rejestracja' | '/konto'
+  fullPaths: '/' | '/grafik' | '/login' | '/rejestracja' | '/konto'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/rejestracja' | '/konto'
+  to: '/' | '/grafik' | '/login' | '/rejestracja' | '/konto'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/grafik'
     | '/login'
     | '/rejestracja'
     | '/_authenticated/konto'
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  GrafikRoute: typeof GrafikRoute
   LoginRoute: typeof LoginRoute
   RejestracjaRoute: typeof RejestracjaRoute
 }
@@ -95,6 +106,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grafik': {
+      id: '/grafik'
+      path: '/grafik'
+      fullPath: '/grafik'
+      preLoaderRoute: typeof GrafikRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -136,6 +154,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  GrafikRoute: GrafikRoute,
   LoginRoute: LoginRoute,
   RejestracjaRoute: RejestracjaRoute,
 }
