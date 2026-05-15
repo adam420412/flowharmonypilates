@@ -22,7 +22,7 @@ export const Route = createFileRoute("/zajecia")({
 const offers = [
   {
     name: "Reformer Pilates",
-    sub: "Grupowe • do 10 osób",
+    sub: "Grupowe • do 4 osób",
     duration: "55 min",
     img: classReformer,
     desc: "Klasyczna sesja na reformerze w kameralnej grupie. Pełna kontrola, oddech, długie linie ciała. Dla każdego poziomu zaawansowania.",
@@ -123,7 +123,7 @@ function ZajeciaPage() {
       <section className="bg-sand px-6 py-24 md:px-10 md:py-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-3">
           {[
-            { icon: Users, title: "Małe grupy", text: "Maksymalnie 10 osób — instruktorka widzi każdą z Was." },
+            { icon: Users, title: "Małe grupy", text: "Maksymalnie 4 osoby — instruktorka widzi każdą z Was." },
             { icon: Sparkles, title: "Premium sprzęt", text: "Profesjonalne reformery i akcesoria najwyższej jakości." },
             { icon: Clock, title: "55 minut", text: "Standardowa długość sesji — pełna rozgrzewka, praca i wyciszenie." },
           ].map((f) => (

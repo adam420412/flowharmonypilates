@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 const classes = [
   {
     name: "Reformer Pilates",
-    sub: "Grupowe • do 10 osób",
+    sub: "Grupowe • do 4 osób",
     desc: "Klasyczna sesja na reformerze w kameralnej grupie. Dla każdego poziomu.",
     img: classReformer,
   },
@@ -137,7 +137,7 @@ function HomePage() {
                 którzy szukają więcej niż treningu — szukają chwili dla siebie.
               </p>
               <p>
-                Kameralne grupy do 10 osób, prywatne sale VIP, certyfikowane
+                Kameralne grupy do 4 osób, prywatne sale VIP, certyfikowane
                 instruktorki i wnętrze, w którym chce się zostać dłużej.
               </p>
             </div>
@@ -198,7 +198,7 @@ function HomePage() {
       <section className="px-6 py-24 md:px-10">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-3">
           {[
-            { icon: Users, title: "Kameralne grupy", text: "Maksymalnie 10 osób na sesji reformer." },
+            { icon: Users, title: "Kameralne grupy", text: "Maksymalnie 4 osoby na sesji reformer." },
             { icon: Sparkles, title: "Premium sprzęt", text: "Profesjonalne reformery i akcesoria." },
             { icon: Clock, title: "Elastyczny grafik", text: "Zajęcia od rana do wieczora, 6 dni w tygodniu." },
           ].map((f) => (

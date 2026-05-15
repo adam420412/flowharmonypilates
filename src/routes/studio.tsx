@@ -51,7 +51,7 @@ function StudioPage() {
                 estetyka i jakość spotykają się z metodą pilates Josepha Pilatesa.
               </p>
               <p>
-                Pracujemy w grupach do 10 osób oraz w formacie VIP solo i duo. Naszym celem jest,
+                Pracujemy w grupach do 4 osób oraz w formacie VIP solo i duo. Naszym celem jest,
                 żebyś po wyjściu czuła się silniejsza, lżejsza i naprawdę zaopiekowana.
               </p>
             </div>
@@ -68,7 +68,7 @@ function StudioPage() {
           <div className="mt-16 grid gap-12 md:grid-cols-3">
             {[
               { icon: Heart, title: "Uważność", text: "Każde powtórzenie z intencją. Słuchamy ciała, nie liczników." },
-              { icon: Users, title: "Kameralność", text: "Maksymalnie 10 osób na sesji. Instruktor widzi i koryguje każdą z Was." },
+              { icon: Users, title: "Kameralność", text: "Maksymalnie 4 osoby na sesji. Instruktor widzi i koryguje każdą z Was." },
               { icon: Sparkles, title: "Jakość", text: "Profesjonalne reformery, certyfikowane instruktorki, dopracowane wnętrze." },
             ].map((f) => (
               <div key={f.title} className="border-t border-foreground/15 pt-8">
