@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.enforce_class_capacity() FROM PUBLIC, anon, authenticated;
