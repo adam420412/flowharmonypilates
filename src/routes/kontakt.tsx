@@ -119,6 +119,57 @@ function KontaktPage() {
         </div>
       </section>
 
+      <section className="px-6 pb-24 md:px-10 md:pb-32">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <span className="text-xs uppercase tracking-widest text-mocha">Dojazd</span>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">Znajdź nas na mapie</h2>
+              <p className="mt-3 max-w-xl text-sm text-foreground/80">
+                ul. Poznańska 117, 62-023 Kamionki — kilka minut od obwodnicy Poznania.
+              </p>
+            </div>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hidden shrink-0 items-center gap-2 rounded-full border border-foreground/20 px-5 py-2.5 text-xs uppercase tracking-widest hover:border-terracotta hover:text-terracotta md:inline-flex"
+            >
+              Wyznacz trasę <ArrowRight size={14} />
+            </a>
+          </div>
+
+          <div className="mt-8 overflow-hidden rounded-2xl border border-foreground/10 shadow-sm">
+            <iframe
+              title="Mapa dojazdu — ul. Poznańska 117, Kamionki"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=17.0123%2C52.3299%2C17.0323%2C52.3499&layer=mapnik&marker=52.3399%2C17.0223"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="block h-[420px] w-full md:h-[520px]"
+            />
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-foreground/70">
+            <a
+              href="https://www.openstreetmap.org/?mlat=52.3399&mlon=17.0223#map=17/52.3399/17.0223"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="underline-offset-4 hover:text-terracotta hover:underline"
+            >
+              Otwórz większą mapę
+            </a>
+            <a
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-2 underline-offset-4 hover:text-terracotta hover:underline md:hidden"
+            >
+              Wyznacz trasę <ArrowRight size={12} />
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-sand px-6 py-20 md:px-10 md:py-28">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl leading-tight md:text-5xl">Wpadnij na sesję Intro</h2>
