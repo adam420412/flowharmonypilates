@@ -589,9 +589,15 @@ function NotificationTestCard() {
           startsAt: form.startsAt,
           recipientEmail: form.recipientEmail || undefined,
           recipientPhone: form.recipientPhone || undefined,
+          bookingId: form.bookingId || undefined,
+          classId: form.classId || undefined,
         },
       });
-      toast.success("Wysłano test (mock — sprawdź logi serwera i log poniżej)");
+      toast.success(
+        form.bookingId
+          ? "Wysłano test pod prawdziwą rezerwację (mock — sprawdź log)"
+          : "Wysłano test (mock — sprawdź logi serwera i log poniżej)",
+      );
       console.log("[test send]", r);
       void loadLogs();
     } catch (e) {
@@ -603,6 +609,7 @@ function NotificationTestCard() {
 
   useEffect(() => {
     void loadLogs();
+    void loadOptions();
   }, []);
 
   return (
