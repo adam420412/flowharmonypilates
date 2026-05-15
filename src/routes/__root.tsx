@@ -78,6 +78,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Butikowe studio pilates na reformerach. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Flow & Harmony — Studio Pilates Reformery" },
+      { name: "twitter:title", content: "Flow & Harmony — Studio Pilates Reformery" },
+      { property: "og:description", content: "Butikowe studio pilates na reformerach. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia." },
+      { name: "twitter:description", content: "Butikowe studio pilates na reformerach. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/976a5461-6ecd-42de-8615-1ae39a652265/id-preview-351bfafb--845cc697-6a4f-4838-a5a8-c2e75f0e592a.lovable.app-1778850612610.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/976a5461-6ecd-42de-8615-1ae39a652265/id-preview-351bfafb--845cc697-6a4f-4838-a5a8-c2e75f0e592a.lovable.app-1778850612610.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
