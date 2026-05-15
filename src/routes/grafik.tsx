@@ -368,12 +368,28 @@ function GrafikPage() {
         </div>
 
         {!isAuthenticated && (
-          <p className="mt-8 text-center text-sm text-muted-foreground">
-            Aby zarezerwować zajęcia,{" "}
-            <Link to="/login" className="text-terracotta underline-offset-4 hover:underline">zaloguj się</Link>
-            {" "}lub{" "}
-            <Link to="/rejestracja" className="text-terracotta underline-offset-4 hover:underline">załóż konto</Link>.
-          </p>
+          <div className="mt-12 flex flex-col items-center gap-4 rounded-2xl border border-terracotta/30 bg-terracotta/5 p-8 text-center">
+            <p className="font-display text-2xl text-foreground">
+              Załóż darmowe konto, by zarezerwować zajęcia.
+            </p>
+            <p className="text-sm text-foreground/70">
+              Rejestracja zajmuje minutę — od razu wybierzesz termin i otrzymasz potwierdzenie e-mail.
+            </p>
+            <div className="mt-2 flex flex-wrap justify-center gap-3">
+              <Link
+                to="/rejestracja"
+                className="rounded-full bg-foreground px-7 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta"
+              >
+                Załóż konto
+              </Link>
+              <Link
+                to="/login"
+                className="rounded-full border border-foreground/30 px-7 py-3 text-xs uppercase tracking-widest text-foreground hover:border-terracotta hover:text-terracotta"
+              >
+                Mam już konto
+              </Link>
+            </div>
+          </div>
         )}
       </main>
       <Footer />
