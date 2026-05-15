@@ -22,7 +22,7 @@ export function Navigation() {
     <header className="absolute top-0 left-0 right-0 z-50">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10 md:py-8">
         <Link to="/" className="flex items-center" aria-label="Flow & Harmony — Studio Pilates Reformery">
-          <Logo variant="auto" className="h-12 md:h-14" />
+          <Logo variant="auto" className="h-16 md:h-20 lg:h-24" />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -30,7 +30,7 @@ export function Navigation() {
             <Link
               key={l.to}
               to={l.to}
-              className="text-xs uppercase tracking-widest text-foreground/80 transition-colors hover:text-terracotta"
+              className="text-xs font-semibold uppercase tracking-widest text-ink transition-colors hover:text-terracotta"
               activeProps={{ className: "text-terracotta" }}
             >
               {l.label}
@@ -42,8 +42,8 @@ export function Navigation() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="text-xs uppercase tracking-widest text-terracotta hover:text-foreground"
-              activeProps={{ className: "text-foreground" }}
+              className="text-xs font-semibold uppercase tracking-widest text-terracotta hover:text-ink"
+              activeProps={{ className: "text-ink" }}
             >
               Admin
             </Link>
@@ -51,21 +51,21 @@ export function Navigation() {
           {!isAuthenticated && (
             <Link
               to="/rejestracja"
-              className="text-xs uppercase tracking-widest text-foreground/80 hover:text-terracotta"
+              className="text-xs font-semibold uppercase tracking-widest text-ink hover:text-terracotta"
             >
               Załóż konto
             </Link>
           )}
           <Link
             to={isAuthenticated ? "/konto" : "/login"}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20 text-foreground transition-all hover:bg-foreground/5"
+            className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-ink/40 text-ink transition-all hover:border-ink hover:bg-ink hover:text-cream"
             aria-label={isAuthenticated ? "Moje konto" : "Zaloguj się"}
           >
             <User className="h-4 w-4" />
           </Link>
           <Link
             to="/grafik"
-            className="rounded-full border border-foreground/30 px-6 py-2.5 text-xs uppercase tracking-widest text-foreground transition-all hover:bg-foreground hover:text-cream"
+            className="rounded-full bg-ink px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-cream shadow-md shadow-ink/20 transition-all hover:bg-terracotta hover:shadow-terracotta/40"
           >
             Rezerwuj
           </Link>
