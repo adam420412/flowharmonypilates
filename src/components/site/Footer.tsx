@@ -15,8 +15,10 @@ export function Footer() {
             </p>
             <div className="mt-8 flex items-center gap-4">
               <a
-                href="https://instagram.com"
-                aria-label="Instagram"
+                href="https://www.instagram.com/asia_konieczna/"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Instagram Joanny Koniecznej"
                 className="rounded-full border border-cream/20 p-3 transition-colors hover:bg-cream hover:text-ink"
               >
                 <Instagram size={18} />
