@@ -15,7 +15,8 @@ const links = [
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, hasRole } = useAuth();
+  const isAdmin = hasRole("admin");
 
   return (
     <header className="absolute top-0 left-0 right-0 z-50">
@@ -38,6 +39,15 @@ export function Navigation() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="text-xs uppercase tracking-widest text-terracotta hover:text-foreground"
+              activeProps={{ className: "text-foreground" }}
+            >
+              Admin
+            </Link>
+          )}
           <Link
             to={isAuthenticated ? "/konto" : "/login"}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-foreground/20 text-foreground transition-all hover:bg-foreground/5"
