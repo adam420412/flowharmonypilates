@@ -222,7 +222,7 @@ function HomePage() {
             </div>
             <Link
               to="/cennik"
-              className="text-xs uppercase tracking-widest text-cream/80 hover:text-cream"
+              className="text-xs font-semibold uppercase tracking-widest text-cream underline underline-offset-8 decoration-nude hover:text-nude"
             >
               Pełny cennik →
             </Link>
