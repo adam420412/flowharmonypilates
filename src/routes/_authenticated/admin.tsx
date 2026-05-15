@@ -43,7 +43,7 @@ type ClassRow = {
   capacity: number;
   waitlist_capacity: number;
   is_cancelled: boolean;
-  class_type: { name: string } | null;
+  class_type: { name: string; slug: string } | null;
   instructor: { full_name: string } | null;
 };
 
