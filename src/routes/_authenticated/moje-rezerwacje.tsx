@@ -74,11 +74,27 @@ function MyBookingsPage() {
       supabase.from("app_settings").select("value").eq("key", "cancellation_hours_before").maybeSingle(),
     ]);
     const rows = ((data ?? []) as unknown as BookingRow[]);
+    const bookingIds = rows.map((b) => b.id);
+    const { data: notices } = bookingIds.length
+      ? await supabase
+          .from("notification_log")
+          .select("booking_id, channel, status, created_at")
+          .eq("user_id", user.id)
+          .eq("kind", "waitlist_promoted")
+          .in("booking_id", bookingIds)
+      : { data: [] as Array<{ booking_id: string; channel: string; status: string; created_at: string }> };
+    const noticesByBooking = new Map<string, PromotionNotice[]>();
+    for (const n of notices ?? []) {
+      const arr = noticesByBooking.get(n.booking_id) ?? [];
+      arr.push({ channel: n.channel as "email" | "sms", status: n.status, created_at: n.created_at });
+      noticesByBooking.set(n.booking_id, arr);
+    }
     const withPositions = await Promise.all(
       rows.map(async (b) => {
-        if (b.status !== "waitlist") return b;
+        const promotion_notices = noticesByBooking.get(b.id);
+        if (b.status !== "waitlist") return { ...b, promotion_notices };
         const { data: pos } = await supabase.rpc("waitlist_position", { _booking_id: b.id });
-        return { ...b, waitlist_position: typeof pos === "number" ? pos : null };
+        return { ...b, waitlist_position: typeof pos === "number" ? pos : null, promotion_notices };
       })
     );
     setBookings(withPositions);
