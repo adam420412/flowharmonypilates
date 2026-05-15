@@ -420,16 +420,18 @@ function ClassesCard() {
                         </div>
                       </div>
                       <NumberCell
-                        label="Miejsca"
+                        label={`Miejsca (max ${typeCapBySlug(row.class_type?.slug)})`}
                         value={draft.capacity}
                         onChange={(v) => setEdit(row.id, { capacity: v })}
                         min={1}
+                        max={typeCapBySlug(row.class_type?.slug)}
                       />
                       <NumberCell
                         label="Rezerwa"
                         value={draft.waitlist_capacity}
                         onChange={(v) => setEdit(row.id, { waitlist_capacity: v })}
                         min={0}
+                        max={50}
                       />
                       <button
                         disabled={!dirty || savingId === row.id}
