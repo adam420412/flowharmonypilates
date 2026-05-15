@@ -100,6 +100,15 @@ export function Navigation() {
             >
               Rezerwuj zajęcia
             </Link>
+            {!isAuthenticated && (
+              <Link
+                to="/rejestracja"
+                onClick={() => setOpen(false)}
+                className="mt-3 rounded-full border border-foreground/30 px-6 py-3 text-center text-xs uppercase tracking-widest text-foreground"
+              >
+                Załóż konto
+              </Link>
+            )}
           </nav>
         </div>
       )}
