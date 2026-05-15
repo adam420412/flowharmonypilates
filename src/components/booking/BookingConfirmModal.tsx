@@ -103,7 +103,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
                 placeholder="+48 600 000 000"
                 className="mt-1 w-full rounded-md border border-foreground/15 bg-background px-3 py-2 text-sm focus:border-terracotta focus:outline-none"
               />
-              {phoneError && <p className="mt-1 text-xs text-rose-600">{phoneError}</p>}
+              {phoneError && <p className="mt-1 text-xs text-destructive">{phoneError}</p>}
             </div>
             <label className="flex items-start gap-2 text-xs text-foreground">
               <input
