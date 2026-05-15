@@ -85,6 +85,7 @@ function MyBookingsPage() {
       : { data: [] as Array<{ booking_id: string; channel: string; status: string; created_at: string }> };
     const noticesByBooking = new Map<string, PromotionNotice[]>();
     for (const n of notices ?? []) {
+      if (!n.booking_id) continue;
       const arr = noticesByBooking.get(n.booking_id) ?? [];
       arr.push({ channel: n.channel as "email" | "sms", status: n.status, created_at: n.created_at });
       noticesByBooking.set(n.booking_id, arr);
