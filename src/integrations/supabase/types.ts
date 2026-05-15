@@ -202,6 +202,45 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_log: {
+        Row: {
+          booking_id: string | null
+          channel: string
+          class_id: string | null
+          created_at: string
+          error: string | null
+          id: string
+          kind: string
+          recipient: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          booking_id?: string | null
+          channel: string
+          class_id?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind: string
+          recipient: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          booking_id?: string | null
+          channel?: string
+          class_id?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind?: string
+          recipient?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -209,6 +248,8 @@ export type Database = {
           display_name: string | null
           id: string
           phone: string | null
+          sms_opt_in: boolean
+          sms_opt_in_at: string | null
           updated_at: string
         }
         Insert: {
@@ -217,6 +258,8 @@ export type Database = {
           display_name?: string | null
           id: string
           phone?: string | null
+          sms_opt_in?: boolean
+          sms_opt_in_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -225,6 +268,8 @@ export type Database = {
           display_name?: string | null
           id?: string
           phone?: string | null
+          sms_opt_in?: boolean
+          sms_opt_in_at?: string | null
           updated_at?: string
         }
         Relationships: []
