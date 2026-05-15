@@ -5,6 +5,7 @@ import { Footer } from "@/components/site/Footer";
 import classReformer from "@/assets/class-reformer.jpg";
 import classVip from "@/assets/class-vip.jpg";
 import classIntro from "@/assets/class-intro.jpg";
+import classCadillac from "@/assets/class-cadillac.jpg";
 
 export const Route = createFileRoute("/zajecia")({
   head: () => ({
@@ -42,6 +43,18 @@ const offers = [
       "Pełna personalizacja i biomechaniczna analiza",
       "Świetne dla rehabilitacji i okresu okołoporodowego",
       "Możliwość treningu z partnerką / partnerem",
+    ],
+  },
+  {
+    name: "Cadillac 1:1",
+    sub: "Indywidualne • rozbudowane urządzenie",
+    duration: "55 min",
+    img: classCadillac,
+    desc: "Sesja indywidualna na Cadillacu — rozbudowanym urządzeniu z trapezem, sprężynami i drążkami. Pełen wachlarz ćwiczeń mobilizacyjnych, wzmacniających i rehabilitacyjnych w pracy 1:1 z instruktorem.",
+    bullets: [
+      "Praca 1:1 na pełnowymiarowym Cadillacu",
+      "Idealne przy bólach pleców i ograniczeniach mobilności",
+      "Indywidualny plan i dobór ćwiczeń",
     ],
   },
   {
