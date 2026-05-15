@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { format, differenceInHours } from "date-fns";
 import { pl } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import { notifyWaitlistPromoted } from "@/lib/notifications.functions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -44,6 +46,7 @@ function MyBookingsPage() {
   const [hoursBefore, setHoursBefore] = useState(12);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
+  const notifyWaitlistPromotedFn = useServerFn(notifyWaitlistPromoted);
 
   async function load() {
     if (!user) return;
@@ -81,6 +84,8 @@ function MyBookingsPage() {
   async function cancel() {
     if (!confirmId) return;
     setCancelling(true);
+    const cancelledBooking = bookings.find((b) => b.id === confirmId);
+    const classId = cancelledBooking?.classes?.id;
     const { data, error } = await supabase.rpc("cancel_booking", { _booking_id: confirmId });
     setCancelling(false);
     setConfirmId(null);
@@ -88,7 +93,7 @@ function MyBookingsPage() {
       toast.error(error.message);
       return;
     }
-    const result = data as { ok: boolean; error?: string; hours_before?: number };
+    const result = data as { ok: boolean; error?: string; hours_before?: number; promoted_user_id?: string | null };
     if (!result.ok) {
       if (result.error === "too_late") {
         toast.error(`Rezerwację można odwołać najpóźniej ${result.hours_before} h przed zajęciami.`);
@@ -98,6 +103,15 @@ function MyBookingsPage() {
       return;
     }
     toast.success("Rezerwacja odwołana");
+    if (result.promoted_user_id && classId) {
+      try {
+        await notifyWaitlistPromotedFn({
+          data: { classId, promotedUserId: result.promoted_user_id },
+        });
+      } catch (e) {
+        console.error("waitlist promoted notification failed:", e);
+      }
+    }
     load();
   }
 
