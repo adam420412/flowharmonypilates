@@ -243,6 +243,8 @@ const testSendSchema = z.object({
   startsAt: z.string().min(1),
   recipientEmail: z.string().email().optional().or(z.literal("")).transform((v) => v || undefined),
   recipientPhone: z.string().regex(/^\+?\d{9,15}$/).optional().or(z.literal("")).transform((v) => v || undefined),
+  bookingId: z.string().uuid().optional(),
+  classId: z.string().uuid().optional(),
 });
 
 /** Wysyła testowy email i/lub SMS na podany adres / numer. Loguje do notification_log. */
