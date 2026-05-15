@@ -490,6 +490,7 @@ function NotificationTestCard() {
   const previewFn = useServerFn(previewWaitlistPromoted);
   const sendFn = useServerFn(sendTestWaitlistPromoted);
   const logsFn = useServerFn(getWaitlistPromotedLogs);
+  const listFn = useServerFn(listWaitlistBookings);
 
   const [form, setForm] = useState({
     className: "Pilates Reformer",
@@ -497,6 +498,8 @@ function NotificationTestCard() {
     startsAt: defaultStartsAt(),
     recipientEmail: "",
     recipientPhone: "",
+    bookingId: "" as string,
+    classId: "" as string,
   });
   const [preview, setPreview] = useState<{
     email: { subject: string; body: string };
@@ -506,6 +509,52 @@ function NotificationTestCard() {
   const [sending, setSending] = useState(false);
   const [logs, setLogs] = useState<LogRow[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(false);
+  const [options, setOptions] = useState<WaitlistOption[]>([]);
+  const [loadingOptions, setLoadingOptions] = useState(false);
+
+  async function loadOptions() {
+    setLoadingOptions(true);
+    try {
+      const r = await listFn({ data: { limit: 100 } });
+      setOptions(r.bookings as WaitlistOption[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Nie udało się pobrać rezerwacji");
+    } finally {
+      setLoadingOptions(false);
+    }
+  }
+
+  function pickBooking(bookingId: string) {
+    if (!bookingId) {
+      setForm((f) => ({ ...f, bookingId: "", classId: "" }));
+      return;
+    }
+    const opt = options.find((o) => o.bookingId === bookingId);
+    if (!opt) return;
+    setForm((f) => ({
+      ...f,
+      bookingId: opt.bookingId,
+      classId: opt.classId,
+      className: opt.className,
+      instructorName: opt.instructorName,
+      startsAt: opt.startsAt,
+      recipientEmail: opt.email ?? "",
+      recipientPhone: opt.smsOptIn && opt.phone ? opt.phone : "",
+    }));
+    setPreview(null);
+  }
+
+  async function loadLogs() {
+    setLoadingLogs(true);
+    try {
+      const r = await logsFn({ data: { limit: 25 } });
+      setLogs(r.logs as LogRow[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Nie udało się pobrać logów");
+    } finally {
+      setLoadingLogs(false);
+    }
+  }
 
   async function loadLogs() {
     setLoadingLogs(true);
