@@ -40,6 +40,7 @@ type Counts = Record<string, { confirmed: number; waitlist: number }>;
 
 function GrafikPage() {
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [classTypes, setClassTypes] = useState<ClassType[]>([]);
   const [instructors, setInstructors] = useState<Instructor[]>([]);
