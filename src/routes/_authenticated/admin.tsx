@@ -301,13 +301,14 @@ function ClassesCard() {
 
   async function save(row: ClassRow) {
     const draft = getEdit(row);
+    const maxCap = typeCapBySlug(row.class_type?.slug);
     const schema = z.object({
-      capacity: z.coerce.number().int().min(1).max(4),
+      capacity: z.coerce.number().int().min(1).max(maxCap),
       waitlist_capacity: z.coerce.number().int().min(0).max(50),
     });
     const parsed = schema.safeParse(draft);
     if (!parsed.success) {
-      toast.error("Limit miejsc: 1–4 (maks. 4 osoby na zajęciach), rezerwa: 0–50");
+      toast.error(`Limit miejsc: 1–${maxCap} dla "${row.class_type?.name ?? "tych zajęć"}", rezerwa: 0–50`);
       return;
     }
     setSavingId(row.id);
