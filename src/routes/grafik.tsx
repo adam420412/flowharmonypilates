@@ -136,7 +136,8 @@ function GrafikPage() {
 
   function openBooking(c: ClassRow) {
     if (!isAuthenticated || !user) {
-      toast.error("Zaloguj się, aby zarezerwować zajęcia");
+      toast.info("Załóż darmowe konto, aby zarezerwować zajęcia.");
+      navigate({ to: "/rejestracja" });
       return;
     }
     const status = statusOf(c);
