@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as GrafikRouteImport } from './routes/grafik'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
 
 const RejestracjaRoute = RejestracjaRouteImport.update({
@@ -40,6 +41,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMojeRezerwacjeRoute =
+  AuthenticatedMojeRezerwacjeRouteImport.update({
+    id: '/moje-rezerwacje',
+    path: '/moje-rezerwacje',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedKontoRoute = AuthenticatedKontoRouteImport.update({
   id: '/konto',
   path: '/konto',
@@ -52,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/konto': typeof AuthenticatedKontoRoute
+  '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,6 +67,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/konto': typeof AuthenticatedKontoRoute
+  '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -68,12 +77,25 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
+  '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/grafik' | '/login' | '/rejestracja' | '/konto'
+  fullPaths:
+    | '/'
+    | '/grafik'
+    | '/login'
+    | '/rejestracja'
+    | '/konto'
+    | '/moje-rezerwacje'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/grafik' | '/login' | '/rejestracja' | '/konto'
+  to:
+    | '/'
+    | '/grafik'
+    | '/login'
+    | '/rejestracja'
+    | '/konto'
+    | '/moje-rezerwacje'
   id:
     | '__root__'
     | '/'
@@ -82,6 +104,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/rejestracja'
     | '/_authenticated/konto'
+    | '/_authenticated/moje-rezerwacje'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -129,6 +152,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/moje-rezerwacje': {
+      id: '/_authenticated/moje-rezerwacje'
+      path: '/moje-rezerwacje'
+      fullPath: '/moje-rezerwacje'
+      preLoaderRoute: typeof AuthenticatedMojeRezerwacjeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/konto': {
       id: '/_authenticated/konto'
       path: '/konto'
@@ -141,10 +171,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedKontoRoute: typeof AuthenticatedKontoRoute
+  AuthenticatedMojeRezerwacjeRoute: typeof AuthenticatedMojeRezerwacjeRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedKontoRoute: AuthenticatedKontoRoute,
+  AuthenticatedMojeRezerwacjeRoute: AuthenticatedMojeRezerwacjeRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
