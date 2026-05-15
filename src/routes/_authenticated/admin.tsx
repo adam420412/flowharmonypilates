@@ -302,12 +302,12 @@ function ClassesCard() {
   async function save(row: ClassRow) {
     const draft = getEdit(row);
     const schema = z.object({
-      capacity: z.coerce.number().int().min(1).max(50),
+      capacity: z.coerce.number().int().min(1).max(4),
       waitlist_capacity: z.coerce.number().int().min(0).max(50),
     });
     const parsed = schema.safeParse(draft);
     if (!parsed.success) {
-      toast.error("Nieprawidłowe wartości (1–50 dla limitu, 0–50 dla rezerwy)");
+      toast.error("Limit miejsc: 1–4 (maks. 4 osoby na zajęciach), rezerwa: 0–50");
       return;
     }
     setSavingId(row.id);
