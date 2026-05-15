@@ -46,6 +46,7 @@ function MyBookingsPage() {
   const [hoursBefore, setHoursBefore] = useState(12);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
+  const notifyWaitlistPromotedFn = useServerFn(notifyWaitlistPromoted);
 
   async function load() {
     if (!user) return;
