@@ -70,7 +70,7 @@ function HomePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/15 to-cream/80" />
 
-        <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
+        <div className="section-gradient relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
           <div className="max-w-5xl animate-fade-up">
             <span className="text-xs uppercase tracking-widest text-mocha">
               Studio Pilates · Reformery
@@ -78,7 +78,7 @@ function HomePage() {
             <img
               src={logo}
               alt="Flow & Harmony"
-              className="mt-8 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl"
+              className="mt-8 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl [filter:var(--logo-filter,none)]"
             />
             <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink/80 md:text-3xl">
               Twoja przestrzeń <span className="text-terracotta">ruchu</span> i wytchnienia.
