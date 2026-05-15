@@ -12,7 +12,23 @@ import {
   previewWaitlistPromoted,
   sendTestWaitlistPromoted,
   getWaitlistPromotedLogs,
+  listWaitlistBookings,
 } from "@/lib/notifications.functions";
+
+type WaitlistOption = {
+  bookingId: string;
+  status: "waitlist" | "confirmed";
+  createdAt: string;
+  classId: string;
+  startsAt: string;
+  className: string;
+  instructorName: string;
+  userId: string;
+  displayName: string | null;
+  email: string | null;
+  phone: string | null;
+  smsOptIn: boolean;
+};
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
