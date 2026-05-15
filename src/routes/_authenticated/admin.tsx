@@ -12,7 +12,23 @@ import {
   previewWaitlistPromoted,
   sendTestWaitlistPromoted,
   getWaitlistPromotedLogs,
+  listWaitlistBookings,
 } from "@/lib/notifications.functions";
+
+type WaitlistOption = {
+  bookingId: string;
+  status: "waitlist" | "confirmed";
+  createdAt: string;
+  classId: string;
+  startsAt: string;
+  className: string;
+  instructorName: string;
+  userId: string;
+  displayName: string | null;
+  email: string | null;
+  phone: string | null;
+  smsOptIn: boolean;
+};
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -474,6 +490,7 @@ function NotificationTestCard() {
   const previewFn = useServerFn(previewWaitlistPromoted);
   const sendFn = useServerFn(sendTestWaitlistPromoted);
   const logsFn = useServerFn(getWaitlistPromotedLogs);
+  const listFn = useServerFn(listWaitlistBookings);
 
   const [form, setForm] = useState({
     className: "Pilates Reformer",
@@ -481,6 +498,8 @@ function NotificationTestCard() {
     startsAt: defaultStartsAt(),
     recipientEmail: "",
     recipientPhone: "",
+    bookingId: "" as string,
+    classId: "" as string,
   });
   const [preview, setPreview] = useState<{
     email: { subject: string; body: string };
@@ -490,6 +509,40 @@ function NotificationTestCard() {
   const [sending, setSending] = useState(false);
   const [logs, setLogs] = useState<LogRow[]>([]);
   const [loadingLogs, setLoadingLogs] = useState(false);
+  const [options, setOptions] = useState<WaitlistOption[]>([]);
+  const [loadingOptions, setLoadingOptions] = useState(false);
+
+  async function loadOptions() {
+    setLoadingOptions(true);
+    try {
+      const r = await listFn({ data: { limit: 100 } });
+      setOptions(r.bookings as WaitlistOption[]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Nie udało się pobrać rezerwacji");
+    } finally {
+      setLoadingOptions(false);
+    }
+  }
+
+  function pickBooking(bookingId: string) {
+    if (!bookingId) {
+      setForm((f) => ({ ...f, bookingId: "", classId: "" }));
+      return;
+    }
+    const opt = options.find((o) => o.bookingId === bookingId);
+    if (!opt) return;
+    setForm((f) => ({
+      ...f,
+      bookingId: opt.bookingId,
+      classId: opt.classId,
+      className: opt.className,
+      instructorName: opt.instructorName,
+      startsAt: opt.startsAt,
+      recipientEmail: opt.email ?? "",
+      recipientPhone: opt.smsOptIn && opt.phone ? opt.phone : "",
+    }));
+    setPreview(null);
+  }
 
   async function loadLogs() {
     setLoadingLogs(true);
@@ -502,6 +555,7 @@ function NotificationTestCard() {
       setLoadingLogs(false);
     }
   }
+
 
   async function handlePreview() {
     setLoadingPreview(true);
@@ -535,9 +589,15 @@ function NotificationTestCard() {
           startsAt: form.startsAt,
           recipientEmail: form.recipientEmail || undefined,
           recipientPhone: form.recipientPhone || undefined,
+          bookingId: form.bookingId || undefined,
+          classId: form.classId || undefined,
         },
       });
-      toast.success("Wysłano test (mock — sprawdź logi serwera i log poniżej)");
+      toast.success(
+        form.bookingId
+          ? "Wysłano test pod prawdziwą rezerwację (mock — sprawdź log)"
+          : "Wysłano test (mock — sprawdź logi serwera i log poniżej)",
+      );
       console.log("[test send]", r);
       void loadLogs();
     } catch (e) {
@@ -549,6 +609,7 @@ function NotificationTestCard() {
 
   useEffect(() => {
     void loadLogs();
+    void loadOptions();
   }, []);
 
   return (
@@ -568,6 +629,44 @@ function NotificationTestCard() {
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <div className="space-y-4">
+          <label className="block">
+            <span className="flex items-center justify-between text-xs uppercase tracking-widest text-foreground/70">
+              <span>Wybierz prawdziwą rezerwację (opcjonalnie)</span>
+              <button
+                type="button"
+                onClick={() => void loadOptions()}
+                className="inline-flex items-center gap-1 text-[10px] normal-case tracking-normal text-foreground/50 hover:text-terracotta"
+              >
+                <RefreshCw className={`h-3 w-3 ${loadingOptions ? "animate-spin" : ""}`} /> odśwież
+              </button>
+            </span>
+            <select
+              value={form.bookingId}
+              onChange={(e) => pickBooking(e.target.value)}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-terracotta"
+            >
+              <option value="">— wpisz dane ręcznie —</option>
+              {options.map((o) => {
+                const when = new Date(o.startsAt).toLocaleString("pl-PL", {
+                  day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
+                });
+                const tag = o.status === "waitlist" ? "[L. rez.]" : "[Potwierdz.]";
+                const who = o.displayName || o.email || o.userId.slice(0, 8);
+                return (
+                  <option key={o.bookingId} value={o.bookingId}>
+                    {tag} {when} · {o.className} · {who}
+                  </option>
+                );
+              })}
+            </select>
+            {form.bookingId ? (
+              <span className="mt-1 block text-[10px] text-foreground/50">
+                booking_id: <span className="font-mono">{form.bookingId}</span>
+                {" · "}log zostanie powiązany z tą rezerwacją.
+              </span>
+            ) : null}
+          </label>
+
           <FieldText
             label="Nazwa zajęć"
             value={form.className}
