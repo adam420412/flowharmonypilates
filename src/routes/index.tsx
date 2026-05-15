@@ -8,17 +8,18 @@ import aboutImg from "@/assets/about-pilates.jpg";
 import classReformer from "@/assets/class-reformer.jpg";
 import classVip from "@/assets/class-vip.jpg";
 import classIntro from "@/assets/class-intro.jpg";
+import logo from "@/assets/logo-flow-harmony.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Mimosa Pilates — Designerskie studio reformer pilates w Kamionkach" },
+      { title: "Flow & Harmony — Studio Pilates Reformery" },
       {
         name: "description",
         content:
-          "Butikowe studio pilates na reformerach. Zajęcia grupowe i VIP. Zarezerwuj online — Kamionki, ul. Poznańska 117.",
+          "Butikowe studio pilates na reformerach. Zajęcia grupowe i VIP — Flow & Harmony. Zarezerwuj online.",
       },
-      { property: "og:title", content: "Mimosa Pilates — Reformer studio" },
+      { property: "og:title", content: "Flow & Harmony — Studio Pilates Reformery" },
       { property: "og:description", content: "Twoja przestrzeń ruchu i wytchnienia." },
     ],
   }),
@@ -62,25 +63,29 @@ function HomePage() {
       <section className="relative h-screen min-h-[700px] w-full overflow-hidden">
         <img
           src={heroImg}
-          alt="Studio Mimosa Pilates"
+          alt="Studio Flow & Harmony — pilates reformery"
           width={1920}
           height={1080}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-cream/30 via-cream/10 to-cream/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/15 to-cream/80" />
 
-        <div className="relative z-10 flex h-full flex-col justify-end px-6 pb-20 md:px-16 md:pb-28">
-          <div className="max-w-4xl animate-fade-up">
+        <div className="relative z-10 flex h-full flex-col justify-center px-6 md:px-16">
+          <div className="max-w-5xl animate-fade-up">
             <span className="text-xs uppercase tracking-widest text-mocha">
-              Reformer pilates · Kamionki
+              Studio Pilates · Reformery
             </span>
-            <h1 className="mt-6 font-display text-6xl leading-[0.95] text-ink md:text-8xl lg:text-9xl">
-              Twoja przestrzeń <em className="italic text-terracotta">ruchu</em>
-              <br />i wytchnienia.
-            </h1>
-            <p className="mt-8 max-w-xl text-base leading-relaxed text-ink/75 md:text-lg">
-              Designerskie studio reformer pilates w Kamionkach.
-              Kameralne sesje, doświadczone instruktorki, atmosfera spa.
+            <img
+              src={logo}
+              alt="Flow & Harmony"
+              className="mt-8 w-full max-w-2xl md:max-w-3xl lg:max-w-4xl"
+            />
+            <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink/80 md:text-3xl">
+              Twoja przestrzeń <span className="text-terracotta">ruchu</span> i wytchnienia.
+            </p>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink/70 md:text-lg">
+              Butikowe studio reformer pilates. Kameralne sesje, doświadczone instruktorki,
+              atmosfera spa.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-4">
               <Link
@@ -118,7 +123,7 @@ function HomePage() {
               className="aspect-[4/5] w-full object-cover"
             />
             <div className="absolute -bottom-8 -right-4 hidden text-terracotta md:block">
-              <Stamp text="MIMOSA · BOUTIQUE STUDIO · " />
+              <Stamp text="FLOW & HARMONY · STUDIO PILATES · " />
             </div>
           </div>
 
@@ -129,7 +134,7 @@ function HomePage() {
             </h2>
             <div className="mt-8 space-y-5 text-base leading-relaxed text-foreground/75">
               <p>
-                Mimosa to butikowe studio reformer pilates stworzone z myślą o tych,
+                Flow & Harmony to butikowe studio reformer pilates stworzone z myślą o tych,
                 którzy szukają więcej niż treningu — szukają chwili dla siebie.
               </p>
               <p>
