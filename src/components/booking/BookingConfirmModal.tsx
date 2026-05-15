@@ -61,10 +61,16 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
           </DialogTitle>
           <DialogDescription>
             {isWaitlist
-              ? "Brak wolnych miejsc. Dopisanie do rezerwy daje Ci szansę wejścia, gdy ktoś odwoła zajęcia."
-              : "Sprawdź szczegóły zajęć przed potwierdzeniem."}
+              ? "Brak wolnych miejsc (limit 4 osoby na zajęciach). Dopisanie do rezerwy daje Ci szansę wejścia, gdy ktoś odwoła zajęcia."
+              : "Sprawdź szczegóły zajęć przed potwierdzeniem. Limit miejsc: 4 osoby."}
           </DialogDescription>
         </DialogHeader>
+
+        {isWaitlist && (
+          <div className="rounded-md border border-terracotta/30 bg-terracotta/10 px-3 py-2 text-xs text-terracotta">
+            Komplet — limit 4 miejsc został wyczerpany. Możesz dołączyć do listy rezerwowej.
+          </div>
+        )}
 
         <div className="space-y-3 rounded-lg border border-border bg-cream/40 p-4">
           <div className="flex items-center gap-2">
