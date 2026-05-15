@@ -111,6 +111,95 @@ export const sendBookingConfirmation = createServerFn({ method: "POST" })
   });
 
 /**
+ * Wysyła powiadomienie email + SMS (jeśli opt-in) do osoby, której rezerwacja
+ * z listy rezerwowej została automatycznie awansowana po odwołaniu miejsca.
+ * Wywoływane po cancel_booking, gdy RPC zwróci promoted_user_id.
+ */
+export const notifyWaitlistPromoted = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { classId: string; promotedUserId: string }) =>
+    z.object({
+      classId: z.string().uuid(),
+      promotedUserId: z.string().uuid(),
+    }).parse(data),
+  )
+  .handler(async ({ data }) => {
+    const { classId, promotedUserId } = data;
+
+    // Znajdź awansowaną rezerwację (najnowsza confirmed na tej klasie dla tego usera)
+    const { data: booking } = await supabaseAdmin
+      .from("bookings")
+      .select("id,class_id,user_id,status,updated_at")
+      .eq("class_id", classId)
+      .eq("user_id", promotedUserId)
+      .eq("status", "confirmed")
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!booking) return { ok: false, reason: "booking_not_found" as const };
+
+    const [{ data: cls }, { data: profile }, { data: authUser }, emailEnabled, smsEnabled] =
+      await Promise.all([
+        supabaseAdmin
+          .from("classes")
+          .select("id,starts_at,duration_minutes,class_type_id,instructor_id")
+          .eq("id", classId)
+          .maybeSingle(),
+        supabaseAdmin
+          .from("profiles")
+          .select("phone,sms_opt_in")
+          .eq("id", promotedUserId)
+          .maybeSingle(),
+        supabaseAdmin.auth.admin.getUserById(promotedUserId),
+        getSetting("notifications_email_enabled"),
+        getSetting("notifications_sms_enabled"),
+      ]);
+    if (!cls) return { ok: false, reason: "class_not_found" as const };
+
+    const [{ data: ct }, { data: ins }] = await Promise.all([
+      supabaseAdmin.from("class_types").select("name").eq("id", cls.class_type_id).maybeSingle(),
+      supabaseAdmin.from("instructors").select("full_name").eq("id", cls.instructor_id).maybeSingle(),
+    ]);
+    const className = ct?.name ?? "Pilates";
+    const instructorName = ins?.full_name ?? "Instruktor";
+    const studioName = await getStudioName();
+    const email = authUser?.user?.email;
+
+    const results: Record<string, unknown> = {};
+
+    if (email && emailEnabled !== false) {
+      const { subject, body } = formatWaitlistPromotedEmail({
+        studioName, className, instructorName, startsAt: cls.starts_at,
+      });
+      results.email = await sendNotification({
+        userId: promotedUserId,
+        bookingId: booking.id,
+        classId: cls.id,
+        channel: "email",
+        kind: "waitlist_promoted",
+        recipient: email,
+        subject,
+        body,
+      });
+    }
+
+    if (smsEnabled !== false && profile?.sms_opt_in && profile.phone) {
+      const body = formatWaitlistPromotedSms({ className, startsAt: cls.starts_at });
+      results.sms = await sendNotification({
+        userId: promotedUserId,
+        bookingId: booking.id,
+        classId: cls.id,
+        channel: "sms",
+        kind: "waitlist_promoted",
+        recipient: profile.phone,
+        body,
+      });
+    }
+
+    return { ok: true, ...results };
+  });
+
+/**
  * Cron: wysyła przypomnienia email 24h przed i SMS ~2h przed.
  * Wywoływane co 5–15 minut przez pg_cron.
  */
