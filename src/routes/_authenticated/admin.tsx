@@ -55,6 +55,19 @@ const settingsSchema = z.object({
 
 type SettingsForm = z.infer<typeof settingsSchema>;
 
+function typeCapBySlug(slug?: string | null): number {
+  switch (slug) {
+    case "intro":
+    case "vip-1on1":
+    case "cadillac-1on1":
+      return 1;
+    case "vip-duo":
+      return 2;
+    default:
+      return 4;
+  }
+}
+
 function AdminPage() {
   const { hasRole, loading: authLoading } = useAuth();
   const isAdmin = hasRole("admin");
