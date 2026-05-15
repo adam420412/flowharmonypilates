@@ -47,6 +47,7 @@
   --color-mocha: var(--mocha);
   --color-nude: var(--nude);
   --color-ink: var(--ink);
+  --color-forest: var(--forest);
 
   --shadow-soft: 0 30px 60px -30px color-mix(in oklab, var(--mocha) 25%, transparent);
 }
