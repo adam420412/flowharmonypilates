@@ -34,7 +34,11 @@ const localBusinessJsonLd = {
   },
   areaServed: ["Kamionki", "Poznań", "Kórnik", "Borówiec"],
   founder: { "@type": "Person", name: "Joanna Konieczna" },
-  sameAs: ["https://www.instagram.com/asia_konieczna/"],
+  sameAs: [
+    "https://www.instagram.com/flow_harmony_pilates/",
+    "https://www.instagram.com/asia_konieczna/",
+    "https://www.facebook.com/joanna.konieczna",
+  ],
   hasMap:
     "https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki",
   openingHoursSpecification: [
