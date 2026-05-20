@@ -148,7 +148,9 @@ function KontaktPage() {
               href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
             />
             <ContactRow icon={Mail} label="E-mail" lines={["hello@flowharmony.pl"]} href="mailto:hello@flowharmony.pl" />
-            <ContactRow icon={Instagram} label="Instagram" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
+            <ContactRow icon={Instagram} label="Instagram studia" lines={["@flow_harmony_pilates"]} href="https://www.instagram.com/flow_harmony_pilates/" />
+            <ContactRow icon={Instagram} label="Instagram Joanny" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
+            <ContactRow icon={Facebook} label="Facebook" lines={["Joanna Konieczna"]} href="https://www.facebook.com/joanna.konieczna" />
 
             <a
               href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
