@@ -69,6 +69,15 @@ function CennikPage() {
             Karnety i sesje VIP — wszystkie ceny zawierają podatek. Karnety są imienne i ważne
             zgodnie z opisem od daty zakupu.
           </p>
+          <div className="mt-8 inline-flex max-w-2xl items-start gap-3 rounded-2xl border border-terracotta/30 bg-terracotta/10 px-5 py-4">
+            <span className="mt-0.5 inline-flex h-7 min-w-7 items-center justify-center rounded-full bg-terracotta px-2 text-[11px] font-semibold uppercase tracking-widest text-cream">
+              max 4
+            </span>
+            <p className="text-sm leading-relaxed text-foreground/85">
+              Wszystkie zajęcia grupowe prowadzimy w <strong>kameralnych grupach maksymalnie 4 osób</strong> —
+              dzięki temu każda klientka dostaje uważne, niemal indywidualne podejście trenera.
+            </p>
+          </div>
         </div>
       </section>
 
