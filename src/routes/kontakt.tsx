@@ -279,7 +279,7 @@ function KontaktPage() {
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl leading-tight md:text-5xl">Wpadnij na sesję Intro</h2>
           <p className="mx-auto mt-6 max-w-xl text-foreground/80">
-            Pierwsza wizyta tylko 79 zł. Załóż konto, wybierz termin i zacznij dziś.
+            Pierwsza wizyta tylko 99 zł — w kameralnej grupie max 4 osób, z indywidualnym wprowadzeniem.
           </p>
           <Link
             to="/rejestracja"
