@@ -69,13 +69,13 @@ const localBusinessJsonLd = {
 export const Route = createFileRoute("/kontakt")({
   head: () => ({
     meta: [
-      { title: "Kontakt — Studio Pilates Flow & Harmony, Kamionki" },
+      { title: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
       {
         name: "description",
         content:
-          "Studio Pilates Flow & Harmony — ul. Poznańska 117, 62-023 Kamionki k. Poznania. Tel. +48 501 817 979 (Joanna Konieczna). Rezerwacja online, WhatsApp, e-mail.",
+          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Poznańska 117, 62-023 Kamionki k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
       },
-      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Kamionki" },
+      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
       {
         property: "og:description",
         content:
