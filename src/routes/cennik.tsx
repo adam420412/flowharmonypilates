@@ -6,9 +6,9 @@ import { Footer } from "@/components/site/Footer";
 export const Route = createFileRoute("/cennik")({
   head: () => ({
     meta: [
-      { title: "Cennik karnetów — Flow & Harmony" },
-      { name: "description", content: "Karnety na zajęcia reformer pilates. Pakiety 4, 8 i no limit oraz pierwsza sesja Intro za 79 zł." },
-      { property: "og:title", content: "Cennik — Flow & Harmony" },
+      { title: "Cennik karnetów — Flow & Harmony | Joanna Konieczna" },
+      { name: "description", content: "Karnety na zajęcia reformer pilates prowadzone przez Joannę Konieczną. Pakiety 4, 8 i no limit oraz pierwsza sesja Intro za 99 zł." },
+      { property: "og:title", content: "Cennik — Flow & Harmony | Joanna Konieczna" },
       { property: "og:description", content: "Wybierz pakiet, który odpowiada Twojemu rytmowi." },
     ],
   }),
@@ -62,9 +62,9 @@ function CennikPage() {
       <section className="px-6 pb-12 pt-32 md:px-10 md:pt-40">
         <div className="mx-auto max-w-6xl">
           <span className="text-xs uppercase tracking-widest text-mocha">Cennik</span>
-          <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
-            Wybierz <em className="italic text-terracotta">swój</em> rytm.
-          </h1>
+            <h2 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
+              Wybierz <em className="italic text-terracotta">swój</em> rytm.
+            </h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
             Karnety i sesje VIP — wszystkie ceny zawierają podatek. Karnety są imienne i ważne
             zgodnie z opisem od daty zakupu.

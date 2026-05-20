@@ -10,9 +10,9 @@ import classCadillac from "@/assets/class-cadillac.jpg";
 export const Route = createFileRoute("/zajecia")({
   head: () => ({
     meta: [
-      { title: "Zajęcia — Flow & Harmony" },
-      { name: "description", content: "Reformer Pilates, VIP Training oraz sesje Intro w studio Flow & Harmony. Wybierz format dla siebie." },
-      { property: "og:title", content: "Zajęcia — Flow & Harmony" },
+      { title: "Zajęcia — Flow & Harmony | Joanna Konieczna" },
+      { name: "description", content: "Reformer Pilates, VIP Training oraz sesje Intro w studio Flow & Harmony prowadzone przez Joannę Konieczną. Wybierz format dla siebie." },
+      { property: "og:title", content: "Zajęcia — Flow & Harmony | Joanna Konieczna" },
       { property: "og:description", content: "Wybierz format pilates dopasowany do Ciebie." },
       { property: "og:image", content: classReformer },
     ],
@@ -79,9 +79,9 @@ function ZajeciaPage() {
       <section className="px-6 pb-12 pt-32 md:px-10 md:pt-40">
         <div className="mx-auto max-w-6xl">
           <span className="text-xs uppercase tracking-widest text-mocha">Zajęcia</span>
-          <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
-            Wybierz format, który <em className="italic text-terracotta">odpowiada Tobie</em>.
-          </h1>
+            <h2 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
+              Wybierz format, który <em className="italic text-terracotta">odpowiada Tobie</em>.
+            </h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground/80">
             Trzy formaty zajęć dopasowane do różnych etapów Twojej drogi z pilatesem reformer.
             Niezależnie od poziomu zaawansowania — znajdziemy sesję dla Ciebie.

@@ -8,9 +8,9 @@ import heroImg from "@/assets/hero-studio.jpg";
 export const Route = createFileRoute("/studio")({
   head: () => ({
     meta: [
-      { title: "O studiu — Flow & Harmony" },
-      { name: "description", content: "Butikowe studio pilates reformer w Kamionkach. Poznaj naszą historię, filozofię i przestrzeń." },
-      { property: "og:title", content: "O studiu — Flow & Harmony" },
+      { title: "O studiu — Flow & Harmony | Joanna Konieczna" },
+      { name: "description", content: "Butikowe studio pilates reformer w Kamionkach prowadzone przez Joannę Konieczną. Poznaj naszą historię, filozofię i przestrzeń." },
+      { property: "og:title", content: "O studiu — Flow & Harmony | Joanna Konieczna" },
       { property: "og:description", content: "Twoja przestrzeń ruchu i wytchnienia." },
       { property: "og:image", content: heroImg },
     ],
@@ -29,9 +29,9 @@ function StudioPage() {
         <div className="relative z-10 flex h-full items-end px-6 pb-16 md:px-16">
           <div>
             <span className="text-xs uppercase tracking-widest text-mocha">O studiu</span>
-            <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
+            <h2 className="mt-4 max-w-3xl font-display text-5xl leading-tight md:text-7xl">
               Miejsce, w którym <em className="italic text-terracotta">zwalniasz</em>.
-            </h1>
+            </h2>
           </div>
         </div>
       </section>

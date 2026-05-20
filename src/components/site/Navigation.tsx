@@ -21,8 +21,11 @@ export function Navigation() {
   return (
     <header className="absolute top-0 left-0 right-0 z-50">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10 md:py-8">
-        <Link to="/" className="flex items-center" aria-label="Flow & Harmony — Studio Pilates Reformery">
+        <Link to="/" className="flex items-center gap-3">
           <Logo variant="auto" className="h-16 md:h-20 lg:h-24" />
+          <h1 className="hidden font-display text-2xl text-ink md:block lg:text-4xl">
+            Flow <em className="italic text-terracotta">&</em> Harmony
+          </h1>
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
