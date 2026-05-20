@@ -15,9 +15,9 @@ import { sendBookingConfirmation } from "@/lib/notifications.functions";
 export const Route = createFileRoute("/grafik")({
   head: () => ({
     meta: [
-      { title: "Grafik zajęć — Flow & Harmony" },
-      { name: "description", content: "Sprawdź dostępne zajęcia reformer pilates i zarezerwuj swój slot online." },
-      { property: "og:title", content: "Grafik zajęć — Flow & Harmony" },
+      { title: "Grafik zajęć — Flow & Harmony | Joanna Konieczna" },
+      { name: "description", content: "Sprawdź dostępne zajęcia reformer pilates prowadzone przez Joannę Konieczną i zarezerwuj swój slot online." },
+      { property: "og:title", content: "Grafik zajęć — Flow & Harmony | Joanna Konieczna" },
       { property: "og:description", content: "Tygodniowy grafik zajęć w studio Flow & Harmony — pilates reformery." },
     ],
   }),
@@ -266,7 +266,7 @@ function GrafikPage() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="text-xs uppercase tracking-widest text-mocha">Rezerwacje online</p>
-            <h1 className="mt-2 font-display text-5xl text-foreground md:text-6xl">Grafik zajęć</h1>
+            <h2 className="mt-2 font-display text-5xl text-foreground md:text-6xl">Grafik zajęć</h2>
           </div>
           <div className="flex items-center gap-2">
             <button

@@ -13,13 +13,13 @@ import classIntro from "@/assets/class-intro.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Flow & Harmony — Studio Pilates Reformery" },
+      { title: "Flow & Harmony — Studio Pilates Reformery | Joanna Konieczna" },
       {
         name: "description",
         content:
-          "Butikowe studio pilates na reformerach. Zajęcia grupowe i VIP — Flow & Harmony. Zarezerwuj online.",
+          "Butikowe studio pilates na reformerach prowadzone przez Joannę Konieczną. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia.",
       },
-      { property: "og:title", content: "Flow & Harmony — Studio Pilates Reformery" },
+      { property: "og:title", content: "Flow & Harmony — Studio Pilates Reformery | Joanna Konieczna" },
       { property: "og:description", content: "Twoja przestrzeń ruchu i wytchnienia." },
     ],
   }),
@@ -76,9 +76,9 @@ function HomePage() {
             <span className="text-xs uppercase tracking-widest text-mocha">
               Studio Pilates · Reformery
             </span>
-            <h1 className="mt-8 font-display text-6xl leading-[0.95] text-ink md:text-8xl lg:text-9xl">
+            <h2 className="mt-8 font-display text-6xl leading-[0.95] text-ink md:text-8xl lg:text-9xl">
               Flow <em className="italic text-terracotta">&</em> Harmony
-            </h1>
+            </h2>
             <p className="mt-8 max-w-xl font-display text-2xl italic leading-snug text-ink md:text-3xl">
               Twoja przestrzeń <span className="text-terracotta">ruchu</span> i wytchnienia.
             </p>
