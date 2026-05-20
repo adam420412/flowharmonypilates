@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { Logo } from "@/components/site/Logo";
+
+
 
 const links = [
   { to: "/", label: "Strona główna" },
