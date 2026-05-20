@@ -18,25 +18,25 @@ export const Route = createFileRoute("/cennik")({
 const memberships = [
   {
     name: "Wejście Intro",
-    price: "79",
+    price: "99",
     note: "Pierwsza wizyta",
     desc: "Sesja próbna dla nowych klientek — poznaj reformer i naszą metodę.",
-    perks: ["Sesja 55 min", "Indywidualne wprowadzenie", "Ważność 7 dni"],
+    perks: ["Sesja 55 min", "Grupa max 4 osoby", "Indywidualne wprowadzenie"],
   },
   {
     name: "4 wejścia",
-    price: "350",
-    note: "87,50 zł / sesja",
+    price: "390",
+    note: "97,50 zł / sesja",
     desc: "Komfortowy wybór dla osób zaczynających regularną praktykę.",
-    perks: ["4 sesje grupowe", "Ważność 30 dni", "Rezerwacja online"],
+    perks: ["4 sesje grupowe (max 4 osoby)", "Ważność 30 dni", "Rezerwacja online"],
   },
   {
     name: "8 wejść",
-    price: "590",
-    note: "73,75 zł / sesja",
+    price: "670",
+    note: "83,75 zł / sesja",
     highlight: true,
-    desc: "Najpopularniejszy pakiet — dwie sesje w tygodniu przez miesiąc.",
-    perks: ["8 sesji grupowych", "Ważność 30 dni", "Pierwszeństwo rezerwacji"],
+    desc: "Najpopularniejszy pakiet — dwie sesje w tygodniu przez miesiąc. Oszczędzasz 10 zł na każdych zajęciach.",
+    perks: ["8 sesji grupowych (max 4 osoby)", "Ważność 30 dni", "Pierwszeństwo rezerwacji"],
   },
   {
     name: "No Limit",
@@ -69,6 +69,15 @@ function CennikPage() {
             Karnety i sesje VIP — wszystkie ceny zawierają podatek. Karnety są imienne i ważne
             zgodnie z opisem od daty zakupu.
           </p>
+          <div className="mt-8 inline-flex max-w-2xl items-start gap-3 rounded-2xl border border-terracotta/30 bg-terracotta/10 px-5 py-4">
+            <span className="mt-0.5 inline-flex h-7 min-w-7 items-center justify-center rounded-full bg-terracotta px-2 text-[11px] font-semibold uppercase tracking-widest text-cream">
+              max 4
+            </span>
+            <p className="text-sm leading-relaxed text-foreground/85">
+              Wszystkie zajęcia grupowe prowadzimy w <strong>kameralnych grupach maksymalnie 4 osób</strong> —
+              dzięki temu każda klientka dostaje uważne, niemal indywidualne podejście trenera.
+            </p>
+          </div>
         </div>
       </section>
 

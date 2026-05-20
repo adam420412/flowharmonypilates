@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { Logo } from "@/components/site/Logo";
 
 export function Footer() {
@@ -13,7 +13,16 @@ export function Footer() {
             <p className="mt-6 max-w-md font-display text-xl italic text-cream/85">
               Twoja przestrzeń ruchu i wytchnienia.
             </p>
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href="https://www.instagram.com/flow_harmony_pilates/"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Instagram Flow & Harmony Pilates"
+                className="rounded-full border border-cream/20 p-3 transition-colors hover:bg-cream hover:text-ink"
+              >
+                <Instagram size={18} />
+              </a>
               <a
                 href="https://www.instagram.com/asia_konieczna/"
                 target="_blank"
@@ -22,6 +31,15 @@ export function Footer() {
                 className="rounded-full border border-cream/20 p-3 transition-colors hover:bg-cream hover:text-ink"
               >
                 <Instagram size={18} />
+              </a>
+              <a
+                href="https://www.facebook.com/joanna.konieczna"
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label="Facebook Joanny Koniecznej"
+                className="rounded-full border border-cream/20 p-3 transition-colors hover:bg-cream hover:text-ink"
+              >
+                <Facebook size={18} />
               </a>
             </div>
           </div>

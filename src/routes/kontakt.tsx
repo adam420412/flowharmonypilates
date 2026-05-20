@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin, Phone, Instagram, ArrowRight, Send, Loader2, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, Instagram, Facebook, ArrowRight, Send, Loader2, MessageCircle } from "lucide-react";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { toast } from "sonner";
@@ -34,7 +34,11 @@ const localBusinessJsonLd = {
   },
   areaServed: ["Kamionki", "Poznań", "Kórnik", "Borówiec"],
   founder: { "@type": "Person", name: "Joanna Konieczna" },
-  sameAs: ["https://www.instagram.com/asia_konieczna/"],
+  sameAs: [
+    "https://www.instagram.com/flow_harmony_pilates/",
+    "https://www.instagram.com/asia_konieczna/",
+    "https://www.facebook.com/joanna.konieczna",
+  ],
   hasMap:
     "https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki",
   openingHoursSpecification: [
@@ -144,7 +148,9 @@ function KontaktPage() {
               href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
             />
             <ContactRow icon={Mail} label="E-mail" lines={["hello@flowharmony.pl"]} href="mailto:hello@flowharmony.pl" />
-            <ContactRow icon={Instagram} label="Instagram" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
+            <ContactRow icon={Instagram} label="Instagram studia" lines={["@flow_harmony_pilates"]} href="https://www.instagram.com/flow_harmony_pilates/" />
+            <ContactRow icon={Instagram} label="Instagram Joanny" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
+            <ContactRow icon={Facebook} label="Facebook" lines={["Joanna Konieczna"]} href="https://www.facebook.com/joanna.konieczna" />
 
             <a
               href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
@@ -273,7 +279,7 @@ function KontaktPage() {
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="font-display text-4xl leading-tight md:text-5xl">Wpadnij na sesję Intro</h2>
           <p className="mx-auto mt-6 max-w-xl text-foreground/80">
-            Pierwsza wizyta tylko 79 zł. Załóż konto, wybierz termin i zacznij dziś.
+            Pierwsza wizyta tylko 99 zł — w kameralnej grupie max 4 osób, z indywidualnym wprowadzeniem.
           </p>
           <Link
             to="/rejestracja"
