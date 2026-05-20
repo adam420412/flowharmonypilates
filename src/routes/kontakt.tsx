@@ -136,6 +136,52 @@ function KontaktPage() {
         </div>
       </section>
 
+      {/* Wyraźny NAP — zgodny ze schematem LocalBusiness */}
+      <section className="px-6 pb-6 md:px-10">
+        <div className="mx-auto max-w-6xl">
+          <div
+            itemScope
+            itemType="https://schema.org/HealthClub"
+            className="rounded-2xl border border-foreground/10 bg-background p-6 md:flex md:items-center md:justify-between md:gap-8 md:p-8"
+          >
+            <div className="md:flex-1">
+              <h2 itemProp="name" className="font-display text-xl md:text-2xl">
+                Flow & Harmony — Studio Pilates Reformery
+              </h2>
+              <div
+                itemProp="address"
+                itemScope
+                itemType="https://schema.org/PostalAddress"
+                className="mt-2 text-sm text-foreground/80"
+              >
+                <span itemProp="streetAddress">ul. Poznańska 117</span>,{" "}
+                <span itemProp="postalCode">62-023</span>{" "}
+                <span itemProp="addressLocality">Kamionki</span>
+                <meta itemProp="addressRegion" content="wielkopolskie" />
+                <meta itemProp="addressCountry" content="PL" />
+              </div>
+            </div>
+            <div className="mt-4 flex flex-col gap-2 md:mt-0 md:items-end">
+              <a
+                href="tel:+48501817979"
+                itemProp="telephone"
+                className="inline-flex items-center gap-2 text-lg font-medium hover:text-terracotta"
+              >
+                <Phone size={18} strokeWidth={1.5} />
+                +48 501 817 979
+              </a>
+              <a
+                href="mailto:hello@flowharmony.pl"
+                itemProp="email"
+                className="inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-terracotta"
+              >
+                <Mail size={16} strokeWidth={1.5} />
+                hello@flowharmony.pl
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="px-6 pb-24 md:px-10 md:pb-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
           <div className="space-y-10">
