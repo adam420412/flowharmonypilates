@@ -43,9 +43,12 @@ type ClassRow = {
   capacity: number;
   waitlist_capacity: number;
   is_cancelled: boolean;
+  instructor_id: string;
   class_type: { name: string; slug: string } | null;
   instructor: { full_name: string } | null;
 };
+
+type InstructorOption = { id: string; full_name: string };
 
 const settingsSchema = z.object({
   cancellation_hours_before: z.coerce.number().int().min(0).max(168),
@@ -64,7 +67,7 @@ function typeCapBySlug(slug?: string | null): number {
     case "vip-duo":
       return 2;
     default:
-      return 4;
+      return 20;
   }
 }
 
