@@ -126,7 +126,7 @@ function GrafikPage() {
   const ctMap = Object.fromEntries(classTypes.map((c) => [c.id, c]));
   const inMap = Object.fromEntries(instructors.map((i) => [i.id, i]));
 
-  const MAX_SEATS = 4;
+  const MAX_SEATS = 20;
 
   function typeCapBySlug(slug?: string): number {
     switch (slug) {
