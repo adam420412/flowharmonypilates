@@ -16,7 +16,7 @@ const localBusinessJsonLd = {
     "Kameralne studio pilates na reformerach w Kamionkach pod Poznaniem. Zajęcia solo, w parach i grupowe (max 4 osoby), Cadillac 1:1.",
   url: "https://flowharmonypilates.lovable.app",
   telephone: "+48501817979",
-  email: "hello@flowharmony.pl",
+  email: "joannakonieczna@flowharmony.pl",
   image: "https://flowharmonypilates.lovable.app/og-image.jpg",
   priceRange: "$$",
   address: {
@@ -87,7 +87,7 @@ export const Route = createFileRoute("/kontakt")({
       // Kontakt + lokalizacja (czytelne dla wyszukiwarek i parserów)
       { name: "contact", content: "+48 501 817 979" },
       { name: "telephone", content: "+48 501 817 979" },
-      { name: "email", content: "hello@flowharmony.pl" },
+      { name: "email", content: "joannakonieczna@flowharmony.pl" },
       { name: "geo.region", content: "PL-30" },
       { name: "geo.placename", content: "Kamionki, Poznań" },
       { name: "geo.position", content: "52.3399;17.0223" },
@@ -171,12 +171,12 @@ function KontaktPage() {
                 +48 501 817 979
               </a>
               <a
-                href="mailto:hello@flowharmony.pl"
+                href="mailto:joannakonieczna@flowharmony.pl"
                 itemProp="email"
                 className="inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-terracotta"
               >
                 <Mail size={16} strokeWidth={1.5} />
-                hello@flowharmony.pl
+                joannakonieczna@flowharmony.pl
               </a>
             </div>
           </div>
@@ -193,7 +193,7 @@ function KontaktPage() {
               lines={["Napisz do nas — odpowiadamy w ciągu kilku minut"]}
               href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."
             />
-            <ContactRow icon={Mail} label="E-mail" lines={["hello@flowharmony.pl"]} href="mailto:hello@flowharmony.pl" />
+            <ContactRow icon={Mail} label="E-mail" lines={["joannakonieczna@flowharmony.pl"]} href="mailto:joannakonieczna@flowharmony.pl" />
             <ContactRow icon={Instagram} label="Instagram studia" lines={["@flow_harmony_pilates"]} href="https://www.instagram.com/flow_harmony_pilates/" />
             <ContactRow icon={Instagram} label="Instagram Joanny" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
             <ContactRow icon={Facebook} label="Facebook" lines={["Joanna Konieczna"]} href="https://www.facebook.com/joanna.konieczna.1614" />
