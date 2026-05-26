@@ -37,7 +37,7 @@ const localBusinessJsonLd = {
   sameAs: [
     "https://www.instagram.com/flow_harmony_pilates/",
     "https://www.instagram.com/asia_konieczna/",
-    "https://www.facebook.com/joanna.konieczna",
+    "https://www.facebook.com/joanna.konieczna.1614",
   ],
   hasMap:
     "https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki",
@@ -196,7 +196,7 @@ function KontaktPage() {
             <ContactRow icon={Mail} label="E-mail" lines={["hello@flowharmony.pl"]} href="mailto:hello@flowharmony.pl" />
             <ContactRow icon={Instagram} label="Instagram studia" lines={["@flow_harmony_pilates"]} href="https://www.instagram.com/flow_harmony_pilates/" />
             <ContactRow icon={Instagram} label="Instagram Joanny" lines={["@asia_konieczna"]} href="https://www.instagram.com/asia_konieczna/" />
-            <ContactRow icon={Facebook} label="Facebook" lines={["Joanna Konieczna"]} href="https://www.facebook.com/joanna.konieczna" />
+            <ContactRow icon={Facebook} label="Facebook" lines={["Joanna Konieczna"]} href="https://www.facebook.com/joanna.konieczna.1614" />
 
             <a
               href="https://wa.me/48501817979?text=Cze%C5%9B%C4%87%21%20Mam%20pytanie%20o%20zaj%C4%99cia%20w%20Flow%20%26%20Harmony."

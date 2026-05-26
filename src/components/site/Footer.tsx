@@ -33,7 +33,7 @@ export function Footer() {
                 <Instagram size={18} />
               </a>
               <a
-                href="https://www.facebook.com/joanna.konieczna"
+                href="https://www.facebook.com/joanna.konieczna.1614"
                 target="_blank"
                 rel="noreferrer noopener"
                 aria-label="Facebook Joanny Koniecznej"
