@@ -137,7 +137,7 @@ function HomePage() {
                 którzy szukają więcej niż treningu — szukają chwili dla siebie.
               </p>
               <p>
-                Kameralne grupy do 4 osób, prywatne sale VIP, certyfikowane
+                Kameralne grupy do 4 osób, prywatne zajęcia VIP, certyfikowane
                 instruktorki i wnętrze, w którym chce się zostać dłużej.
               </p>
             </div>
