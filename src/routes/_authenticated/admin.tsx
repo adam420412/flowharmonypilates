@@ -275,8 +275,11 @@ function SettingField({
 
 function ClassesCard() {
   const [rows, setRows] = useState<ClassRow[]>([]);
+  const [instructors, setInstructors] = useState<InstructorOption[]>([]);
   const [loading, setLoading] = useState(true);
-  const [edits, setEdits] = useState<Record<string, { capacity: number; waitlist_capacity: number }>>({});
+  const [edits, setEdits] = useState<
+    Record<string, { capacity: number; waitlist_capacity: number; instructor_id: string }>
+  >({});
   const [savingId, setSavingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -285,34 +288,57 @@ function ClassesCard() {
 
   async function load() {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("classes")
-      .select(
-        "id,starts_at,capacity,waitlist_capacity,is_cancelled,class_type:class_types(name,slug),instructor:instructors(full_name)",
-      )
-      .gte("starts_at", new Date().toISOString())
-      .order("starts_at", { ascending: true })
-      .limit(100);
-    if (error) {
+    const [{ data: cData, error: cErr }, { data: iData, error: iErr }] = await Promise.all([
+      supabase
+        .from("classes")
+        .select(
+          "id,starts_at,capacity,waitlist_capacity,is_cancelled,instructor_id,class_type:class_types(name,slug),instructor:instructors(full_name)",
+        )
+        .gte("starts_at", new Date().toISOString())
+        .order("starts_at", { ascending: true })
+        .limit(100),
+      supabase
+        .from("instructors")
+        .select("id,full_name")
+        .eq("is_active", true)
+        .order("sort_order"),
+    ]);
+    if (cErr) {
       toast.error("Nie udało się pobrać zajęć");
     } else {
-      setRows((data ?? []) as unknown as ClassRow[]);
+      setRows((cData ?? []) as unknown as ClassRow[]);
+    }
+    if (iErr) {
+      toast.error("Nie udało się pobrać instruktorek");
+    } else {
+      setInstructors((iData ?? []) as InstructorOption[]);
     }
     setLoading(false);
   }
 
   function getEdit(row: ClassRow) {
-    return edits[row.id] ?? { capacity: row.capacity, waitlist_capacity: row.waitlist_capacity };
+    return (
+      edits[row.id] ?? {
+        capacity: row.capacity,
+        waitlist_capacity: row.waitlist_capacity,
+        instructor_id: row.instructor_id,
+      }
+    );
   }
 
-  function setEdit(id: string, patch: Partial<{ capacity: number; waitlist_capacity: number }>) {
-    setEdits((prev) => ({
-      ...prev,
-      [id]: { ...(prev[id] ?? rows.find((r) => r.id === id)!), ...patch } as {
-        capacity: number;
-        waitlist_capacity: number;
-      },
-    }));
+  function setEdit(
+    id: string,
+    patch: Partial<{ capacity: number; waitlist_capacity: number; instructor_id: string }>,
+  ) {
+    setEdits((prev) => {
+      const row = rows.find((r) => r.id === id)!;
+      const base = prev[id] ?? {
+        capacity: row.capacity,
+        waitlist_capacity: row.waitlist_capacity,
+        instructor_id: row.instructor_id,
+      };
+      return { ...prev, [id]: { ...base, ...patch } };
+    });
   }
 
   async function save(row: ClassRow) {
@@ -321,10 +347,16 @@ function ClassesCard() {
     const schema = z.object({
       capacity: z.coerce.number().int().min(1).max(maxCap),
       waitlist_capacity: z.coerce.number().int().min(0).max(50),
+      instructor_id: z.string().uuid({ message: "Wybierz instruktorkę" }),
     });
     const parsed = schema.safeParse(draft);
     if (!parsed.success) {
-      toast.error(`Limit miejsc: 1–${maxCap} dla "${row.class_type?.name ?? "tych zajęć"}", rezerwa: 0–50`);
+      const first = parsed.error.issues[0]?.message ?? "Nieprawidłowe dane";
+      toast.error(
+        first.includes("instruktor")
+          ? first
+          : `Limit miejsc: 1–${maxCap} dla "${row.class_type?.name ?? "tych zajęć"}", rezerwa: 0–50`,
+      );
       return;
     }
     setSavingId(row.id);
@@ -333,6 +365,7 @@ function ClassesCard() {
       .update({
         capacity: parsed.data.capacity,
         waitlist_capacity: parsed.data.waitlist_capacity,
+        instructor_id: parsed.data.instructor_id,
         updated_at: new Date().toISOString(),
       })
       .eq("id", row.id);
@@ -340,9 +373,23 @@ function ClassesCard() {
     if (error) {
       toast.error("Zapis nie powiódł się");
     } else {
-      toast.success("Limity zaktualizowane");
+      toast.success("Zajęcia zaktualizowane");
+      const newInstructor =
+        instructors.find((i) => i.id === parsed.data.instructor_id) ?? null;
       setRows((prev) =>
-        prev.map((r) => (r.id === row.id ? { ...r, ...parsed.data } : r)),
+        prev.map((r) =>
+          r.id === row.id
+            ? {
+                ...r,
+                capacity: parsed.data.capacity,
+                waitlist_capacity: parsed.data.waitlist_capacity,
+                instructor_id: parsed.data.instructor_id,
+                instructor: newInstructor
+                  ? { full_name: newInstructor.full_name }
+                  : r.instructor,
+              }
+            : r,
+        ),
       );
       setEdits((prev) => {
         const { [row.id]: _, ...rest } = prev;
@@ -369,9 +416,10 @@ function ClassesCard() {
     <section className="rounded-2xl border border-border bg-background p-8 md:p-10">
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="font-display text-3xl">Limity miejsc na zajęciach</h2>
+          <h2 className="font-display text-3xl">Zajęcia — miejsca i instruktorki</h2>
           <p className="mt-2 text-sm text-foreground/80">
-            Najbliższe nadchodzące zajęcia. Edytuj liczbę miejsc i wielkość listy rezerwowej.
+            Najbliższe nadchodzące zajęcia. Edytuj liczbę miejsc, listę rezerwową
+            i przypisaną instruktorkę.
           </p>
         </div>
         <button
@@ -398,7 +446,8 @@ function ClassesCard() {
                   const draft = getEdit(row);
                   const dirty =
                     draft.capacity !== row.capacity ||
-                    draft.waitlist_capacity !== row.waitlist_capacity;
+                    draft.waitlist_capacity !== row.waitlist_capacity ||
+                    draft.instructor_id !== row.instructor_id;
                   const time = new Date(row.starts_at).toLocaleTimeString("pl-PL", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -406,7 +455,7 @@ function ClassesCard() {
                   return (
                     <div
                       key={row.id}
-                      className="grid grid-cols-1 items-center gap-4 py-4 md:grid-cols-[80px_1fr_120px_120px_auto]"
+                      className="grid grid-cols-1 items-center gap-4 py-4 md:grid-cols-[70px_1fr_minmax(180px,1fr)_110px_110px_auto]"
                     >
                       <div className="font-display text-2xl">{time}</div>
                       <div>
@@ -419,9 +468,32 @@ function ClassesCard() {
                           )}
                         </div>
                         <div className="text-xs text-foreground/80">
-                          {row.instructor?.full_name ?? "—"}
+                          Obecnie: {row.instructor?.full_name ?? "—"}
                         </div>
                       </div>
+                      <label className="block">
+                        <span className="text-[10px] uppercase tracking-widest text-foreground/75">
+                          Instruktorka
+                        </span>
+                        <select
+                          value={draft.instructor_id}
+                          onChange={(e) =>
+                            setEdit(row.id, { instructor_id: e.target.value })
+                          }
+                          className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-terracotta"
+                        >
+                          {instructors.map((i) => (
+                            <option key={i.id} value={i.id}>
+                              {i.full_name}
+                            </option>
+                          ))}
+                          {!instructors.some((i) => i.id === draft.instructor_id) && (
+                            <option value={draft.instructor_id}>
+                              {row.instructor?.full_name ?? "— wybierz —"}
+                            </option>
+                          )}
+                        </select>
+                      </label>
                       <NumberCell
                         label={`Miejsca (max ${typeCapBySlug(row.class_type?.slug)})`}
                         value={draft.capacity}
