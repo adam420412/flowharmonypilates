@@ -38,13 +38,6 @@ const memberships = [
     desc: "Najpopularniejszy pakiet — dwie sesje w tygodniu przez miesiąc. Oszczędzasz 10 zł na każdych zajęciach.",
     perks: ["8 sesji grupowych (max 4 osoby)", "Ważność 30 dni", "Pierwszeństwo rezerwacji"],
   },
-  {
-    name: "No Limit",
-    price: "990",
-    note: "Bez limitu sesji",
-    desc: "Dla osób, dla których pilates to codzienny rytuał.",
-    perks: ["Bez limitu zajęć grupowych", "Ważność 30 dni", "Rabat 10% na VIP"],
-  },
 ];
 
 const vip = [
