@@ -82,8 +82,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "Flow & Harmony — Studio Pilates Reformery | Joanna Konieczna" },
       { property: "og:description", content: "Butikowe studio pilates na reformerach prowadzone przez Joannę Konieczną. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia." },
       { name: "twitter:description", content: "Butikowe studio pilates na reformerach prowadzone przez Joannę Konieczną. Flow & Harmony — Twoja przestrzeń ruchu i wytchnienia." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/976a5461-6ecd-42de-8615-1ae39a652265/id-preview-351bfafb--845cc697-6a4f-4838-a5a8-c2e75f0e592a.lovable.app-1778850612610.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/976a5461-6ecd-42de-8615-1ae39a652265/id-preview-351bfafb--845cc697-6a4f-4838-a5a8-c2e75f0e592a.lovable.app-1778850612610.png" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/edf0d0a1-c54e-4833-a3a1-8d51a25ccf87" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/edf0d0a1-c54e-4833-a3a1-8d51a25ccf87" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
