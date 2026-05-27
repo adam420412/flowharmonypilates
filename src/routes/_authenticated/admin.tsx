@@ -411,6 +411,49 @@ function ClassesCard() {
     }
   }
 
+  async function cancelClass(row: ClassRow) {
+    setCancellingId(row.id);
+    const { error: cErr } = await supabase
+      .from("classes")
+      .update({ is_cancelled: true, updated_at: new Date().toISOString() })
+      .eq("id", row.id);
+    if (cErr) {
+      setCancellingId(null);
+      toast.error("Nie udało się odwołać zajęć");
+      return;
+    }
+    const { error: bErr } = await supabase
+      .from("bookings")
+      .update({ status: "cancelled", updated_at: new Date().toISOString() })
+      .eq("class_id", row.id)
+      .in("status", ["confirmed", "waitlist"]);
+    setCancellingId(null);
+    setConfirmCancel(null);
+    if (bErr) {
+      toast.error("Zajęcia oznaczone jako odwołane, ale nie udało się anulować rezerwacji");
+    } else {
+      toast.success("Zajęcia odwołane. Rezerwacje klientek anulowane.");
+    }
+    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, is_cancelled: true } : r)));
+  }
+
+  async function restoreClass(row: ClassRow) {
+    setCancellingId(row.id);
+    const { error } = await supabase
+      .from("classes")
+      .update({ is_cancelled: false, updated_at: new Date().toISOString() })
+      .eq("id", row.id);
+    setCancellingId(null);
+    setConfirmRestore(null);
+    if (error) {
+      toast.error("Nie udało się przywrócić zajęć");
+      return;
+    }
+    toast.success("Zajęcia przywrócone. Klientki muszą zarezerwować ponownie.");
+    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, is_cancelled: false } : r)));
+  }
+
+
   const grouped = useMemo(() => {
     const out = new Map<string, ClassRow[]>();
     for (const r of rows) {
