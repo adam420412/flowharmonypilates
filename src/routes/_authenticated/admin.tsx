@@ -291,6 +291,9 @@ function ClassesCard() {
     Record<string, { capacity: number; waitlist_capacity: number; instructor_id: string }>
   >({});
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState<ClassRow | null>(null);
+  const [confirmRestore, setConfirmRestore] = useState<ClassRow | null>(null);
 
   useEffect(() => {
     void load();
