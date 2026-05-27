@@ -705,6 +705,7 @@ function ClassesCard() {
       toast.success("Zajęcia odwołane. Rezerwacje klientek anulowane.");
     }
     setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, is_cancelled: true } : r)));
+    void load();
   }
 
   async function restoreClass(row: ClassRow) {
