@@ -7,7 +7,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
-import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw } from "lucide-react";
+import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw, Ban, Undo2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   previewWaitlistPromoted,
   sendTestWaitlistPromoted,
@@ -281,6 +291,9 @@ function ClassesCard() {
     Record<string, { capacity: number; waitlist_capacity: number; instructor_id: string }>
   >({});
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState<ClassRow | null>(null);
+  const [confirmRestore, setConfirmRestore] = useState<ClassRow | null>(null);
 
   useEffect(() => {
     void load();
@@ -398,6 +411,49 @@ function ClassesCard() {
     }
   }
 
+  async function cancelClass(row: ClassRow) {
+    setCancellingId(row.id);
+    const { error: cErr } = await supabase
+      .from("classes")
+      .update({ is_cancelled: true, updated_at: new Date().toISOString() })
+      .eq("id", row.id);
+    if (cErr) {
+      setCancellingId(null);
+      toast.error("Nie udało się odwołać zajęć");
+      return;
+    }
+    const { error: bErr } = await supabase
+      .from("bookings")
+      .update({ status: "cancelled", updated_at: new Date().toISOString() })
+      .eq("class_id", row.id)
+      .in("status", ["confirmed", "waitlist"]);
+    setCancellingId(null);
+    setConfirmCancel(null);
+    if (bErr) {
+      toast.error("Zajęcia oznaczone jako odwołane, ale nie udało się anulować rezerwacji");
+    } else {
+      toast.success("Zajęcia odwołane. Rezerwacje klientek anulowane.");
+    }
+    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, is_cancelled: true } : r)));
+  }
+
+  async function restoreClass(row: ClassRow) {
+    setCancellingId(row.id);
+    const { error } = await supabase
+      .from("classes")
+      .update({ is_cancelled: false, updated_at: new Date().toISOString() })
+      .eq("id", row.id);
+    setCancellingId(null);
+    setConfirmRestore(null);
+    if (error) {
+      toast.error("Nie udało się przywrócić zajęć");
+      return;
+    }
+    toast.success("Zajęcia przywrócone. Klientki muszą zarezerwować ponownie.");
+    setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, is_cancelled: false } : r)));
+  }
+
+
   const grouped = useMemo(() => {
     const out = new Map<string, ClassRow[]>();
     for (const r of rows) {
@@ -508,18 +564,43 @@ function ClassesCard() {
                         min={0}
                         max={50}
                       />
-                      <button
-                        disabled={!dirty || savingId === row.id}
-                        onClick={() => void save(row)}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2 text-xs uppercase tracking-widest text-cream transition-all hover:bg-terracotta disabled:cursor-not-allowed disabled:opacity-30"
-                      >
-                        {savingId === row.id ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <div className="flex flex-col gap-1.5">
+                        <button
+                          disabled={!dirty || savingId === row.id || row.is_cancelled}
+                          onClick={() => void save(row)}
+                          className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-4 py-2 text-xs uppercase tracking-widest text-cream transition-all hover:bg-terracotta disabled:cursor-not-allowed disabled:opacity-30"
+                        >
+                          {savingId === row.id ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <Save className="h-3.5 w-3.5" />
+                          )}
+                          Zapisz
+                        </button>
+                        {row.is_cancelled ? (
+                          <button
+                            disabled={cancellingId === row.id}
+                            onClick={() => setConfirmRestore(row)}
+                            className="inline-flex items-center justify-center gap-2 rounded-full border border-foreground/30 px-4 py-2 text-xs uppercase tracking-widest text-foreground transition-all hover:bg-foreground hover:text-cream disabled:opacity-30"
+                          >
+                            <Undo2 className="h-3.5 w-3.5" />
+                            Przywróć
+                          </button>
                         ) : (
-                          <Save className="h-3.5 w-3.5" />
+                          <button
+                            disabled={cancellingId === row.id}
+                            onClick={() => setConfirmCancel(row)}
+                            className="inline-flex items-center justify-center gap-2 rounded-full border border-destructive/40 px-4 py-2 text-xs uppercase tracking-widest text-destructive transition-all hover:bg-destructive hover:text-cream disabled:opacity-30"
+                          >
+                            {cancellingId === row.id ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            ) : (
+                              <Ban className="h-3.5 w-3.5" />
+                            )}
+                            Odwołaj
+                          </button>
                         )}
-                        Zapisz
-                      </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -528,6 +609,69 @@ function ClassesCard() {
           ))}
         </div>
       )}
+
+      <AlertDialog open={!!confirmCancel} onOpenChange={(open) => !open && setConfirmCancel(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Odwołać te zajęcia?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {confirmCancel && (
+                <>
+                  <strong>{confirmCancel.class_type?.name}</strong> —{" "}
+                  {new Date(confirmCancel.starts_at).toLocaleString("pl-PL", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "long",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  . Wszystkie aktywne rezerwacje i wpisy na liście rezerwowej zostaną anulowane.
+                  Klientki zobaczą zajęcia jako odwołane w grafiku i w „Moich rezerwacjach".
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={!!cancellingId}>Wróć</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                if (confirmCancel) void cancelClass(confirmCancel);
+              }}
+              disabled={!!cancellingId}
+              className="bg-destructive text-cream hover:bg-destructive/90"
+            >
+              {cancellingId ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Odwołaj zajęcia
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!confirmRestore} onOpenChange={(open) => !open && setConfirmRestore(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Przywrócić te zajęcia?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Zajęcia ponownie pojawią się w grafiku jako dostępne. Wcześniej anulowane
+              rezerwacje nie zostaną automatycznie przywrócone — klientki muszą zarezerwować ponownie.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={!!cancellingId}>Wróć</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                if (confirmRestore) void restoreClass(confirmRestore);
+              }}
+              disabled={!!cancellingId}
+            >
+              {cancellingId ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Przywróć
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 }
