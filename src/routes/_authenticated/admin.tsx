@@ -283,7 +283,271 @@ function SettingField({
   );
 }
 
+/* -------------------- Add Class -------------------- */
+
+type ClassTypeOption = { id: string; name: string; slug: string; duration_minutes: number };
+
+function toLocalInput(d: Date) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function AddClassCard() {
+  const [types, setTypes] = useState<ClassTypeOption[]>([]);
+  const [instructors, setInstructors] = useState<InstructorOption[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [classTypeId, setClassTypeId] = useState("");
+  const [instructorId, setInstructorId] = useState("");
+  const [startsAt, setStartsAt] = useState(() => {
+    const d = new Date();
+    d.setMinutes(0, 0, 0);
+    d.setHours(d.getHours() + 1);
+    return toLocalInput(d);
+  });
+  const [duration, setDuration] = useState(55);
+  const [capacity, setCapacity] = useState(20);
+  const [waitlistCapacity, setWaitlistCapacity] = useState(4);
+  const [notes, setNotes] = useState("");
+  const [repeatWeeks, setRepeatWeeks] = useState(1);
+
+  useEffect(() => {
+    void (async () => {
+      const [{ data: t }, { data: i }] = await Promise.all([
+        supabase
+          .from("class_types")
+          .select("id,name,slug,duration_minutes")
+          .eq("is_active", true)
+          .order("sort_order"),
+        supabase
+          .from("instructors")
+          .select("id,full_name")
+          .eq("is_active", true)
+          .order("sort_order"),
+      ]);
+      const tt = (t ?? []) as ClassTypeOption[];
+      const ii = (i ?? []) as InstructorOption[];
+      setTypes(tt);
+      setInstructors(ii);
+      if (tt[0]) {
+        setClassTypeId(tt[0].id);
+        setDuration(tt[0].duration_minutes);
+        setCapacity(typeCapBySlug(tt[0].slug));
+      }
+      if (ii[0]) setInstructorId(ii[0].id);
+      setLoading(false);
+    })();
+  }, []);
+
+  function onTypeChange(id: string) {
+    setClassTypeId(id);
+    const t = types.find((x) => x.id === id);
+    if (t) {
+      setDuration(t.duration_minutes);
+      setCapacity(typeCapBySlug(t.slug));
+    }
+  }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    const t = types.find((x) => x.id === classTypeId);
+    const maxCap = typeCapBySlug(t?.slug);
+    const schema = z.object({
+      class_type_id: z.string().uuid({ message: "Wybierz rodzaj zajęć" }),
+      instructor_id: z.string().uuid({ message: "Wybierz instruktorkę" }),
+      starts_at: z
+        .string()
+        .min(1, "Podaj datę i godzinę")
+        .refine((v) => !Number.isNaN(new Date(v).getTime()), "Nieprawidłowa data"),
+      duration_minutes: z.coerce.number().int().min(15).max(240),
+      capacity: z.coerce.number().int().min(1).max(maxCap),
+      waitlist_capacity: z.coerce.number().int().min(0).max(50),
+      notes: z.string().trim().max(500).optional().or(z.literal("")),
+      repeat_weeks: z.coerce.number().int().min(1).max(26),
+    });
+    const parsed = schema.safeParse({
+      class_type_id: classTypeId,
+      instructor_id: instructorId,
+      starts_at: startsAt,
+      duration_minutes: duration,
+      capacity,
+      waitlist_capacity: waitlistCapacity,
+      notes,
+      repeat_weeks: repeatWeeks,
+    });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Sprawdź formularz");
+      return;
+    }
+
+    const base = new Date(parsed.data.starts_at);
+    const inserts = Array.from({ length: parsed.data.repeat_weeks }).map((_, i) => {
+      const d = new Date(base);
+      d.setDate(d.getDate() + i * 7);
+      return {
+        class_type_id: parsed.data.class_type_id,
+        instructor_id: parsed.data.instructor_id,
+        starts_at: d.toISOString(),
+        duration_minutes: parsed.data.duration_minutes,
+        capacity: parsed.data.capacity,
+        waitlist_capacity: parsed.data.waitlist_capacity,
+        notes: parsed.data.notes ? parsed.data.notes : null,
+      };
+    });
+
+    setSaving(true);
+    const { error } = await supabase.from("classes").insert(inserts);
+    setSaving(false);
+    if (error) {
+      toast.error(`Nie udało się dodać zajęć: ${error.message}`);
+      return;
+    }
+    toast.success(
+      inserts.length > 1
+        ? `Dodano ${inserts.length} zajęć (co tydzień)`
+        : "Zajęcia dodane",
+    );
+    setNotes("");
+    setRepeatWeeks(1);
+    window.dispatchEvent(new CustomEvent("admin:classes:refresh"));
+  }
+
+  return (
+    <section className="mb-16 rounded-2xl border border-border bg-background p-8 md:p-10">
+      <h2 className="font-display text-3xl">Dodaj zajęcia</h2>
+      <p className="mt-2 text-sm text-foreground/80">
+        Utwórz nowy termin w grafiku. Możesz powielić wpis na kolejne tygodnie.
+      </p>
+
+      {loading ? (
+        <div className="mt-8 flex items-center gap-3 text-sm text-foreground/80">
+          <Loader2 className="h-4 w-4 animate-spin" /> Ładowanie…
+        </div>
+      ) : (
+        <form onSubmit={submit} className="mt-8 grid gap-5 md:grid-cols-2">
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Rodzaj zajęć</span>
+            <select
+              value={classTypeId}
+              onChange={(e) => onTypeChange(e.target.value)}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            >
+              {types.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Instruktorka</span>
+            <select
+              value={instructorId}
+              onChange={(e) => setInstructorId(e.target.value)}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            >
+              {instructors.map((i) => (
+                <option key={i.id} value={i.id}>
+                  {i.full_name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Data i godzina</span>
+            <input
+              type="datetime-local"
+              value={startsAt}
+              onChange={(e) => setStartsAt(e.target.value)}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Czas trwania (min)</span>
+            <input
+              type="number"
+              min={15}
+              max={240}
+              value={duration}
+              onChange={(e) => setDuration(Number(e.target.value))}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">
+              Miejsca (max {typeCapBySlug(types.find((t) => t.id === classTypeId)?.slug)})
+            </span>
+            <input
+              type="number"
+              min={1}
+              max={typeCapBySlug(types.find((t) => t.id === classTypeId)?.slug)}
+              value={capacity}
+              onChange={(e) => setCapacity(Number(e.target.value))}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Lista rezerwowa</span>
+            <input
+              type="number"
+              min={0}
+              max={50}
+              value={waitlistCapacity}
+              onChange={(e) => setWaitlistCapacity(Number(e.target.value))}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            />
+          </label>
+
+          <label className="block md:col-span-2">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Notatka (opcjonalnie)</span>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              maxLength={500}
+              rows={2}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-xs uppercase tracking-widest text-foreground/80">Powtórz co tydzień (×)</span>
+            <input
+              type="number"
+              min={1}
+              max={26}
+              value={repeatWeeks}
+              onChange={(e) => setRepeatWeeks(Number(e.target.value))}
+              className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 outline-none focus:border-terracotta"
+            />
+            <span className="mt-1 block text-xs text-foreground/75">
+              1 = tylko jeden termin. 4 = ten i 3 kolejne tygodnie.
+            </span>
+          </label>
+
+          <div className="flex items-end">
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream transition-all hover:bg-terracotta disabled:opacity-50"
+            >
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+              Dodaj do grafiku
+            </button>
+          </div>
+        </form>
+      )}
+    </section>
+  );
+}
+
 /* -------------------- Classes -------------------- */
+
 
 function ClassesCard() {
   const [rows, setRows] = useState<ClassRow[]>([]);
