@@ -7,7 +7,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
-import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw } from "lucide-react";
+import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw, Ban, Undo2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   previewWaitlistPromoted,
   sendTestWaitlistPromoted,
