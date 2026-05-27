@@ -128,8 +128,10 @@ function AdminPage() {
         </header>
 
         <SettingsCard />
+        <AddClassCard />
         <ClassesCard />
         <NotificationTestCard />
+
       </main>
       <Footer />
     </div>
