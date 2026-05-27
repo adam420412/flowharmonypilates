@@ -299,7 +299,11 @@ function ClassesCard() {
 
   useEffect(() => {
     void load();
+    const handler = () => void load();
+    window.addEventListener("admin:classes:refresh", handler);
+    return () => window.removeEventListener("admin:classes:refresh", handler);
   }, []);
+
 
   async function load() {
     setLoading(true);
