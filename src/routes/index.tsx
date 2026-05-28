@@ -48,10 +48,10 @@ const classes = [
 ];
 
 const memberships = [
-  { name: "1 Wejście Intro", price: "79", note: "Pierwsza wizyta, 7 dni" },
-  { name: "4 Wejścia", price: "350", note: "Miesięcznie • 87,50 zł / sesja" },
-  { name: "8 Wejść", price: "590", note: "Miesięcznie • 73,75 zł / sesja" },
-  { name: "No Limit", price: "990", note: "Bez limitu sesji w miesiącu" },
+  { name: "1 Wejście Intro", price: "99", note: "Pierwsza wizyta" },
+  { name: "4 Wejścia", price: "390", note: "97,50 zł / sesja" },
+  { name: "8 Wejść", price: "670", note: "83,75 zł / sesja" },
+  { name: "VIP Solo", price: "260", note: "Trening 1:1 (reformer / cadillac)" },
 ];
 
 function HomePage() {
@@ -250,7 +250,7 @@ function HomePage() {
           <Calendar size={28} className="mx-auto text-terracotta" strokeWidth={1.25} />
           <h2 className="mt-8 font-display text-5xl leading-tight md:text-7xl">
             Zacznij <em className="italic text-terracotta">dziś</em>.
-            <br />Pierwsza sesja za 79 zł.
+            <br />Pierwsza sesja Intro za 99 zł.
           </h2>
           <p className="mx-auto mt-8 max-w-xl text-foreground/80">
             Pakiet Intro dla nowych klientek — poznaj reformer, naszą filozofię i atmosferę studia.
