@@ -1167,10 +1167,13 @@ function NotificationTestCard() {
             Wpisy trafiają do dziennika powiadomień (notification_log).
           </p>
         </div>
-        <span className="rounded-full bg-terracotta/15 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta">
-          Tryb mock — wysyłka logowana w konsoli
+        <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-[10px] uppercase tracking-widest text-emerald-700">
+          Realna wysyłka e-mail • SMS w trybie mock
         </span>
       </div>
+
+      <AllTemplatesTestPanel />
+
 
       <div className="mt-8 grid gap-6 md:grid-cols-2">
         <div className="space-y-4">
