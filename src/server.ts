@@ -85,10 +85,10 @@ function canonicalRedirect(request: Request): Response | null {
     return null;
   }
 
-  // Redirect apex flowharmony.pl -> www.flowharmony.pl and the old
-  // Lovable published hostname -> canonical www.
-  const shouldRedirect =
-    host === LEGACY_PUBLISHED_HOST || host === "flowharmony.pl";
+  // Redirect only the old Lovable published hostname.
+  // The custom domain routing may still normalize www/apex upstream,
+  // so redirecting flowharmony.pl here can create a loop.
+  const shouldRedirect = host === LEGACY_PUBLISHED_HOST;
 
   if (!shouldRedirect) return null;
 
