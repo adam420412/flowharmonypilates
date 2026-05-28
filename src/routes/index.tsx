@@ -48,10 +48,10 @@ const classes = [
 ];
 
 const memberships = [
-  { name: "1 Wejście Intro", price: "79", note: "Pierwsza wizyta, 7 dni" },
-  { name: "4 Wejścia", price: "350", note: "Miesięcznie • 87,50 zł / sesja" },
-  { name: "8 Wejść", price: "590", note: "Miesięcznie • 73,75 zł / sesja" },
-  { name: "No Limit", price: "990", note: "Bez limitu sesji w miesiącu" },
+  { name: "1 Wejście Intro", price: "99", note: "Pierwsza wizyta" },
+  { name: "4 Wejścia", price: "390", note: "97,50 zł / sesja" },
+  { name: "8 Wejść", price: "670", note: "83,75 zł / sesja" },
+  { name: "VIP Solo", price: "260", note: "Trening 1:1 (reformer / cadillac)" },
 ];
 
 function HomePage() {

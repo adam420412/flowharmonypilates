@@ -20,7 +20,17 @@ export const Route = createFileRoute("/zajecia")({
   component: ZajeciaPage,
 });
 
-const offers = [
+type Offer = {
+  name: string;
+  sub: string;
+  duration: string;
+  img: string;
+  desc: string;
+  bullets: string[];
+  priceTyp: "reformer" | "vip" | "intro";
+};
+
+const offers: Offer[] = [
   {
     name: "Reformer Pilates",
     sub: "Grupowe • do 4 osób",
@@ -32,6 +42,7 @@ const offers = [
       "Praca nad mobilnością i świadomością ciała",
       "Sesje poranne, w ciągu dnia i wieczorne",
     ],
+    priceTyp: "reformer",
   },
   {
     name: "VIP Training",
@@ -44,18 +55,20 @@ const offers = [
       "Świetne dla rehabilitacji i okresu okołoporodowego",
       "Możliwość treningu z partnerką / partnerem",
     ],
+    priceTyp: "vip",
   },
   {
-    name: "Cadillac 1:1",
+    name: "VIP Cadillac 1:1",
     sub: "Indywidualne • rozbudowane urządzenie",
     duration: "55 min",
     img: classCadillac,
-    desc: "Sesja indywidualna na Cadillacu — rozbudowanym urządzeniu z trapezem, sprężynami i drążkami. Pełen wachlarz ćwiczeń mobilizacyjnych, wzmacniających i rehabilitacyjnych w pracy 1:1 z instruktorem.",
+    desc: "Sesja indywidualna na Cadillacu — rozbudowanym urządzeniu z trapezem, sprężynami i drążkami. Pełen wachlarz ćwiczeń mobilizacyjnych, wzmacniających i rehabilitacyjnych w pracy 1:1 z instruktorem. Rozliczana w cenach VIP Training.",
     bullets: [
       "Praca 1:1 na pełnowymiarowym Cadillacu",
       "Idealne przy bólach pleców i ograniczeniach mobilności",
-      "Indywidualny plan i dobór ćwiczeń",
+      "Cena jak za VIP Training",
     ],
+    priceTyp: "vip",
   },
   {
     name: "Pilates Intro",
@@ -66,8 +79,9 @@ const offers = [
     bullets: [
       "Bez doświadczenia — prowadzimy krok po kroku",
       "Omawiamy bezpieczeństwo i sprzęt",
-      "Pierwsza wizyta tylko 79 zł",
+      "Pierwsza wizyta tylko 99 zł",
     ],
+    priceTyp: "intro",
   },
 ];
 
@@ -122,6 +136,7 @@ function ZajeciaPage() {
                   </Link>
                   <Link
                     to="/cennik"
+                    search={{ typ: o.priceTyp }}
                     className="text-xs uppercase tracking-widest text-foreground hover:text-terracotta"
                   >
                     Zobacz cennik →
