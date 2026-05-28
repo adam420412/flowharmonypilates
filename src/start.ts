@@ -7,7 +7,7 @@ const errorMiddleware = createMiddleware().server(async ({ next, request }) => {
   // Bypass error wrapper for /lovable/* (webhooks, queue cron, previews).
   // Each route authenticates itself and must return raw responses.
   const url = new URL(request.url);
-  if (url.pathname.startsWith("/lovable/")) {
+  if (url.pathname.startsWith("/lovable/") || url.pathname === "/email/unsubscribe") {
     return next();
   }
   try {
