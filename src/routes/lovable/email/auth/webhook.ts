@@ -12,12 +12,12 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 const EMAIL_SUBJECTS: Record<string, string> = {
-  signup: 'Confirm your email',
-  invite: "You've been invited",
-  magiclink: 'Your login link',
-  recovery: 'Reset your password',
-  email_change: 'Confirm your new email',
-  reauthentication: 'Your verification code',
+  signup: 'Potwierdź swój adres e-mail',
+  invite: 'Zaproszenie do Flow & Harmony',
+  magiclink: 'Twój link logowania',
+  recovery: 'Resetowanie hasła',
+  email_change: 'Potwierdź nowy adres e-mail',
+  reauthentication: 'Twój kod weryfikacyjny',
 }
 
 // Template mapping
@@ -31,7 +31,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "flowharmonypilates"
+const SITE_NAME = "Flow & Harmony"
 const SENDER_DOMAIN = "notify.flowharmony.pl"
 const ROOT_DOMAIN = "flowharmony.pl"
 const FROM_DOMAIN = "flowharmony.pl"
