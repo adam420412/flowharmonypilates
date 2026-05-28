@@ -14,6 +14,7 @@ import { ClientsCard } from "@/components/admin/ClientsCard";
 import { AllBookingsCard } from "@/components/admin/AllBookingsCard";
 import { ClassTypesCard } from "@/components/admin/ClassTypesCard";
 import { InstructorsCard } from "@/components/admin/InstructorsCard";
+import { DomainStatusCard } from "@/components/admin/DomainStatusCard";
 import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw, Ban, Undo2 } from "lucide-react";
 import {
   AlertDialog,
@@ -145,6 +146,7 @@ function AdminPage() {
             <TabsTrigger value="instructors">Instruktorki</TabsTrigger>
             <TabsTrigger value="settings">Ustawienia</TabsTrigger>
             <TabsTrigger value="notifications">Powiadomienia</TabsTrigger>
+            <TabsTrigger value="domain">Domena</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard"><DashboardCard /></TabsContent>
@@ -159,6 +161,7 @@ function AdminPage() {
           <TabsContent value="instructors"><InstructorsCard /></TabsContent>
           <TabsContent value="settings"><SettingsCard /></TabsContent>
           <TabsContent value="notifications"><NotificationTestCard /></TabsContent>
+          <TabsContent value="domain"><DomainStatusCard /></TabsContent>
         </Tabs>
 
       </main>
