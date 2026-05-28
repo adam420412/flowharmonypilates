@@ -12,14 +12,23 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 export const Route = createFileRoute("/api/public/bootstrap-admin")({
   server: {
     handlers: {
-      POST: async ({ request }) => {
+      POST: async () => {
         const secret = process.env.ADMIN_INITIAL_PASSWORD;
         if (!secret) {
           return new Response("ADMIN_INITIAL_PASSWORD not set", { status: 500 });
         }
-        const token = request.headers.get("x-bootstrap-token");
-        if (!token || token !== secret) {
-          return new Response("Unauthorized", { status: 401 });
+
+        // Safety: only allowed when no admin exists yet (first-run bootstrap).
+        const { data: adminRows, error: adminErr } = await supabaseAdmin
+          .from("user_roles")
+          .select("user_id")
+          .eq("role", "admin")
+          .limit(1);
+        if (adminErr) {
+          return Response.json({ error: `check: ${adminErr.message}` }, { status: 500 });
+        }
+        if ((adminRows ?? []).length > 0) {
+          return Response.json({ ok: true, note: "admin already exists" });
         }
 
         const email = "joanna@flowharmony.pl";
