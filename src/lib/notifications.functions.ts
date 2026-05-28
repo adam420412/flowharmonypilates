@@ -540,3 +540,62 @@ export async function processScheduledReminders() {
 
   return summary;
 }
+
+/* -------------------- Admin: test wszystkich szablonów transakcyjnych -------------------- */
+
+import { enqueueTemplateEmail } from "@/lib/email/enqueue.server";
+
+const testAllSchema = z.object({
+  recipientEmail: z.string().email(),
+});
+
+/**
+ * Wysyła po jednej kopii każdego transakcyjnego szablonu (React Email) na podany adres.
+ * Używa realnej infrastruktury Lovable Emails (kolejka pgmq + cron co 5s).
+ */
+export const sendAllTestEmails = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: z.infer<typeof testAllSchema>) => testAllSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+
+    const studioName = await getStudioName();
+    const startsAt = new Date(Date.now() + 26 * 3600_000).toISOString();
+    const className = "Pilates Reformer (test)";
+    const instructorName = "Anna Kowalska";
+
+    const common = {
+      siteName: studioName,
+      className,
+      instructorName,
+      startsAt,
+      durationMinutes: 55,
+      studioName,
+      name: "Test Klientka",
+    };
+
+    const targets: Array<{ template: string; data: Record<string, any> }> = [
+      { template: "booking-confirmation", data: common },
+      { template: "booking-cancelled", data: common },
+      { template: "waitlist-added", data: common },
+      { template: "waitlist-promoted", data: common },
+      { template: "reminder-24h", data: common },
+    ];
+
+    const results: Array<{ template: string; ok: boolean; reason?: string; messageId?: string }> = [];
+    for (const t of targets) {
+      const r = await enqueueTemplateEmail({
+        templateName: t.template,
+        to: data.recipientEmail,
+        data: t.data,
+        idempotencyKey: `test:${t.template}:${Date.now()}`,
+      });
+      if (r.ok) {
+        results.push({ template: t.template, ok: true, messageId: r.messageId });
+      } else {
+        results.push({ template: t.template, ok: false, reason: r.reason });
+      }
+    }
+
+    return { recipient: data.recipientEmail, results };
+  });
