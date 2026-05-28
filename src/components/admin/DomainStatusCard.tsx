@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { CheckCircle2, XCircle, Loader2, RefreshCw, ExternalLink, ShieldCheck, ShieldAlert } from "lucide-react";
 import { checkDomainStatus, type CheckResult } from "@/lib/domain-status.functions";
+import { DomainSetupGuide } from "./DomainSetupGuide";
 
 type Status = Awaited<ReturnType<typeof checkDomainStatus>>;
 
@@ -28,8 +29,18 @@ export function DomainStatusCard() {
     void load();
   }, []);
 
+  const canonicalOk = !!(data?.canonical.ok && data?.canonical.https);
+  const apexRedirects = data?.apex.redirectsToCanonical === true;
+  const lovableRedirects = data?.lovable.redirectsToCanonical === true;
+
   return (
-    <section className="mb-16 rounded-2xl border border-border bg-background p-8 md:p-10">
+    <>
+      <DomainSetupGuide
+        canonicalOk={canonicalOk}
+        apexRedirects={apexRedirects}
+        lovableRedirects={lovableRedirects}
+      />
+      <section className="mb-16 rounded-2xl border border-border bg-background p-8 md:p-10">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h2 className="font-display text-3xl">Status domeny</h2>
@@ -80,7 +91,8 @@ export function DomainStatusCard() {
           <li><strong>Przekierowanie</strong> – stary adres przekierowuje na www.flowharmony.pl (301).</li>
         </ul>
       </div>
-    </section>
+      </section>
+    </>
   );
 }
 
