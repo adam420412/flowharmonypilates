@@ -7,6 +7,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DashboardCard } from "@/components/admin/DashboardCard";
+import { CalendarView } from "@/components/admin/CalendarView";
+import { ClientsCard } from "@/components/admin/ClientsCard";
+import { AllBookingsCard } from "@/components/admin/AllBookingsCard";
+import { ClassTypesCard } from "@/components/admin/ClassTypesCard";
+import { InstructorsCard } from "@/components/admin/InstructorsCard";
 import { Loader2, Save, Send, ShieldAlert, Eye, RefreshCw, Ban, Undo2 } from "lucide-react";
 import {
   AlertDialog,
@@ -123,14 +130,36 @@ function AdminPage() {
           <span className="text-xs uppercase tracking-widest text-terracotta">Administracja</span>
           <h1 className="mt-3 font-display text-5xl md:text-6xl">Panel zarządzania</h1>
           <p className="mt-3 text-foreground/80">
-            Edytuj limity miejsc na zajęciach oraz reguły rezerwacji studia.
+            Pełna obsługa studia: grafik, klientki, rezerwacje, typy zajęć i ustawienia.
           </p>
         </header>
 
-        <SettingsCard />
-        <AddClassCard />
-        <ClassesCard />
-        <NotificationTestCard />
+        <Tabs defaultValue="dashboard" className="w-full">
+          <TabsList className="mb-8 flex flex-wrap h-auto gap-1 bg-foreground/5 p-1">
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="calendar">Grafik</TabsTrigger>
+            <TabsTrigger value="classes">Zajęcia</TabsTrigger>
+            <TabsTrigger value="bookings">Rezerwacje</TabsTrigger>
+            <TabsTrigger value="clients">Klientki</TabsTrigger>
+            <TabsTrigger value="types">Typy zajęć</TabsTrigger>
+            <TabsTrigger value="instructors">Instruktorki</TabsTrigger>
+            <TabsTrigger value="settings">Ustawienia</TabsTrigger>
+            <TabsTrigger value="notifications">Powiadomienia</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="dashboard"><DashboardCard /></TabsContent>
+          <TabsContent value="calendar"><CalendarView /></TabsContent>
+          <TabsContent value="classes">
+            <AddClassCard />
+            <ClassesCard />
+          </TabsContent>
+          <TabsContent value="bookings"><AllBookingsCard /></TabsContent>
+          <TabsContent value="clients"><ClientsCard /></TabsContent>
+          <TabsContent value="types"><ClassTypesCard /></TabsContent>
+          <TabsContent value="instructors"><InstructorsCard /></TabsContent>
+          <TabsContent value="settings"><SettingsCard /></TabsContent>
+          <TabsContent value="notifications"><NotificationTestCard /></TabsContent>
+        </Tabs>
 
       </main>
       <Footer />
