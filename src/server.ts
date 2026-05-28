@@ -85,11 +85,10 @@ function canonicalRedirect(request: Request): Response | null {
     return null;
   }
 
-  // Do not redirect any custom-domain host here.
-  // At the moment www.flowharmony.pl is being redirected externally to the apex
-  // domain, so redirecting apex -> www in the app creates an infinite loop.
-  // Keep app-level redirects limited to the old published Lovable hostname only.
-  const shouldRedirect = host === LEGACY_PUBLISHED_HOST;
+  // Redirect apex flowharmony.pl -> www.flowharmony.pl and the old
+  // Lovable published hostname -> canonical www.
+  const shouldRedirect =
+    host === LEGACY_PUBLISHED_HOST || host === "flowharmony.pl";
 
   if (!shouldRedirect) return null;
 
