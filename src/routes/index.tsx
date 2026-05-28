@@ -250,7 +250,7 @@ function HomePage() {
           <Calendar size={28} className="mx-auto text-terracotta" strokeWidth={1.25} />
           <h2 className="mt-8 font-display text-5xl leading-tight md:text-7xl">
             Zacznij <em className="italic text-terracotta">dziś</em>.
-            <br />Pierwsza sesja za 79 zł.
+            <br />Pierwsza sesja Intro za 99 zł.
           </h2>
           <p className="mx-auto mt-8 max-w-xl text-foreground/80">
             Pakiet Intro dla nowych klientek — poznaj reformer, naszą filozofię i atmosferę studia.
