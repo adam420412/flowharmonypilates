@@ -23,11 +23,17 @@ import { Route as GrafikRouteImport } from './routes/grafik'
 import { Route as CennikRouteImport } from './routes/cennik'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
 import { Route as ApiPublicBootstrapAdminRouteImport } from './routes/api/public/bootstrap-admin'
+import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
+import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
+import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
+import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
 const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
@@ -99,6 +105,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
+  id: '/email/unsubscribe',
+  path: '/email/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedMojeRezerwacjeRoute =
   AuthenticatedMojeRezerwacjeRouteImport.update({
     id: '/moje-rezerwacje',
@@ -115,17 +126,44 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
+  id: '/lovable/email/suppression',
+  path: '/lovable/email/suppression',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicBootstrapAdminRoute = ApiPublicBootstrapAdminRouteImport.update({
   id: '/api/public/bootstrap-admin',
   path: '/api/public/bootstrap-admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LovableEmailTransactionalSendRoute =
+  LovableEmailTransactionalSendRouteImport.update({
+    id: '/lovable/email/transactional/send',
+    path: '/lovable/email/transactional/send',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const LovableEmailTransactionalPreviewRoute =
+  LovableEmailTransactionalPreviewRouteImport.update({
+    id: '/lovable/email/transactional/preview',
+    path: '/lovable/email/transactional/preview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
     path: '/lovable/email/queue/process',
     getParentRoute: () => rootRouteImport,
   } as any)
+const LovableEmailAuthWebhookRoute = LovableEmailAuthWebhookRouteImport.update({
+  id: '/lovable/email/auth/webhook',
+  path: '/lovable/email/auth/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
+  id: '/lovable/email/auth/preview',
+  path: '/lovable/email/auth/preview',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksProcessRemindersRoute =
   ApiPublicHooksProcessRemindersRouteImport.update({
     id: '/api/public/hooks/process-reminders',
@@ -150,9 +188,15 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -171,9 +215,15 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -194,9 +244,15 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
+  '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
+  '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
+  '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
+  '/lovable/email/transactional/preview': typeof LovableEmailTransactionalPreviewRoute
+  '/lovable/email/transactional/send': typeof LovableEmailTransactionalSendRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -217,9 +273,15 @@ export interface FileRouteTypes {
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/email/unsubscribe'
     | '/api/public/bootstrap-admin'
+    | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -238,9 +300,15 @@ export interface FileRouteTypes {
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/email/unsubscribe'
     | '/api/public/bootstrap-admin'
+    | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   id:
     | '__root__'
     | '/'
@@ -260,9 +328,15 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
+    | '/email/unsubscribe'
     | '/api/public/bootstrap-admin'
+    | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
+    | '/lovable/email/auth/preview'
+    | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
+    | '/lovable/email/transactional/preview'
+    | '/lovable/email/transactional/send'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -280,9 +354,15 @@ export interface RootRouteChildren {
   StudioRoute: typeof StudioRoute
   ZajeciaRoute: typeof ZajeciaRoute
   ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
+  EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
+  LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
+  LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
+  LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
+  LovableEmailTransactionalPreviewRoute: typeof LovableEmailTransactionalPreviewRoute
+  LovableEmailTransactionalSendRoute: typeof LovableEmailTransactionalSendRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -385,6 +465,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/email/unsubscribe': {
+      id: '/email/unsubscribe'
+      path: '/email/unsubscribe'
+      fullPath: '/email/unsubscribe'
+      preLoaderRoute: typeof EmailUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/moje-rezerwacje': {
       id: '/_authenticated/moje-rezerwacje'
       path: '/moje-rezerwacje'
@@ -406,6 +493,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/lovable/email/suppression': {
+      id: '/lovable/email/suppression'
+      path: '/lovable/email/suppression'
+      fullPath: '/lovable/email/suppression'
+      preLoaderRoute: typeof LovableEmailSuppressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/bootstrap-admin': {
       id: '/api/public/bootstrap-admin'
       path: '/api/public/bootstrap-admin'
@@ -413,11 +507,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicBootstrapAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lovable/email/transactional/send': {
+      id: '/lovable/email/transactional/send'
+      path: '/lovable/email/transactional/send'
+      fullPath: '/lovable/email/transactional/send'
+      preLoaderRoute: typeof LovableEmailTransactionalSendRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/transactional/preview': {
+      id: '/lovable/email/transactional/preview'
+      path: '/lovable/email/transactional/preview'
+      fullPath: '/lovable/email/transactional/preview'
+      preLoaderRoute: typeof LovableEmailTransactionalPreviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
       path: '/lovable/email/queue/process'
       fullPath: '/lovable/email/queue/process'
       preLoaderRoute: typeof LovableEmailQueueProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/webhook': {
+      id: '/lovable/email/auth/webhook'
+      path: '/lovable/email/auth/webhook'
+      fullPath: '/lovable/email/auth/webhook'
+      preLoaderRoute: typeof LovableEmailAuthWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lovable/email/auth/preview': {
+      id: '/lovable/email/auth/preview'
+      path: '/lovable/email/auth/preview'
+      fullPath: '/lovable/email/auth/preview'
+      preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/process-reminders': {
@@ -461,9 +583,15 @@ const rootRouteChildren: RootRouteChildren = {
   StudioRoute: StudioRoute,
   ZajeciaRoute: ZajeciaRoute,
   ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
+  EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
+  LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
+  LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
+  LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
+  LovableEmailTransactionalPreviewRoute: LovableEmailTransactionalPreviewRoute,
+  LovableEmailTransactionalSendRoute: LovableEmailTransactionalSendRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

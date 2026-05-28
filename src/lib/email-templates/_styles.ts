@@ -1,0 +1,11 @@
+export const main = { backgroundColor: '#ffffff', fontFamily: 'Georgia, serif' }
+export const container = { padding: '24px 28px', maxWidth: '560px' }
+export const h1 = { fontSize: '24px', fontWeight: 'normal' as const, color: '#3a2a20', margin: '0 0 16px' }
+export const h2 = { fontSize: '18px', fontWeight: 'normal' as const, color: '#3a2a20', margin: '0 0 12px' }
+export const text = { fontSize: '15px', color: '#55473d', lineHeight: '1.6', margin: '0 0 16px', fontFamily: 'Arial, sans-serif' }
+export const small = { fontSize: '13px', color: '#7a6a5e', lineHeight: '1.5', margin: '0 0 12px', fontFamily: 'Arial, sans-serif' }
+export const link = { color: '#c2725a', textDecoration: 'underline' }
+export const button = { backgroundColor: '#c2725a', color: '#ffffff', fontSize: '14px', borderRadius: '6px', padding: '12px 22px', textDecoration: 'none', fontFamily: 'Arial, sans-serif' }
+export const card = { backgroundColor: '#faf6f1', border: '1px solid #ecdfd0', borderRadius: '8px', padding: '18px 20px', margin: '0 0 20px' }
+export const label = { display: 'inline-block', padding: '3px 10px', borderRadius: '3px', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase' as const, color: '#ffffff', fontFamily: 'Arial, sans-serif' }
+export const footer = { fontSize: '12px', color: '#999999', margin: '32px 0 0', fontFamily: 'Arial, sans-serif' }
