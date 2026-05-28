@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
-import { Logo } from "@/components/site/Logo";
 
 export function Footer() {
   return (
@@ -8,7 +7,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-20 md:px-10">
         <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
-            <Logo variant="light" className="h-16" alt="Flow & Harmony — Studio Pilates Reformery" />
+            <Link to="/" className="inline-flex items-center gap-3">
+              <h2 className="font-display text-3xl text-cream lg:text-4xl">
+                Flow <em className="italic text-terracotta">&</em> Harmony
+              </h2>
+            </Link>
             <p className="mt-3 text-xs uppercase tracking-widest text-nude">Studio Pilates · Reformery</p>
             <p className="mt-6 max-w-md font-display text-xl italic text-cream/85">
               Twoja przestrzeń ruchu i wytchnienia.
