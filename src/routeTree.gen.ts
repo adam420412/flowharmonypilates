@@ -9,10 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ZapomnialemHaslaRouteImport } from './routes/zapomnialem-hasla'
 import { Route as ZajeciaRouteImport } from './routes/zajecia'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResetHaslaRouteImport } from './routes/reset-hasla'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
+import { Route as RegulaminRouteImport } from './routes/regulamin'
+import { Route as PolitykaPrywatnosciRouteImport } from './routes/polityka-prywatnosci'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as GrafikRouteImport } from './routes/grafik'
@@ -24,6 +28,11 @@ import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
+const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
+  id: '/zapomnialem-hasla',
+  path: '/zapomnialem-hasla',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ZajeciaRoute = ZajeciaRouteImport.update({
   id: '/zajecia',
   path: '/zajecia',
@@ -39,9 +48,24 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetHaslaRoute = ResetHaslaRouteImport.update({
+  id: '/reset-hasla',
+  path: '/reset-hasla',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RejestracjaRoute = RejestracjaRouteImport.update({
   id: '/rejestracja',
   path: '/rejestracja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegulaminRoute = RegulaminRouteImport.update({
+  id: '/regulamin',
+  path: '/regulamin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PolitykaPrywatnosciRoute = PolitykaPrywatnosciRouteImport.update({
+  id: '/polityka-prywatnosci',
+  path: '/polityka-prywatnosci',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -102,10 +126,14 @@ export interface FileRoutesByFullPath {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -117,10 +145,14 @@ export interface FileRoutesByTo {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -134,10 +166,14 @@ export interface FileRoutesById {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
@@ -151,10 +187,14 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/polityka-prywatnosci'
+    | '/regulamin'
     | '/rejestracja'
+    | '/reset-hasla'
     | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
+    | '/zapomnialem-hasla'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
@@ -166,10 +206,14 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/polityka-prywatnosci'
+    | '/regulamin'
     | '/rejestracja'
+    | '/reset-hasla'
     | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
+    | '/zapomnialem-hasla'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
@@ -182,10 +226,14 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/polityka-prywatnosci'
+    | '/regulamin'
     | '/rejestracja'
+    | '/reset-hasla'
     | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
+    | '/zapomnialem-hasla'
     | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
@@ -199,15 +247,26 @@ export interface RootRouteChildren {
   GrafikRoute: typeof GrafikRoute
   KontaktRoute: typeof KontaktRoute
   LoginRoute: typeof LoginRoute
+  PolitykaPrywatnosciRoute: typeof PolitykaPrywatnosciRoute
+  RegulaminRoute: typeof RegulaminRoute
   RejestracjaRoute: typeof RejestracjaRoute
+  ResetHaslaRoute: typeof ResetHaslaRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StudioRoute: typeof StudioRoute
   ZajeciaRoute: typeof ZajeciaRoute
+  ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/zapomnialem-hasla': {
+      id: '/zapomnialem-hasla'
+      path: '/zapomnialem-hasla'
+      fullPath: '/zapomnialem-hasla'
+      preLoaderRoute: typeof ZapomnialemHaslaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/zajecia': {
       id: '/zajecia'
       path: '/zajecia'
@@ -229,11 +288,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-hasla': {
+      id: '/reset-hasla'
+      path: '/reset-hasla'
+      fullPath: '/reset-hasla'
+      preLoaderRoute: typeof ResetHaslaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rejestracja': {
       id: '/rejestracja'
       path: '/rejestracja'
       fullPath: '/rejestracja'
       preLoaderRoute: typeof RejestracjaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/regulamin': {
+      id: '/regulamin'
+      path: '/regulamin'
+      fullPath: '/regulamin'
+      preLoaderRoute: typeof RegulaminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/polityka-prywatnosci': {
+      id: '/polityka-prywatnosci'
+      path: '/polityka-prywatnosci'
+      fullPath: '/polityka-prywatnosci'
+      preLoaderRoute: typeof PolitykaPrywatnosciRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -332,10 +412,14 @@ const rootRouteChildren: RootRouteChildren = {
   GrafikRoute: GrafikRoute,
   KontaktRoute: KontaktRoute,
   LoginRoute: LoginRoute,
+  PolitykaPrywatnosciRoute: PolitykaPrywatnosciRoute,
+  RegulaminRoute: RegulaminRoute,
   RejestracjaRoute: RejestracjaRoute,
+  ResetHaslaRoute: ResetHaslaRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StudioRoute: StudioRoute,
   ZajeciaRoute: ZajeciaRoute,
+  ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
 }
 export const routeTree = rootRouteImport
