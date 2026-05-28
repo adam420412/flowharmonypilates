@@ -102,28 +102,11 @@ function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 rounded-lg border border-terracotta/30 bg-terracotta/5 p-4 text-xs">
-          <p className="mb-2 font-medium uppercase tracking-widest text-terracotta">Konta testowe</p>
-          <ul className="space-y-2 text-foreground/85">
-            {[
-              { label: "Admin", email: "admin@flowharmony.test", pass: "Admin1234!" },
-              { label: "Klient", email: "klient@flowharmony.test", pass: "Klient1234!" },
-            ].map((c) => (
-              <li key={c.email} className="flex items-center justify-between gap-2">
-                <span>
-                  <strong className="text-foreground">{c.label}:</strong> {c.email} / {c.pass}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => { setEmail(c.email); setPassword(c.pass); }}
-                  className="shrink-0 rounded-full border border-terracotta/40 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta hover:bg-terracotta hover:text-cream"
-                >
-                  Wypełnij
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p className="mt-4 text-center text-sm">
+          <Link to="/zapomnialem-hasla" className="text-muted-foreground hover:text-terracotta underline-offset-4 hover:underline">
+            Zapomniałeś hasła?
+          </Link>
+        </p>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Nie masz konta?{" "}
