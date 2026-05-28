@@ -66,9 +66,47 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
+const CANONICAL_HOST = "www.flowharmony.pl";
+// Hosts that should NOT be redirected (preview/dev environments).
+const REDIRECT_EXEMPT_HOST_SUFFIXES = [
+  ".lovable.dev",
+  "-dev.lovable.app",
+  "id-preview--",
+];
+
+function canonicalRedirect(request: Request): Response | null {
+  const url = new URL(request.url);
+  const host = url.hostname;
+
+  if (host === CANONICAL_HOST) return null;
+  if (host === "localhost" || host === "127.0.0.1") return null;
+  if (REDIRECT_EXEMPT_HOST_SUFFIXES.some((s) => host.endsWith(s) || host.includes(s))) {
+    return null;
+  }
+
+  // Only redirect the known old hosts: apex flowharmony.pl + lovable.app published URL.
+  const shouldRedirect =
+    host === "flowharmony.pl" ||
+    host.endsWith(".lovable.app");
+
+  if (!shouldRedirect) return null;
+
+  const target = `https://${CANONICAL_HOST}${url.pathname}${url.search}`;
+  return new Response(null, {
+    status: 301,
+    headers: {
+      location: target,
+      "cache-control": "public, max-age=3600",
+    },
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const redirect = canonicalRedirect(request);
+      if (redirect) return redirect;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
