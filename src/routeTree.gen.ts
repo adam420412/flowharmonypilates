@@ -26,6 +26,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicBootstrapAdminRouteImport } from './routes/api/public/bootstrap-admin'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
 const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
@@ -113,6 +114,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiPublicBootstrapAdminRoute = ApiPublicBootstrapAdminRouteImport.update({
+  id: '/api/public/bootstrap-admin',
+  path: '/api/public/bootstrap-admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksProcessRemindersRoute =
   ApiPublicHooksProcessRemindersRouteImport.update({
     id: '/api/public/hooks/process-reminders',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRoutesByTo {
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRoutesById {
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRouteTypes {
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/api/public/bootstrap-admin'
     | '/api/public/hooks/process-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/api/public/bootstrap-admin'
     | '/api/public/hooks/process-reminders'
   id:
     | '__root__'
@@ -237,6 +248,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
+    | '/api/public/bootstrap-admin'
     | '/api/public/hooks/process-reminders'
   fileRoutesById: FileRoutesById
 }
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   StudioRoute: typeof StudioRoute
   ZajeciaRoute: typeof ZajeciaRoute
   ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
+  ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
 }
 
@@ -379,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/bootstrap-admin': {
+      id: '/api/public/bootstrap-admin'
+      path: '/api/public/bootstrap-admin'
+      fullPath: '/api/public/bootstrap-admin'
+      preLoaderRoute: typeof ApiPublicBootstrapAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/process-reminders': {
       id: '/api/public/hooks/process-reminders'
       path: '/api/public/hooks/process-reminders'
@@ -420,8 +440,19 @@ const rootRouteChildren: RootRouteChildren = {
   StudioRoute: StudioRoute,
   ZajeciaRoute: ZajeciaRoute,
   ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
+  ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
