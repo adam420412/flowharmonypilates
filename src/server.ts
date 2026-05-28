@@ -67,6 +67,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 const CANONICAL_HOST = "www.flowharmony.pl";
+const LEGACY_PUBLISHED_HOST = "flowharmonypilates.lovable.app";
 // Hosts that should NOT be redirected (preview/dev environments).
 const REDIRECT_EXEMPT_HOST_SUFFIXES = [
   ".lovable.dev",
@@ -84,14 +85,11 @@ function canonicalRedirect(request: Request): Response | null {
     return null;
   }
 
-  // Only redirect the old Lovable published URL → canonical www.
-  // NOTE: apex (flowharmony.pl) redirect is intentionally disabled — while DNS
-  // for apex vs www points to different hosts (cyberfolks vs Lovable), adding
-  // a 301 here can create a redirect loop with the other host's own redirect.
-  // Re-enable `host === "flowharmony.pl"` only after both A records point to Lovable.
-  const shouldRedirect = host.endsWith(".lovable.app");
-
-
+  // Do not redirect any custom-domain host here.
+  // At the moment www.flowharmony.pl is being redirected externally to the apex
+  // domain, so redirecting apex -> www in the app creates an infinite loop.
+  // Keep app-level redirects limited to the old published Lovable hostname only.
+  const shouldRedirect = host === LEGACY_PUBLISHED_HOST;
 
   if (!shouldRedirect) return null;
 
@@ -100,7 +98,7 @@ function canonicalRedirect(request: Request): Response | null {
     status: 301,
     headers: {
       location: target,
-      "cache-control": "public, max-age=3600",
+      "cache-control": "no-store",
     },
   });
 }
