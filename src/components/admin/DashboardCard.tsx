@@ -59,7 +59,7 @@ export function DashboardCard() {
         .lt("classes.starts_at", to.toISOString()),
       supabase
         .from("bookings")
-        .select("user_id,status,profiles:profiles!bookings_user_id_fkey(display_name)")
+        .select("user_id,status")
         .gte("created_at", addDays(from, -30).toISOString())
         .eq("status", "confirmed"),
     ]);
@@ -101,24 +101,26 @@ export function DashboardCard() {
     }));
 
     // top clients last 30 days
-    type MonthBookingRow = {
-      user_id: string;
-      status: string;
-      profiles: { display_name: string | null } | null;
-    };
-    const mb = (monthBookings ?? []) as unknown as MonthBookingRow[];
-    const counts = new Map<string, TopClient>();
+    type MonthBookingRow = { user_id: string; status: string };
+    const mb = (monthBookings ?? []) as MonthBookingRow[];
+    const counts = new Map<string, number>();
     for (const b of mb) {
-      const existing = counts.get(b.user_id);
-      if (existing) existing.count += 1;
-      else
-        counts.set(b.user_id, {
-          user_id: b.user_id,
-          display_name: b.profiles?.display_name ?? null,
-          count: 1,
-        });
+      counts.set(b.user_id, (counts.get(b.user_id) ?? 0) + 1);
     }
-    const top = [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 5);
+    const topIds = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+    let profileMap = new Map<string, string | null>();
+    if (topIds.length > 0) {
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id,display_name")
+        .in("id", topIds.map(([id]) => id));
+      profileMap = new Map((profs ?? []).map((p) => [p.id, p.display_name]));
+    }
+    const top: TopClient[] = topIds.map(([user_id, count]) => ({
+      user_id,
+      display_name: profileMap.get(user_id) ?? null,
+      count,
+    }));
 
     setStats({ classesNext7, confirmedNext7, capacityNext7, waitlistNext7, cancelledNext7 });
     setPerDay(perDayArr);

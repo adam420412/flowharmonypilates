@@ -17,7 +17,7 @@ type Row = {
     class_type: { name: string } | null;
     instructor: { full_name: string } | null;
   } | null;
-  profiles: { display_name: string | null; phone: string | null } | null;
+  profile: { display_name: string | null; phone: string | null } | null;
 };
 
 export function AllBookingsCard() {
@@ -37,7 +37,7 @@ export function AllBookingsCard() {
     let q = supabase
       .from("bookings")
       .select(
-        "id,status,created_at,user_id,class_id,classes!inner(starts_at,is_cancelled,class_type:class_types(name),instructor:instructors(full_name)),profiles:profiles!bookings_user_id_fkey(display_name,phone)",
+        "id,status,created_at,user_id,class_id,classes!inner(starts_at,is_cancelled,class_type:class_types(name),instructor:instructors(full_name))",
       )
       .order("created_at", { ascending: false })
       .limit(500);
@@ -46,7 +46,19 @@ export function AllBookingsCard() {
     }
     const { data, error } = await q;
     if (error) toast.error("Nie udało się pobrać rezerwacji");
-    setRows((data ?? []) as unknown as Row[]);
+    const baseRows = (data ?? []) as unknown as Omit<Row, "profile">[];
+    const userIds = [...new Set(baseRows.map((r) => r.user_id))];
+    let profileMap = new Map<string, { display_name: string | null; phone: string | null }>();
+    if (userIds.length > 0) {
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id,display_name,phone")
+        .in("id", userIds);
+      profileMap = new Map(
+        (profs ?? []).map((p) => [p.id, { display_name: p.display_name, phone: p.phone }]),
+      );
+    }
+    setRows(baseRows.map((r) => ({ ...r, profile: profileMap.get(r.user_id) ?? null })));
     setLoading(false);
   }
 
