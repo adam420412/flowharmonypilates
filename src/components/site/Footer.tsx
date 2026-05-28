@@ -82,8 +82,19 @@ export function Footer() {
             <Link to="/regulamin" className="hover:text-cream">Regulamin</Link>
             <Link to="/polityka-prywatnosci" className="hover:text-cream">Polityka prywatności</Link>
           </div>
-          <span>Studio Pilates · Reformery</span>
+          <span className="normal-case tracking-normal text-cream/60">
+            Strona internetowa zbudowana przez{" "}
+            <a
+              href="http://fotz.pl/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-cream/90 underline-offset-4 hover:text-cream hover:underline"
+            >
+              Fotz Studio
+            </a>
+          </span>
         </div>
+
       </div>
     </footer>
   );
