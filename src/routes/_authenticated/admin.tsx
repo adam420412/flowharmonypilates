@@ -1406,3 +1406,76 @@ function toLocalDatetimeInput(iso: string) {
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
+
+function AllTemplatesTestPanel() {
+  const fn = useServerFn(sendAllTestEmails);
+  const [email, setEmail] = useState("adam@fotz.pl");
+  const [sending, setSending] = useState(false);
+  const [results, setResults] = useState<
+    Array<{ template: string; ok: boolean; reason?: string; messageId?: string }>
+  >([]);
+
+  async function handleSend() {
+    setSending(true);
+    setResults([]);
+    try {
+      const r = await fn({ data: { recipientEmail: email } });
+      setResults(r.results);
+      const okCount = r.results.filter((x) => x.ok).length;
+      if (okCount === r.results.length) {
+        toast.success(`Zakolejkowano ${okCount} testowych e-maili na ${email}`);
+      } else {
+        toast.warning(`Zakolejkowano ${okCount}/${r.results.length} — sprawdź szczegóły`);
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Błąd wysyłki testów");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-cream/40 p-6">
+      <h3 className="font-display text-xl">Test wszystkich szablonów (React Email)</h3>
+      <p className="mt-1 text-xs text-foreground/70">
+        Wyśle po jednym e-mailu dla każdego z 5 szablonów: potwierdzenie rezerwacji,
+        odwołanie, lista rezerwowa (dopisanie + awans), przypomnienie 24h.
+        Realna wysyłka przez kolejkę pgmq (cron co 5s).
+      </p>
+      <div className="mt-4 flex flex-wrap items-end gap-3">
+        <label className="flex-1 min-w-[240px]">
+          <span className="block text-xs uppercase tracking-widest text-foreground/80">
+            Adres e-mail odbiorcy
+          </span>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mt-2 w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-terracotta"
+          />
+        </label>
+        <button
+          type="button"
+          onClick={handleSend}
+          disabled={sending || !email}
+          className="rounded-md bg-terracotta px-5 py-2.5 text-sm font-medium text-white disabled:opacity-50"
+        >
+          {sending ? "Wysyłam..." : "Wyślij 5 testów"}
+        </button>
+      </div>
+      {results.length > 0 && (
+        <ul className="mt-4 space-y-1 text-xs">
+          {results.map((r) => (
+            <li
+              key={r.template}
+              className={r.ok ? "text-emerald-700" : "text-red-600"}
+            >
+              {r.ok ? "✓" : "✗"} {r.template}
+              {r.ok ? ` (id: ${r.messageId?.slice(0, 8)})` : ` — ${r.reason}`}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
