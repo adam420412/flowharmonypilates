@@ -32,6 +32,7 @@ import {
   sendTestWaitlistPromoted,
   getWaitlistPromotedLogs,
   listWaitlistBookings,
+  sendAllTestEmails,
 } from "@/lib/notifications.functions";
 
 type WaitlistOption = {
