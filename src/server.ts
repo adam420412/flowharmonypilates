@@ -84,10 +84,14 @@ function canonicalRedirect(request: Request): Response | null {
     return null;
   }
 
-  // Only redirect the known old hosts: apex flowharmony.pl + lovable.app published URL.
-  const shouldRedirect =
-    host === "flowharmony.pl" ||
-    host.endsWith(".lovable.app");
+  // Only redirect the old Lovable published URL → canonical www.
+  // NOTE: apex (flowharmony.pl) redirect is intentionally disabled — while DNS
+  // for apex vs www points to different hosts (cyberfolks vs Lovable), adding
+  // a 301 here can create a redirect loop with the other host's own redirect.
+  // Re-enable `host === "flowharmony.pl"` only after both A records point to Lovable.
+  const shouldRedirect = host.endsWith(".lovable.app");
+
+
 
   if (!shouldRedirect) return null;
 
