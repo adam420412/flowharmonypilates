@@ -1,19 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 220" role="img" aria-label="Flow and Harmony — Studio Pilatesu">
-  <g fill="none" stroke="#1a1a1a" stroke-width="1.4" stroke-linecap="round">
-    <path d="M70 110 C 130 60, 200 60, 260 110 S 390 160, 450 110" opacity="0.55"/>
-    <path d="M70 122 C 130 78, 200 78, 260 122 S 390 166, 450 122" opacity="0.28"/>
-  </g>
-  <text x="260" y="118" text-anchor="middle" fill="#1a1a1a"
-        font-family="Lora" font-style="italic" font-weight="400" font-size="84">
-    Flow <tspan font-style="normal" font-size="72">&amp;</tspan> Harmony
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" role="img" aria-label="Flow and Harmony — Studio Pilatesu">
+  <text x="400" y="150" text-anchor="middle" fill="#1a1a1a"
+        font-family="'Cormorant Garamond', 'Cormorant', 'Playfair Display', 'EB Garamond', Georgia, serif"
+        font-weight="400" font-size="150">
+    Flow <tspan font-style="italic" fill="#c0542e" font-weight="400">&amp;</tspan> Harmony
   </text>
-  <g stroke="#1a1a1a" stroke-width="1" opacity="0.5">
-    <line x1="150" y1="158" x2="230" y2="158"/>
-    <line x1="290" y1="158" x2="370" y2="158"/>
-    <circle cx="260" cy="158" r="2.2" fill="#1a1a1a" stroke="none"/>
-  </g>
-  <text x="260" y="188" text-anchor="middle" fill="#1a1a1a"
-        font-family="Work Sans" font-weight="400" font-size="13" letter-spacing="5.4">
+  <text x="400" y="215" text-anchor="middle" fill="#1a1a1a"
+        font-family="'Work Sans', 'Inter', 'Helvetica Neue', Arial, sans-serif"
+        font-weight="400" font-size="22" letter-spacing="22.5">
     STUDIO PILATESU
   </text>
 </svg>
