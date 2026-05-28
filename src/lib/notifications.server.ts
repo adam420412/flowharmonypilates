@@ -42,10 +42,31 @@ export async function sendNotification(params: {
     }
   }
 
-  // MOCK send — w produkcji wywołanie API dostawcy
-  console.log(`[NOTIFY:${channel.toUpperCase()}] → ${recipient}`);
-  if (subject) console.log(`  Subject: ${subject}`);
-  console.log(`  Body: ${body}`);
+  // Realna wysyłka (email) lub MOCK (sms)
+  let sendError: string | null = null;
+  let sendStatus: "sent" | "failed" | "queued" | "suppressed" = "sent";
+
+  if (channel === "email") {
+    const r = await enqueueRenderedEmail({
+      to: recipient,
+      subject: subject ?? "Wiadomość od Flow & Harmony",
+      body,
+      label: kind,
+      idempotencyKey: bookingId ? `${kind}:${bookingId}` : undefined,
+    });
+    if (r.ok) {
+      sendStatus = "queued";
+    } else if (r.reason === "suppressed") {
+      sendStatus = "suppressed";
+    } else {
+      sendStatus = "failed";
+      sendError = r.reason;
+    }
+  } else {
+    // SMS — MOCK do czasu wpięcia SMSAPI.pl
+    console.log(`[NOTIFY:SMS] → ${recipient}`);
+    console.log(`  Body: ${body}`);
+  }
 
   const { error } = await supabaseAdmin.from("notification_log").insert({
     user_id: userId,
@@ -54,7 +75,8 @@ export async function sendNotification(params: {
     channel,
     kind,
     recipient,
-    status: "sent",
+    status: sendStatus,
+    error: sendError,
   });
 
   if (error) {
