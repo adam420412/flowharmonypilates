@@ -9,6 +9,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { CookieConsent } from "@/components/site/CookieConsent";
 
 import appCss from "../styles.css?url";
 
@@ -123,6 +124,7 @@ function RootComponent() {
       <AuthProvider>
         <Outlet />
         <Toaster position="top-right" />
+        <CookieConsent />
       </AuthProvider>
     </QueryClientProvider>
   );

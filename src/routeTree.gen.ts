@@ -9,10 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ZapomnialemHaslaRouteImport } from './routes/zapomnialem-hasla'
 import { Route as ZajeciaRouteImport } from './routes/zajecia'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ResetHaslaRouteImport } from './routes/reset-hasla'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
+import { Route as RegulaminRouteImport } from './routes/regulamin'
+import { Route as PolitykaPrywatnosciRouteImport } from './routes/polityka-prywatnosci'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as GrafikRouteImport } from './routes/grafik'
@@ -22,8 +26,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicBootstrapAdminRouteImport } from './routes/api/public/bootstrap-admin'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
+const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
+  id: '/zapomnialem-hasla',
+  path: '/zapomnialem-hasla',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ZajeciaRoute = ZajeciaRouteImport.update({
   id: '/zajecia',
   path: '/zajecia',
@@ -39,9 +49,24 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetHaslaRoute = ResetHaslaRouteImport.update({
+  id: '/reset-hasla',
+  path: '/reset-hasla',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RejestracjaRoute = RejestracjaRouteImport.update({
   id: '/rejestracja',
   path: '/rejestracja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegulaminRoute = RegulaminRouteImport.update({
+  id: '/regulamin',
+  path: '/regulamin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PolitykaPrywatnosciRoute = PolitykaPrywatnosciRouteImport.update({
+  id: '/polityka-prywatnosci',
+  path: '/polityka-prywatnosci',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -89,6 +114,11 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiPublicBootstrapAdminRoute = ApiPublicBootstrapAdminRouteImport.update({
+  id: '/api/public/bootstrap-admin',
+  path: '/api/public/bootstrap-admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksProcessRemindersRoute =
   ApiPublicHooksProcessRemindersRouteImport.update({
     id: '/api/public/hooks/process-reminders',
@@ -102,13 +132,18 @@ export interface FileRoutesByFullPath {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRoutesByTo {
@@ -117,13 +152,18 @@ export interface FileRoutesByTo {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRoutesById {
@@ -134,13 +174,18 @@ export interface FileRoutesById {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
+  '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/reset-hasla': typeof ResetHaslaRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
+  '/zapomnialem-hasla': typeof ZapomnialemHaslaRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
+  '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
 }
 export interface FileRouteTypes {
@@ -151,13 +196,18 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/polityka-prywatnosci'
+    | '/regulamin'
     | '/rejestracja'
+    | '/reset-hasla'
     | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
+    | '/zapomnialem-hasla'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/api/public/bootstrap-admin'
     | '/api/public/hooks/process-reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -166,13 +216,18 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/polityka-prywatnosci'
+    | '/regulamin'
     | '/rejestracja'
+    | '/reset-hasla'
     | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
+    | '/zapomnialem-hasla'
     | '/admin'
     | '/konto'
     | '/moje-rezerwacje'
+    | '/api/public/bootstrap-admin'
     | '/api/public/hooks/process-reminders'
   id:
     | '__root__'
@@ -182,13 +237,18 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/polityka-prywatnosci'
+    | '/regulamin'
     | '/rejestracja'
+    | '/reset-hasla'
     | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
+    | '/zapomnialem-hasla'
     | '/_authenticated/admin'
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
+    | '/api/public/bootstrap-admin'
     | '/api/public/hooks/process-reminders'
   fileRoutesById: FileRoutesById
 }
@@ -199,15 +259,27 @@ export interface RootRouteChildren {
   GrafikRoute: typeof GrafikRoute
   KontaktRoute: typeof KontaktRoute
   LoginRoute: typeof LoginRoute
+  PolitykaPrywatnosciRoute: typeof PolitykaPrywatnosciRoute
+  RegulaminRoute: typeof RegulaminRoute
   RejestracjaRoute: typeof RejestracjaRoute
+  ResetHaslaRoute: typeof ResetHaslaRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StudioRoute: typeof StudioRoute
   ZajeciaRoute: typeof ZajeciaRoute
+  ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
+  ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/zapomnialem-hasla': {
+      id: '/zapomnialem-hasla'
+      path: '/zapomnialem-hasla'
+      fullPath: '/zapomnialem-hasla'
+      preLoaderRoute: typeof ZapomnialemHaslaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/zajecia': {
       id: '/zajecia'
       path: '/zajecia'
@@ -229,11 +301,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-hasla': {
+      id: '/reset-hasla'
+      path: '/reset-hasla'
+      fullPath: '/reset-hasla'
+      preLoaderRoute: typeof ResetHaslaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rejestracja': {
       id: '/rejestracja'
       path: '/rejestracja'
       fullPath: '/rejestracja'
       preLoaderRoute: typeof RejestracjaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/regulamin': {
+      id: '/regulamin'
+      path: '/regulamin'
+      fullPath: '/regulamin'
+      preLoaderRoute: typeof RegulaminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/polityka-prywatnosci': {
+      id: '/polityka-prywatnosci'
+      path: '/polityka-prywatnosci'
+      fullPath: '/polityka-prywatnosci'
+      preLoaderRoute: typeof PolitykaPrywatnosciRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -299,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/bootstrap-admin': {
+      id: '/api/public/bootstrap-admin'
+      path: '/api/public/bootstrap-admin'
+      fullPath: '/api/public/bootstrap-admin'
+      preLoaderRoute: typeof ApiPublicBootstrapAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/process-reminders': {
       id: '/api/public/hooks/process-reminders'
       path: '/api/public/hooks/process-reminders'
@@ -332,10 +432,15 @@ const rootRouteChildren: RootRouteChildren = {
   GrafikRoute: GrafikRoute,
   KontaktRoute: KontaktRoute,
   LoginRoute: LoginRoute,
+  PolitykaPrywatnosciRoute: PolitykaPrywatnosciRoute,
+  RegulaminRoute: RegulaminRoute,
   RejestracjaRoute: RejestracjaRoute,
+  ResetHaslaRoute: ResetHaslaRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StudioRoute: StudioRoute,
   ZajeciaRoute: ZajeciaRoute,
+  ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
+  ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
 }
 export const routeTree = rootRouteImport
