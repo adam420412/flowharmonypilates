@@ -1,76 +1,89 @@
-## Co jest teraz w panelu
+## Cel
+Oddać Joannie funkcjonującą stronę: czysty ekran logowania, ostateczne konto administratora, kompletny pakiet prawny (RODO), działający formularz kontaktowy z powiadomieniem oraz płatności online za karnety.
 
-- Ustawienia studia (godziny do anulowania itp.)
-- Dodawanie zajęć (z powtarzaniem co tydzień)
-- Lista nadchodzących zajęć — edycja miejsc/instruktorki, odwoływanie/przywracanie
-- Test powiadomień (awans z listy rezerwowej)
+---
 
-## Propozycje do dodania
+## 1. Czyszczenie ekranu logowania i kont testowych
 
-### 1. Klientki (CRM) — priorytet wysoki
-- Lista wszystkich klientek (imię, telefon, e-mail, liczba rezerwacji, ostatnia wizyta, opt-in SMS)
-- Szukajka + filtry (aktywne, nowe, nieaktywne >30 dni)
-- Karta klientki: historia rezerwacji, statystyki, notatki admina
-- Ręczne dodanie/edycja telefonu, oznaczenie VIP
-- Eksport CSV
+**Co znika z UI** (`src/routes/login.tsx`, linie 105–126):
+- ramka „Konta testowe" z widocznymi loginami i hasłami,
+- przyciski „Wypełnij".
 
-### 2. Rezerwacje — przegląd globalny
-- Tabela wszystkich rezerwacji (filtr: zajęcia, data, status, klientka)
-- Ręczne dodanie rezerwacji za klientkę (np. zapis telefoniczny)
-- Ręczne przeniesienie z listy rezerwowej / zamiana miejsc
-- Anulowanie pojedynczej rezerwacji z powodem
+**Co dzieje się w bazie:**
+- usuwam użytkownika `klient@flowharmony.test` (z `auth.users` — kaskada usuwa `profiles`, `user_roles`, `bookings`),
+- tworzę użytkownika `joanna@flowharmony.pl` z rolą `admin` i hasłem startowym, które podasz w bezpiecznym oknie sekretów po zatwierdzeniu planu,
+- usuwam stare `admin@flowharmony.test`,
+- jako fallback dodaję na ekranie /login link **„Zapomniałeś hasła?"** (patrz punkt 2), żeby Joanna mogła zresetować hasło w razie utraty.
 
-### 3. Grafik — widok kalendarza
-- Tygodniowy/miesięczny widok (zamiast samej listy)
-- Drag & drop do zmiany godziny/instruktorki
-- Szybki podgląd obłożenia (kolory: wolne / pełne / odwołane)
-- Duplikowanie tygodnia (skopiuj cały tydzień do przodu)
+**Końcowe dane logowania (do przekazania Joannie):**
+- E-mail: **joanna@flowharmony.pl**
+- Hasło: **ustawisz je sam w okienku po zatwierdzeniu planu** (zalecam min. 12 znaków, mix wielkich/małych liter, cyfra, znak specjalny). Hasło nie pojawia się w kodzie, czacie ani repo.
 
-### 4. Typy zajęć i instruktorki
-- CRUD typów zajęć (slug, nazwa, opis, kolor, czas, domyślny limit)
-- CRUD instruktorek (imię, bio, zdjęcie, aktywna/nieaktywna, kolejność)
-- Włącz/wyłącz typ zajęć bez kasowania
+---
 
-### 5. Dashboard / statystyki
-- KPI na górze: zajęcia w tym tygodniu, rezerwacje, obłożenie %, lista rezerwowa
-- Wykres obłożenia w czasie (ostatnie 4/12 tygodni)
-- Top klientki (najwięcej rezerwacji)
-- Najczęściej odwoływane sloty / godziny martwe
+## 2. Reset hasła („Zapomniałem hasła")
 
-### 6. Komunikacja
-- Wysyłka SMS/e-mail do uczestniczek konkretnych zajęć (np. „spóźnię się 10 min")
-- Newsletter / ogłoszenie do wszystkich z opt-in
-- Szablony wiadomości (potwierdzenie, przypomnienie, odwołanie)
-- Historia powiadomień (już jest tabela `notification_log` — pokazać UI)
+- Nowa publiczna trasa **`/zapomnialem-hasla`** — formularz z polem e-mail, wywołuje `supabase.auth.resetPasswordForEmail(email, { redirectTo: origin + "/reset-hasla" })`.
+- Nowa publiczna trasa **`/reset-hasla`** — formularz nowego hasła, wywołuje `supabase.auth.updateUser({ password })` po wykryciu `type=recovery` w URL.
+- Link **„Zapomniałeś hasła?"** na `/login` pod formularzem.
+- Wymaga aktywnego nadawcy e-mail (Lovable Email Domain). Jeśli domena `notify.flowharmony.pl` nie jest jeszcze skonfigurowana, pokażę okno konfiguracji — to jednorazowy krok DNS w cyber_Folks.
 
-### 7. Uprawnienia / zespół
-- Lista użytkowniczek z rolami (admin / klientka)
-- Nadawanie roli admin innej osobie (np. instruktorka jako admin)
-- Log akcji admina (kto co zmienił i kiedy)
+---
 
-### 8. Operacyjne drobiazgi
-- Dni wolne / urlop (blokada zakresu dat — kasuje/oznacza zajęcia)
-- Globalna pauza rezerwacji (np. remont)
-- Komunikat na stronie głównej (banner edytowalny z panelu)
-- Galeria / sekcje strony edytowalne (CMS-lite)
+## 3. RODO: polityka, regulamin, cookies
 
-### 9. Raporty
-- Eksport rezerwacji do CSV (zakres dat)
-- Raport miesięczny: liczba zajęć, frekwencja, anulowania
-- Raport per instruktorka
+**Nowe statyczne trasy:**
+- `/polityka-prywatnosci` — przetwarzanie danych zgodnie z RODO, kontakt do ADO (Flow & Harmony, NIP/adres do uzupełnienia), cele przetwarzania (rezerwacje, marketing opt-in), prawa użytkownika, dane retencji, info o Lovable Cloud / Supabase jako podmiocie przetwarzającym.
+- `/regulamin` — regulamin rezerwacji zajęć (zasady odwołań — już mamy `cancellation_hours_before`, brak zwrotów za niewykorzystane karnety, BHP w studio).
+- **Banner cookies** (komponent `<CookieConsent />`) — minimalny: dwa przyciski „Akceptuję wszystkie" / „Tylko niezbędne", trzyma wybór w `localStorage`, blokuje skrypty analityczne (na razie nie używamy, ale przygotowane).
+- Linki do polityki/regulaminu w stopce.
 
-### 10. Ustawienia studia — rozbudowa
-- Adres, telefon, e-mail kontaktowy (używane na stronie)
-- Linki social media
-- Logo i kolory marki (bez kodu)
-- Polityka anulowania — edytowalny tekst pokazywany klientkom
+> Treści napiszę po polsku jako rozsądny szablon — Joanna powinna je przeczytać i ewentualnie poprawić dane firmy.
 
-## Co polecam zrobić najpierw
+---
 
-Trzy najbardziej wartościowe rzeczy z perspektywy codziennej obsługi studia:
+## 4. Formularz kontaktowy → baza + e-mail do Joanny
 
-1. **Klientki (CRM) + Rezerwacje globalne** — bez tego trudno reagować na telefony
-2. **Widok kalendarza grafiku** — szybciej się ogarnia tydzień niż w liście
-3. **Dashboard z KPI** — od razu widać czy tydzień się zapełnia
+- Nowa tabela **`contact_messages`** (id, name, email, phone, message, status, created_at) z RLS: insert dla `anon`+`authenticated`, select/update tylko dla admina.
+- Endpoint zapisuje wiadomość przez `createServerFn` z walidacją zod (długości, sanityzacja).
+- Po zapisie wysyłany jest e-mail do Joanny przez Lovable Email (transactional template).
+- W panelu admina nowa zakładka **„Wiadomości"** z listą i statusem przeczytane/odpowiedziane.
 
-Powiedz które z tych obszarów (lub własny wybór) wdrażamy — wtedy zrobię szczegółowy plan dla konkretnego.
+Wymaga email domain (ten sam co reset hasła — robimy raz).
+
+---
+
+## 5. Płatności online za karnety (Stripe)
+
+**Zakres MVP, żeby nie blokować oddania:**
+- Włączamy **Lovable Stripe Payments** (built-in, bez konieczności konta Stripe na start — najpierw środowisko testowe).
+- Nowy katalog karnetów w bazie (`packages`: 1 wejście, karnet 4, karnet 8, miesięczny open) — Joanna potwierdza ceny przed włączeniem.
+- Strona **`/karnety`** (lub sekcja na `/cennik`) z przyciskiem „Kup karnet" → Stripe Checkout.
+- Webhook `/api/public/stripe-webhook` zapisuje zakup do nowej tabeli `user_packages` (user_id, package_id, entries_left, expires_at, status).
+- Przy rezerwacji zajęć decrement `entries_left`; przy anulowaniu w terminie — zwrot wejścia.
+- W panelu admina lista zakupów i ręczne dodawanie karnetu (off-line zakupy).
+
+> Stripe to największy kawałek — jeśli chcesz **najpierw oddać stronę bez płatności**, mogę zrobić punkty 1–4 teraz i Stripe w osobnej iteracji. Daj znać w komentarzu po przeczytaniu planu, jeśli wolisz tak.
+
+---
+
+## Szczegóły techniczne
+
+- Migracje SQL: `contact_messages` + RLS + GRANT-y, `packages` + `user_packages` + RLS + GRANT-y.
+- Server functions: `submitContactMessage`, `createCheckoutSession`, `markMessageRead`, `addManualPackage`.
+- Server route: `src/routes/api/public/stripe-webhook.ts` z weryfikacją podpisu Stripe.
+- Edycje: `src/routes/login.tsx` (usunięcie panelu testowych kont + link reset), `src/components/site/Navigation.tsx` lub stopka (linki do polityki/regulaminu), `src/routes/_authenticated/admin.tsx` (zakładki Wiadomości, Karnety).
+- Nowe komponenty: `CookieConsent`, `ContactForm` refactor (jeśli istnieje), `PackagesGrid`.
+- Sekrety: hasło początkowe Joanny, `STRIPE_*` (obsłużone przez Lovable Stripe automatycznie po włączeniu).
+
+---
+
+## Kolejność wykonania
+1. Migracje DB (admin user, usunięcie testowych, contact_messages, packages, user_packages).
+2. UI: czyszczenie /login, link reset hasła, dwie trasy resetu.
+3. Strony prawne + cookies banner + linki w stopce.
+4. Email domain → formularz kontaktowy z powiadomieniem.
+5. Stripe Payments → katalog → checkout → webhook → integracja z rezerwacjami.
+6. Smoke test: logowanie Joanny, reset hasła, wysłanie wiadomości, zakup testowego karnetu, rezerwacja z dekrementem.
+
+Po zatwierdzeniu pokażę okno do wpisania **hasła startowego dla joanna@flowharmony.pl**, a potem lecę punkt po punkcie.
