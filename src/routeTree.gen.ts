@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ZajeciaRouteImport } from './routes/zajecia'
 import { Route as StudioRouteImport } from './routes/studio'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KontaktRouteImport } from './routes/kontakt'
@@ -31,6 +32,11 @@ const ZajeciaRoute = ZajeciaRouteImport.update({
 const StudioRoute = StudioRouteImport.update({
   id: '/studio',
   path: '/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RejestracjaRoute = RejestracjaRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
   '/rejestracja': typeof RejestracjaRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/studio': typeof StudioRoute
   '/zajecia': typeof ZajeciaRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/login'
     | '/rejestracja'
+    | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
     | '/admin'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/login'
     | '/rejestracja'
+    | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
     | '/admin'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/kontakt'
     | '/login'
     | '/rejestracja'
+    | '/sitemap.xml'
     | '/studio'
     | '/zajecia'
     | '/_authenticated/admin'
@@ -188,6 +200,7 @@ export interface RootRouteChildren {
   KontaktRoute: typeof KontaktRoute
   LoginRoute: typeof LoginRoute
   RejestracjaRoute: typeof RejestracjaRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StudioRoute: typeof StudioRoute
   ZajeciaRoute: typeof ZajeciaRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/studio'
       fullPath: '/studio'
       preLoaderRoute: typeof StudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rejestracja': {
@@ -313,6 +333,7 @@ const rootRouteChildren: RootRouteChildren = {
   KontaktRoute: KontaktRoute,
   LoginRoute: LoginRoute,
   RejestracjaRoute: RejestracjaRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StudioRoute: StudioRoute,
   ZajeciaRoute: ZajeciaRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
