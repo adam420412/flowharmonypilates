@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /konto
+Disallow: /moje-rezerwacje
+Disallow: /login
+Disallow: /rejestracja
+Disallow: /api/
+
+Sitemap: https://www.flowharmony.pl/sitemap.xml
