@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { CheckCircle2, XCircle, Loader2, RefreshCw, ExternalLink, ShieldCheck, ShieldAlert } from "lucide-react";
 import { checkDomainStatus, type CheckResult } from "@/lib/domain-status.functions";
+import { DomainSetupGuide } from "./DomainSetupGuide";
 
 type Status = Awaited<ReturnType<typeof checkDomainStatus>>;
 
