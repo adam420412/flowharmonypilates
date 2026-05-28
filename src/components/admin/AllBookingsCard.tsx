@@ -68,15 +68,15 @@ export function AllBookingsCard() {
       if (status !== "all" && r.status !== status) return false;
       if (!qx) return true;
       return (
-        (r.profiles?.display_name ?? "").toLowerCase().includes(qx) ||
-        (r.profiles?.phone ?? "").toLowerCase().includes(qx) ||
+        (r.profile?.display_name ?? "").toLowerCase().includes(qx) ||
+        (r.profile?.phone ?? "").toLowerCase().includes(qx) ||
         (r.classes?.class_type?.name ?? "").toLowerCase().includes(qx)
       );
     });
   }, [rows, query, status]);
 
   async function cancel(row: Row) {
-    if (!confirm(`Anulować rezerwację: ${row.profiles?.display_name ?? "klientka"}?`)) return;
+    if (!confirm(`Anulować rezerwację: ${row.profile?.display_name ?? "klientka"}?`)) return;
     setCancellingId(row.id);
     const { error } = await supabase
       .from("bookings")
@@ -143,8 +143,8 @@ export function AllBookingsCard() {
             <tbody className="divide-y divide-border">
               {filtered.map((r) => (
                 <tr key={r.id}>
-                  <td className="px-4 py-3">{r.profiles?.display_name ?? "—"}</td>
-                  <td className="px-4 py-3">{r.profiles?.phone ?? "—"}</td>
+                  <td className="px-4 py-3">{r.profile?.display_name ?? "—"}</td>
+                  <td className="px-4 py-3">{r.profile?.phone ?? "—"}</td>
                   <td className="px-4 py-3">{r.classes?.class_type?.name ?? "—"}</td>
                   <td className="px-4 py-3 text-foreground/70">
                     {r.classes?.starts_at
