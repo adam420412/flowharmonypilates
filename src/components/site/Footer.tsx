@@ -59,7 +59,7 @@ export function Footer() {
                 <a href="tel:+48501817979" className="hover:text-cream">+48 501 817 979 · Joanna Konieczna</a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={16} /> joannakonieczna@flowharmony.pl
+                <Mail size={16} /> joanna@flowharmony.pl
               </li>
             </ul>
           </div>
