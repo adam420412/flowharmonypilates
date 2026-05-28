@@ -1,8 +1,11 @@
 /**
- * Mock notification sender. Loguje do notification_log i console.
- * Później podmienimy na realnego dostawcę (Resend/Brevo + Twilio).
+ * Notification sender.
+ * - Email: realny enqueue do pgmq (notify.flowharmony.pl) przez Lovable Emails.
+ * - SMS: nadal MOCK do czasu wpięcia SMSAPI.pl.
+ * Każda wysyłka jest logowana w `notification_log` (idempotencja po bookingu).
  */
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { enqueueRenderedEmail } from "@/lib/email/enqueue.server";
 
 export type NotificationKind =
   | "booking_confirmation"
