@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Mail, MapPin, Phone, Instagram, Facebook, ArrowRight, Send, Loader2, MessageCircle } from "lucide-react";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { toast } from "sonner";
+import { submitContactMessage } from "@/lib/contact.functions";
 
 const KONTAKT_URL = "https://flowharmonypilates.lovable.app/kontakt";
 
@@ -105,18 +107,22 @@ export const Route = createFileRoute("/kontakt")({
 });
 
 function KontaktPage() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", website: "" });
   const [sending, setSending] = useState(false);
+  const submit = useServerFn(submitContactMessage);
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setSending(true);
-    // Mock — w realnym wdrożeniu można podpiąć pod server function lub e-mail.
-    setTimeout(() => {
-      setSending(false);
+    try {
+      await submit({ data: form });
       toast.success("Dziękujemy! Odpowiemy najszybciej, jak to możliwe.");
-      setForm({ name: "", email: "", message: "" });
-    }, 600);
+      setForm({ name: "", email: "", phone: "", message: "", website: "" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Coś poszło nie tak");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -252,12 +258,25 @@ function KontaktPage() {
                 />
               </div>
               <div>
+                <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Telefon (opcjonalnie)</label>
+                <input
+                  type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  className="w-full rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
+                />
+              </div>
+              <div>
                 <label className="mb-1.5 block text-xs uppercase tracking-widest text-foreground/80">Wiadomość</label>
                 <textarea
                   required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })}
                   className="w-full resize-none rounded-md border border-foreground/15 bg-background px-4 py-2.5 text-sm focus:border-terracotta focus:outline-none"
                 />
               </div>
+              {/* honeypot — niewidoczne dla ludzi, łapie boty */}
+              <input
+                type="text" tabIndex={-1} autoComplete="off" aria-hidden="true"
+                value={form.website} onChange={(e) => setForm({ ...form, website: e.target.value })}
+                className="hidden"
+              />
               <button
                 type="submit" disabled={sending}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta disabled:opacity-60"
