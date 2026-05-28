@@ -36,7 +36,7 @@ const introOffers: Membership[] = [
     price: "99",
     note: "Pierwsza wizyta",
     desc: "Sesja próbna dla nowych klientek — poznaj reformer i naszą metodę.",
-    perks: ["Sesja 55 min", "Grupa max 4 osoby", "Indywidualne wprowadzenie"],
+    perks: ["Sesja 50 min", "Grupa max 4 osoby", "Indywidualne wprowadzenie"],
   },
 ];
 

@@ -34,7 +34,7 @@ const offers: Offer[] = [
   {
     name: "Reformer Pilates",
     sub: "Grupowe • do 4 osób",
-    duration: "55 min",
+    duration: "50 min",
     img: classReformer,
     desc: "Klasyczna sesja na reformerze w kameralnej grupie. Pełna kontrola, oddech, długie linie ciała. Dla każdego poziomu zaawansowania.",
     bullets: [
@@ -47,7 +47,7 @@ const offers: Offer[] = [
   {
     name: "VIP Training",
     sub: "Solo lub w parach",
-    duration: "55 min",
+    duration: "50 min",
     img: classVip,
     desc: "Indywidualna opieka instruktora w prywatnej sali — solo lub w parze. Plan szyty pod Ciebie, dla osób chcących pracować z konkretnym celem.",
     bullets: [
@@ -60,7 +60,7 @@ const offers: Offer[] = [
   {
     name: "VIP Cadillac 1:1",
     sub: "Indywidualne • rozbudowane urządzenie",
-    duration: "55 min",
+    duration: "50 min",
     img: classCadillac,
     desc: "Sesja indywidualna na Cadillacu — rozbudowanym urządzeniu z trapezem, sprężynami i drążkami. Pełen wachlarz ćwiczeń mobilizacyjnych, wzmacniających i rehabilitacyjnych w pracy 1:1 z instruktorem. Rozliczana w cenach VIP Training.",
     bullets: [
@@ -73,7 +73,7 @@ const offers: Offer[] = [
   {
     name: "Pilates Intro",
     sub: "Dla początkujących",
-    duration: "55 min",
+    duration: "50 min",
     img: classIntro,
     desc: "Pierwsza sesja próbna. Poznajemy reformer, ustawiamy ciało, omawiamy fundamenty metody. Rekomendowana przed dołączeniem do zajęć grupowych.",
     bullets: [
@@ -153,7 +153,7 @@ function ZajeciaPage() {
           {[
             { icon: Users, title: "Małe grupy", text: "Maksymalnie 4 osoby — instruktorka widzi każdą z Was." },
             { icon: Sparkles, title: "Premium sprzęt", text: "Profesjonalne reformery i akcesoria najwyższej jakości." },
-            { icon: Clock, title: "55 minut", text: "Standardowa długość sesji — pełna rozgrzewka, praca i wyciszenie." },
+            { icon: Clock, title: "50 minut", text: "Standardowa długość sesji — pełna rozgrzewka, praca i wyciszenie." },
           ].map((f) => (
             <div key={f.title} className="border-t border-foreground/15 pt-8">
               <f.icon size={26} className="text-terracotta" strokeWidth={1.25} />
