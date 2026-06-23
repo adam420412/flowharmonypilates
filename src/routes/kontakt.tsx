@@ -31,10 +31,10 @@ const localBusinessJsonLd = {
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: 52.3399,
-    longitude: 17.0223,
+    latitude: 52.4064,
+    longitude: 16.9252,
   },
-  areaServed: ["Poznań", "Poznań", "Kórnik", "Borówiec"],
+  areaServed: ["Poznań", "Kórnik", "Borówiec", "Kamionki"],
   founder: { "@type": "Person", name: "Joanna Konieczna" },
   sameAs: [
     "https://www.instagram.com/flow_harmony_pilates/",
@@ -92,8 +92,8 @@ export const Route = createFileRoute("/kontakt")({
       { name: "email", content: "joanna@flowharmony.pl" },
       { name: "geo.region", content: "PL-30" },
       { name: "geo.placename", content: "Poznań" },
-      { name: "geo.position", content: "52.3399;17.0223" },
-      { name: "ICBM", content: "52.3399, 17.0223" },
+      { name: "geo.position", content: "52.4064;16.9252" },
+      { name: "ICBM", content: "52.4064, 16.9252" },
     ],
     links: [{ rel: "canonical", href: KONTAKT_URL }],
     scripts: [
