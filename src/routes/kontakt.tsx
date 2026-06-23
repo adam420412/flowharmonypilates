@@ -14,12 +14,15 @@ const localBusinessJsonLd = {
   "@type": "HealthClub",
   "@id": `${KONTAKT_URL}#studio`,
   name: "Flow & Harmony — Studio Pilates Reformery",
+  legalName: "Fites Joanna Konieczna",
+  taxID: "PL7822224858",
+  vatID: "PL7822224858",
   description:
-    "Kameralne studio pilates na reformerach w Kamionkach pod Poznaniem. Zajęcia solo, w parach i grupowe (max 4 osoby), Cadillac 1:1.",
-  url: "https://flowharmonypilates.lovable.app",
+    "Kameralne studio pilates na reformerach w Poznaniu. Zajęcia solo, w parach i grupowe (max 4 osoby), Cadillac 1:1.",
+  url: "https://flowharmony.pl",
   telephone: "+48501817979",
   email: "joanna@flowharmony.pl",
-  image: "https://flowharmonypilates.lovable.app/og-image.jpg",
+  image: "https://flowharmony.pl/og-image.jpg",
   priceRange: "$$",
   address: {
     "@type": "PostalAddress",
