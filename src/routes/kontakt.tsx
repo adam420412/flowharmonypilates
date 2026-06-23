@@ -161,8 +161,8 @@ function KontaktPage() {
                 className="mt-2 text-sm text-foreground/80"
               >
                 <span itemProp="streetAddress">ul. Piotrowska 3</span>,{" "}
-                <span itemProp="postalCode">62-023</span>{" "}
-                <span itemProp="addressLocality">Kamionki</span>
+                <span itemProp="postalCode">62-353</span>{" "}
+                <span itemProp="addressLocality">Poznań</span>
                 <meta itemProp="addressRegion" content="wielkopolskie" />
                 <meta itemProp="addressCountry" content="PL" />
               </div>
