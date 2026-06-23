@@ -157,6 +157,9 @@ function KontaktPage() {
               <h2 itemProp="name" className="font-display text-xl md:text-2xl">
                 Flow & Harmony — Studio Pilates Reformery
               </h2>
+              <p className="mt-1 text-sm text-foreground/70">
+                <span itemProp="legalName">Fites Joanna Konieczna</span> · NIP <span itemProp="taxID">7822224858</span>
+              </p>
               <div
                 itemProp="address"
                 itemScope
@@ -170,6 +173,7 @@ function KontaktPage() {
                 <meta itemProp="addressCountry" content="PL" />
               </div>
             </div>
+
             <div className="mt-4 flex flex-col gap-2 md:mt-0 md:items-end">
               <a
                 href="tel:+48501817979"
