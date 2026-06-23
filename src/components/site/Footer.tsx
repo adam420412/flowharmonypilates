@@ -78,7 +78,8 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-cream/10 pt-8 text-xs uppercase tracking-widest text-cream/75 md:flex-row">
-          <span>© {new Date().getFullYear()} Flow & Harmony</span>
+          <span>© {new Date().getFullYear()} Fites Joanna Konieczna · NIP 7822224858</span>
+
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link to="/regulamin" className="hover:text-cream">Regulamin</Link>
             <Link to="/polityka-prywatnosci" className="hover:text-cream">Polityka prywatności</Link>
