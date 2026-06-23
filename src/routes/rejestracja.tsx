@@ -97,12 +97,33 @@ function SignupPage() {
             />
             <p className="mt-1 text-xs text-muted-foreground">Min. 8 znaków</p>
           </div>
+          <label className="flex items-start gap-2 text-xs text-foreground/80">
+            <input
+              type="checkbox"
+              checked={acceptTerms}
+              onChange={(e) => setAcceptTerms(e.target.checked)}
+              className="mt-0.5"
+              required
+            />
+            <span>
+              Akceptuję{" "}
+              <Link to="/regulamin" target="_blank" className="text-terracotta underline">
+                regulamin
+              </Link>{" "}
+              oraz{" "}
+              <Link to="/polityka-prywatnosci" target="_blank" className="text-terracotta underline">
+                politykę prywatności
+              </Link>{" "}
+              Flow &amp; Harmony.
+            </span>
+          </label>
           <button
             type="submit" disabled={loading}
             className="w-full rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream transition-all hover:bg-foreground/90 disabled:opacity-60"
           >
             {loading ? "Tworzenie konta…" : "Załóż konto"}
           </button>
+
         </form>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
