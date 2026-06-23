@@ -14,27 +14,30 @@ const localBusinessJsonLd = {
   "@type": "HealthClub",
   "@id": `${KONTAKT_URL}#studio`,
   name: "Flow & Harmony — Studio Pilates Reformery",
+  legalName: "Fites Joanna Konieczna",
+  taxID: "PL7822224858",
+  vatID: "PL7822224858",
   description:
-    "Kameralne studio pilates na reformerach w Kamionkach pod Poznaniem. Zajęcia solo, w parach i grupowe (max 4 osoby), Cadillac 1:1.",
-  url: "https://flowharmonypilates.lovable.app",
+    "Kameralne studio pilates na reformerach w Poznaniu. Zajęcia solo, w parach i grupowe (max 4 osoby), Cadillac 1:1.",
+  url: "https://flowharmony.pl",
   telephone: "+48501817979",
   email: "joanna@flowharmony.pl",
-  image: "https://flowharmonypilates.lovable.app/og-image.jpg",
+  image: "https://flowharmony.pl/og-image.jpg",
   priceRange: "$$",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "ul. Poznańska 117",
-    addressLocality: "Kamionki",
-    postalCode: "62-023",
+    streetAddress: "ul. Piotrowska 3",
+    addressLocality: "Poznań",
+    postalCode: "62-353",
     addressRegion: "wielkopolskie",
     addressCountry: "PL",
   },
   geo: {
     "@type": "GeoCoordinates",
-    latitude: 52.3399,
-    longitude: 17.0223,
+    latitude: 52.4064,
+    longitude: 16.9252,
   },
-  areaServed: ["Kamionki", "Poznań", "Kórnik", "Borówiec"],
+  areaServed: ["Poznań", "Kórnik", "Borówiec", "Kamionki"],
   founder: { "@type": "Person", name: "Joanna Konieczna" },
   sameAs: [
     "https://www.instagram.com/flow_harmony_pilates/",
@@ -42,7 +45,7 @@ const localBusinessJsonLd = {
     "https://www.facebook.com/joanna.konieczna.1614",
   ],
   hasMap:
-    "https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki",
+    "https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84",
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -71,17 +74,17 @@ const localBusinessJsonLd = {
 export const Route = createFileRoute("/kontakt")({
   head: () => ({
     meta: [
-      { title: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
+      { title: "Kontakt — Studio Pilates Flow & Harmony, Poznań | Joanna Konieczna" },
       {
         name: "description",
         content:
-          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Poznańska 117, 62-023 Kamionki k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
+          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Piotrowska 3, 62-353 Poznań k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
       },
-      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
+      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Poznań | Joanna Konieczna" },
       {
         property: "og:description",
         content:
-          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Poznańska 117, Kamionki. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
+          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Piotrowska 3, Poznań. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
       },
       { property: "og:url", content: KONTAKT_URL },
       { property: "og:type", content: "website" },
@@ -91,9 +94,9 @@ export const Route = createFileRoute("/kontakt")({
       { name: "telephone", content: "+48 501 817 979" },
       { name: "email", content: "joanna@flowharmony.pl" },
       { name: "geo.region", content: "PL-30" },
-      { name: "geo.placename", content: "Kamionki, Poznań" },
-      { name: "geo.position", content: "52.3399;17.0223" },
-      { name: "ICBM", content: "52.3399, 17.0223" },
+      { name: "geo.placename", content: "Poznań" },
+      { name: "geo.position", content: "52.4064;16.9252" },
+      { name: "ICBM", content: "52.4064, 16.9252" },
     ],
     links: [{ rel: "canonical", href: KONTAKT_URL }],
     scripts: [
@@ -154,19 +157,23 @@ function KontaktPage() {
               <h2 itemProp="name" className="font-display text-xl md:text-2xl">
                 Flow & Harmony — Studio Pilates Reformery
               </h2>
+              <p className="mt-1 text-sm text-foreground/70">
+                <span itemProp="legalName">Fites Joanna Konieczna</span> · NIP <span itemProp="taxID">7822224858</span>
+              </p>
               <div
                 itemProp="address"
                 itemScope
                 itemType="https://schema.org/PostalAddress"
                 className="mt-2 text-sm text-foreground/80"
               >
-                <span itemProp="streetAddress">ul. Poznańska 117</span>,{" "}
-                <span itemProp="postalCode">62-023</span>{" "}
-                <span itemProp="addressLocality">Kamionki</span>
+                <span itemProp="streetAddress">ul. Piotrowska 3</span>,{" "}
+                <span itemProp="postalCode">62-353</span>{" "}
+                <span itemProp="addressLocality">Poznań</span>
                 <meta itemProp="addressRegion" content="wielkopolskie" />
                 <meta itemProp="addressCountry" content="PL" />
               </div>
             </div>
+
             <div className="mt-4 flex flex-col gap-2 md:mt-0 md:items-end">
               <a
                 href="tel:+48501817979"
@@ -191,8 +198,9 @@ function KontaktPage() {
       <section className="px-6 pb-24 md:px-10 md:pb-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
           <div className="space-y-10">
-            <ContactRow icon={MapPin} label="Adres" lines={["ul. Poznańska 117", "62-023 Kamionki"]} />
+            <ContactRow icon={MapPin} label="Adres" lines={["Fites Joanna Konieczna", "NIP 7822224858", "ul. Piotrowska 3, 62-353 Poznań"]} />
             <ContactRow icon={Phone} label="Telefon" lines={["+48 501 817 979", "Joanna Konieczna"]} href="tel:+48501817979" />
+
             <ContactRow
               icon={MessageCircle}
               label="WhatsApp"
@@ -296,11 +304,11 @@ function KontaktPage() {
               <span className="text-xs uppercase tracking-widest text-mocha">Dojazd</span>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">Znajdź nas na mapie</h2>
               <p className="mt-3 max-w-xl text-sm text-foreground/80">
-                ul. Poznańska 117, 62-023 Kamionki — kilka minut od obwodnicy Poznania.
+                ul. Piotrowska 3, 62-353 Poznań — kilka minut od obwodnicy Poznania.
               </p>
             </div>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki"
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84"
               target="_blank"
               rel="noreferrer noopener"
               className="hidden shrink-0 items-center gap-2 rounded-full border border-foreground/20 px-5 py-2.5 text-xs uppercase tracking-widest hover:border-terracotta hover:text-terracotta md:inline-flex"
@@ -311,7 +319,7 @@ function KontaktPage() {
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-foreground/10 shadow-sm">
             <iframe
-              title="Mapa dojazdu — ul. Poznańska 117, Kamionki"
+              title="Mapa dojazdu — ul. Piotrowska 3, Poznań"
               src="https://www.openstreetmap.org/export/embed.html?bbox=17.0123%2C52.3299%2C17.0323%2C52.3499&layer=mapnik&marker=52.3399%2C17.0223"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -329,7 +337,7 @@ function KontaktPage() {
               Otwórz większą mapę
             </a>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki"
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84"
               target="_blank"
               rel="noreferrer noopener"
               className="inline-flex items-center gap-2 underline-offset-4 hover:text-terracotta hover:underline md:hidden"

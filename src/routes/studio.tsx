@@ -88,7 +88,7 @@ function StudioPage() {
             Odwiedź nas
           </h2>
           <p className="mt-6 text-foreground/80">
-            ul. Poznańska 117 · Kamionki<br />Pn–Pt 7:00–21:00 · Sb 9:00–14:00
+            ul. Piotrowska 3 · Poznań<br />Pn–Pt 7:00–21:00 · Sb 9:00–14:00
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
