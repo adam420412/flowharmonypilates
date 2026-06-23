@@ -14,10 +14,15 @@ function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (!acceptTerms) {
+      toast.error("Aby założyć konto, zaakceptuj regulamin i politykę prywatności.");
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
@@ -35,6 +40,7 @@ function SignupPage() {
     toast.success("Konto utworzone! Witaj w Flow & Harmony.");
     navigate({ to: "/" });
   }
+
 
   async function handleGoogle() {
     const result = await lovable.auth.signInWithOAuth("google", {
