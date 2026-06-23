@@ -198,8 +198,9 @@ function KontaktPage() {
       <section className="px-6 pb-24 md:px-10 md:pb-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
           <div className="space-y-10">
-            <ContactRow icon={MapPin} label="Adres" lines={["ul. Piotrowska 3", "62-353 Poznań"]} />
+            <ContactRow icon={MapPin} label="Adres" lines={["Fites Joanna Konieczna", "NIP 7822224858", "ul. Piotrowska 3, 62-353 Poznań"]} />
             <ContactRow icon={Phone} label="Telefon" lines={["+48 501 817 979", "Joanna Konieczna"]} href="tel:+48501817979" />
+
             <ContactRow
               icon={MessageCircle}
               label="WhatsApp"
