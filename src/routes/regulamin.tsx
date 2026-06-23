@@ -63,9 +63,11 @@ function TermsPage() {
         <h2 className="mt-8">§ 6. Reklamacje</h2>
         <p>
           Reklamacje należy zgłaszać na adres{" "}
-          <a href="mailto:joanna@flowharmony.pl">joanna@flowharmony.pl</a> w ciągu 14 dni
-          od zaistnienia zdarzenia. Odpowiedź otrzymasz w ciągu 14 dni roboczych.
+          <a href="mailto:joanna@flowharmony.pl">joanna@flowharmony.pl</a>. Reklamacja zostanie
+          rozpatrzona w terminie <strong>14 dni kalendarzowych</strong> od daty jej otrzymania,
+          zgodnie z ustawą o prawach konsumenta.
         </p>
+
 
         <h2 className="mt-8">§ 7. Postanowienia końcowe</h2>
         <p>
