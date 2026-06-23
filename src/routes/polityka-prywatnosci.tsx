@@ -24,7 +24,7 @@ function PrivacyPage() {
         <h2 className="mt-10">1. Administrator danych</h2>
         <p>
           Administratorem danych osobowych jest <strong>Joanna Konieczna — Flow &amp; Harmony Studio Pilates</strong>,
-          ul. Poznańska 117, 62-023 Kamionki, NIP: <em>(do uzupełnienia)</em>. Kontakt:{" "}
+          ul. Piotrowska 3, 62-353 Poznań, NIP: <em>(do uzupełnienia)</em>. Kontakt:{" "}
           <a href="mailto:joanna@flowharmony.pl">joanna@flowharmony.pl</a>, tel. +48 501 817 979.
         </p>
 

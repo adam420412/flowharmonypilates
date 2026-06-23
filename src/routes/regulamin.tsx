@@ -23,7 +23,7 @@ function TermsPage() {
 
         <h2 className="mt-10">§ 1. Postanowienia ogólne</h2>
         <p>
-          Studio Flow &amp; Harmony prowadzone przez Joannę Konieczną, ul. Poznańska 117, 62-023 Kamionki,
+          Studio Flow &amp; Harmony prowadzone przez Joannę Konieczną, ul. Piotrowska 3, 62-353 Poznań,
           oferuje zajęcia Pilates na reformerach w grupach do 4 osób, sesje indywidualne i duo oraz
           treningi na Cadillacu.
         </p>

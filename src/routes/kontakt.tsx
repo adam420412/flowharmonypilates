@@ -23,7 +23,7 @@ const localBusinessJsonLd = {
   priceRange: "$$",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "ul. Poznańska 117",
+    streetAddress: "ul. Piotrowska 3",
     addressLocality: "Kamionki",
     postalCode: "62-023",
     addressRegion: "wielkopolskie",
@@ -42,7 +42,7 @@ const localBusinessJsonLd = {
     "https://www.facebook.com/joanna.konieczna.1614",
   ],
   hasMap:
-    "https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki",
+    "https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84",
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -75,13 +75,13 @@ export const Route = createFileRoute("/kontakt")({
       {
         name: "description",
         content:
-          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Poznańska 117, 62-023 Kamionki k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
+          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Piotrowska 3, 62-353 Poznań k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
       },
       { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
       {
         property: "og:description",
         content:
-          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Poznańska 117, Kamionki. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
+          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Piotrowska 3, Kamionki. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
       },
       { property: "og:url", content: KONTAKT_URL },
       { property: "og:type", content: "website" },
@@ -160,7 +160,7 @@ function KontaktPage() {
                 itemType="https://schema.org/PostalAddress"
                 className="mt-2 text-sm text-foreground/80"
               >
-                <span itemProp="streetAddress">ul. Poznańska 117</span>,{" "}
+                <span itemProp="streetAddress">ul. Piotrowska 3</span>,{" "}
                 <span itemProp="postalCode">62-023</span>{" "}
                 <span itemProp="addressLocality">Kamionki</span>
                 <meta itemProp="addressRegion" content="wielkopolskie" />
@@ -191,7 +191,7 @@ function KontaktPage() {
       <section className="px-6 pb-24 md:px-10 md:pb-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
           <div className="space-y-10">
-            <ContactRow icon={MapPin} label="Adres" lines={["ul. Poznańska 117", "62-023 Kamionki"]} />
+            <ContactRow icon={MapPin} label="Adres" lines={["ul. Piotrowska 3", "62-353 Poznań"]} />
             <ContactRow icon={Phone} label="Telefon" lines={["+48 501 817 979", "Joanna Konieczna"]} href="tel:+48501817979" />
             <ContactRow
               icon={MessageCircle}
@@ -296,11 +296,11 @@ function KontaktPage() {
               <span className="text-xs uppercase tracking-widest text-mocha">Dojazd</span>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">Znajdź nas na mapie</h2>
               <p className="mt-3 max-w-xl text-sm text-foreground/80">
-                ul. Poznańska 117, 62-023 Kamionki — kilka minut od obwodnicy Poznania.
+                ul. Piotrowska 3, 62-353 Poznań — kilka minut od obwodnicy Poznania.
               </p>
             </div>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki"
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84"
               target="_blank"
               rel="noreferrer noopener"
               className="hidden shrink-0 items-center gap-2 rounded-full border border-foreground/20 px-5 py-2.5 text-xs uppercase tracking-widest hover:border-terracotta hover:text-terracotta md:inline-flex"
@@ -311,7 +311,7 @@ function KontaktPage() {
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-foreground/10 shadow-sm">
             <iframe
-              title="Mapa dojazdu — ul. Poznańska 117, Kamionki"
+              title="Mapa dojazdu — ul. Piotrowska 3, Kamionki"
               src="https://www.openstreetmap.org/export/embed.html?bbox=17.0123%2C52.3299%2C17.0323%2C52.3499&layer=mapnik&marker=52.3399%2C17.0223"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -329,7 +329,7 @@ function KontaktPage() {
               Otwórz większą mapę
             </a>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Pozna%C5%84ska+117%2C+62-023+Kamionki"
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84"
               target="_blank"
               rel="noreferrer noopener"
               className="inline-flex items-center gap-2 underline-offset-4 hover:text-terracotta hover:underline md:hidden"
