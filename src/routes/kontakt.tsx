@@ -24,8 +24,8 @@ const localBusinessJsonLd = {
   address: {
     "@type": "PostalAddress",
     streetAddress: "ul. Piotrowska 3",
-    addressLocality: "Kamionki",
-    postalCode: "62-023",
+    addressLocality: "Poznań",
+    postalCode: "62-353",
     addressRegion: "wielkopolskie",
     addressCountry: "PL",
   },
@@ -34,7 +34,7 @@ const localBusinessJsonLd = {
     latitude: 52.3399,
     longitude: 17.0223,
   },
-  areaServed: ["Kamionki", "Poznań", "Kórnik", "Borówiec"],
+  areaServed: ["Poznań", "Poznań", "Kórnik", "Borówiec"],
   founder: { "@type": "Person", name: "Joanna Konieczna" },
   sameAs: [
     "https://www.instagram.com/flow_harmony_pilates/",
@@ -71,17 +71,17 @@ const localBusinessJsonLd = {
 export const Route = createFileRoute("/kontakt")({
   head: () => ({
     meta: [
-      { title: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
+      { title: "Kontakt — Studio Pilates Flow & Harmony, Poznań | Joanna Konieczna" },
       {
         name: "description",
         content:
           "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Piotrowska 3, 62-353 Poznań k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
       },
-      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Kamionki | Joanna Konieczna" },
+      { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Poznań | Joanna Konieczna" },
       {
         property: "og:description",
         content:
-          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Piotrowska 3, Kamionki. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
+          "Zadzwoń, napisz na WhatsApp lub odwiedź nas: ul. Piotrowska 3, Poznań. Pon–Pt 7:00–21:00, Sob 9:00–14:00.",
       },
       { property: "og:url", content: KONTAKT_URL },
       { property: "og:type", content: "website" },
@@ -91,7 +91,7 @@ export const Route = createFileRoute("/kontakt")({
       { name: "telephone", content: "+48 501 817 979" },
       { name: "email", content: "joanna@flowharmony.pl" },
       { name: "geo.region", content: "PL-30" },
-      { name: "geo.placename", content: "Kamionki, Poznań" },
+      { name: "geo.placename", content: "Poznań" },
       { name: "geo.position", content: "52.3399;17.0223" },
       { name: "ICBM", content: "52.3399, 17.0223" },
     ],
@@ -311,7 +311,7 @@ function KontaktPage() {
 
           <div className="mt-8 overflow-hidden rounded-2xl border border-foreground/10 shadow-sm">
             <iframe
-              title="Mapa dojazdu — ul. Piotrowska 3, Kamionki"
+              title="Mapa dojazdu — ul. Piotrowska 3, Poznań"
               src="https://www.openstreetmap.org/export/embed.html?bbox=17.0123%2C52.3299%2C17.0323%2C52.3499&layer=mapnik&marker=52.3399%2C17.0223"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

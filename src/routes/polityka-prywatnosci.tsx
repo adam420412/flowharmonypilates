@@ -6,7 +6,7 @@ export const Route = createFileRoute("/polityka-prywatnosci")({
   head: () => ({
     meta: [
       { title: "Polityka prywatności — Flow & Harmony" },
-      { name: "description", content: "Polityka prywatności i zasady przetwarzania danych osobowych w studio Pilates Flow & Harmony, Kamionki." },
+      { name: "description", content: "Polityka prywatności i zasady przetwarzania danych osobowych w studio Pilates Flow & Harmony, Poznań." },
     ],
   }),
   component: PrivacyPage,

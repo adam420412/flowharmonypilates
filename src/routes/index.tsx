@@ -263,7 +263,7 @@ function HomePage() {
             <ArrowRight size={16} />
           </Link>
           <div className="mt-12 flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-mocha">
-            <MapPin size={14} /> ul. Piotrowska 3 · Kamionki
+            <MapPin size={14} /> ul. Piotrowska 3 · Poznań
           </div>
         </div>
       </section>
