@@ -52,7 +52,7 @@ export function Footer() {
             <ul className="mt-6 space-y-3 text-sm text-cream/90">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="mt-1 shrink-0" />
-                <span>Fites Joanna Konieczna<br />ul. Piotrowska 3<br />62-353 Poznań<br />NIP 7822224858</span>
+                <span>Fites Joanna Konieczna<br />ul. Piotrowska 3<br />61-353 Poznań<br />NIP 7822224858</span>
               </li>
 
               <li className="flex items-center gap-3">

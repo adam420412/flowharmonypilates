@@ -24,7 +24,7 @@ function PrivacyPage() {
         <h2 className="mt-10">1. Administrator danych</h2>
         <p>
           Administratorem danych osobowych jest <strong>Fites Joanna Konieczna</strong> (Flow &amp; Harmony Studio Pilates),
-          ul. Piotrowska 3, 62-353 Poznań, NIP: <strong>7822224858</strong>. Kontakt:{" "}
+          ul. Piotrowska 3, 61-353 Poznań, NIP: <strong>7822224858</strong>. Kontakt:{" "}
           <a href="mailto:joanna@flowharmony.pl">joanna@flowharmony.pl</a>, tel. +48 501 817 979.
         </p>
 

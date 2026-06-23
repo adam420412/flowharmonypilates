@@ -28,7 +28,7 @@ const localBusinessJsonLd = {
     "@type": "PostalAddress",
     streetAddress: "ul. Piotrowska 3",
     addressLocality: "Poznań",
-    postalCode: "62-353",
+    postalCode: "61-353",
     addressRegion: "wielkopolskie",
     addressCountry: "PL",
   },
@@ -45,7 +45,7 @@ const localBusinessJsonLd = {
     "https://www.facebook.com/joanna.konieczna.1614",
   ],
   hasMap:
-    "https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84",
+    "https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+61-353+Pozna%C5%84",
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
@@ -78,7 +78,7 @@ export const Route = createFileRoute("/kontakt")({
       {
         name: "description",
         content:
-          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Piotrowska 3, 62-353 Poznań k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
+          "Studio Pilates Flow & Harmony prowadzone przez Joannę Konieczną — ul. Piotrowska 3, 61-353 Poznań k. Poznania. Tel. +48 501 817 979. Rezerwacja online, WhatsApp, e-mail.",
       },
       { property: "og:title", content: "Kontakt — Studio Pilates Flow & Harmony, Poznań | Joanna Konieczna" },
       {
@@ -167,7 +167,7 @@ function KontaktPage() {
                 className="mt-2 text-sm text-foreground/80"
               >
                 <span itemProp="streetAddress">ul. Piotrowska 3</span>,{" "}
-                <span itemProp="postalCode">62-353</span>{" "}
+                <span itemProp="postalCode">61-353</span>{" "}
                 <span itemProp="addressLocality">Poznań</span>
                 <meta itemProp="addressRegion" content="wielkopolskie" />
                 <meta itemProp="addressCountry" content="PL" />
@@ -198,7 +198,7 @@ function KontaktPage() {
       <section className="px-6 pb-24 md:px-10 md:pb-32">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 md:gap-16">
           <div className="space-y-10">
-            <ContactRow icon={MapPin} label="Adres" lines={["Fites Joanna Konieczna", "NIP 7822224858", "ul. Piotrowska 3, 62-353 Poznań"]} />
+            <ContactRow icon={MapPin} label="Adres" lines={["Fites Joanna Konieczna", "NIP 7822224858", "ul. Piotrowska 3, 61-353 Poznań"]} />
             <ContactRow icon={Phone} label="Telefon" lines={["+48 501 817 979", "Joanna Konieczna"]} href="tel:+48501817979" />
 
             <ContactRow
@@ -304,11 +304,11 @@ function KontaktPage() {
               <span className="text-xs uppercase tracking-widest text-mocha">Dojazd</span>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">Znajdź nas na mapie</h2>
               <p className="mt-3 max-w-xl text-sm text-foreground/80">
-                ul. Piotrowska 3, 62-353 Poznań — kilka minut od obwodnicy Poznania.
+                ul. Piotrowska 3, 61-353 Poznań — kilka minut od obwodnicy Poznania.
               </p>
             </div>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84"
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+61-353+Pozna%C5%84"
               target="_blank"
               rel="noreferrer noopener"
               className="hidden shrink-0 items-center gap-2 rounded-full border border-foreground/20 px-5 py-2.5 text-xs uppercase tracking-widest hover:border-terracotta hover:text-terracotta md:inline-flex"
@@ -337,7 +337,7 @@ function KontaktPage() {
               Otwórz większą mapę
             </a>
             <a
-              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+62-353+Pozna%C5%84"
+              href="https://www.google.com/maps/dir/?api=1&destination=ul.+Piotrowska+3%2C+61-353+Pozna%C5%84"
               target="_blank"
               rel="noreferrer noopener"
               className="inline-flex items-center gap-2 underline-offset-4 hover:text-terracotta hover:underline md:hidden"

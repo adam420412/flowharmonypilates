@@ -24,7 +24,7 @@ function TermsPage() {
         <h2 className="mt-10">§ 1. Postanowienia ogólne</h2>
         <p>
           Studio Flow &amp; Harmony prowadzone jest przez <strong>Fites Joanna Konieczna</strong>,
-          ul. Piotrowska 3, 62-353 Poznań, NIP: <strong>7822224858</strong>. Studio oferuje zajęcia
+          ul. Piotrowska 3, 61-353 Poznań, NIP: <strong>7822224858</strong>. Studio oferuje zajęcia
           Pilates na reformerach w grupach do 4 osób, sesje indywidualne i duo oraz treningi na Cadillacu.
         </p>
 
