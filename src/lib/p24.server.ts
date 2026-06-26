@@ -4,12 +4,28 @@ import { createHash } from "crypto";
 const P24_BASE = "https://secure.przelewy24.pl";
 
 function env() {
-  const merchantId = Number(process.env.P24_MERCHANT_ID);
-  const posId = Number(process.env.P24_POS_ID);
-  const crc = process.env.P24_CRC!;
-  const apiKey = process.env.P24_API_KEY!;
-  if (!merchantId || !posId || !crc || !apiKey) {
-    throw new Error("P24 credentials are not configured");
+  const rawMerchantId = process.env.P24_MERCHANT_ID?.trim();
+  const rawPosId = process.env.P24_POS_ID?.trim();
+  const crc = process.env.P24_CRC?.trim();
+  const apiKey = process.env.P24_API_KEY?.trim();
+  const posId = Number(rawPosId);
+  const merchantId = Number(rawMerchantId || rawPosId);
+  const missing = [
+    !rawPosId ? "P24_POS_ID" : null,
+    !crc ? "P24_CRC" : null,
+    !apiKey ? "P24_API_KEY" : null,
+  ].filter(Boolean);
+  const invalid = [
+    rawMerchantId && !Number.isInteger(merchantId) ? "P24_MERCHANT_ID" : null,
+    rawPosId && !Number.isInteger(posId) ? "P24_POS_ID" : null,
+  ].filter(Boolean);
+  if (missing.length || invalid.length || !merchantId || !posId) {
+    const details = [
+      missing.length ? `missing: ${missing.join(", ")}` : null,
+      invalid.length ? `invalid: ${invalid.join(", ")}` : null,
+      !merchantId && rawMerchantId === undefined && rawPosId ? "missing: P24_MERCHANT_ID or invalid POS fallback" : null,
+    ].filter(Boolean).join("; ");
+    throw new Error(`P24 credentials are not configured correctly${details ? ` (${details})` : ""}`);
   }
   return { merchantId, posId, crc, apiKey };
 }
