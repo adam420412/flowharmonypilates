@@ -23,6 +23,7 @@ import { Route as GrafikRouteImport } from './routes/grafik'
 import { Route as CennikRouteImport } from './routes/cennik'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlatnoscStatusRouteImport } from './routes/platnosc.status'
 import { Route as EmailUnsubscribeRouteImport } from './routes/email/unsubscribe'
 import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authenticated/moje-rezerwacje'
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
@@ -34,6 +35,7 @@ import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/l
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicP24WebhookRouteImport } from './routes/api/public/p24/webhook'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
 const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
@@ -105,6 +107,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatnoscStatusRoute = PlatnoscStatusRouteImport.update({
+  id: '/platnosc/status',
+  path: '/platnosc/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmailUnsubscribeRoute = EmailUnsubscribeRouteImport.update({
   id: '/email/unsubscribe',
   path: '/email/unsubscribe',
@@ -164,6 +171,11 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicP24WebhookRoute = ApiPublicP24WebhookRouteImport.update({
+  id: '/api/public/p24/webhook',
+  path: '/api/public/p24/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksProcessRemindersRoute =
   ApiPublicHooksProcessRemindersRouteImport.update({
     id: '/api/public/hooks/process-reminders',
@@ -189,9 +201,11 @@ export interface FileRoutesByFullPath {
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
+  '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -216,9 +230,11 @@ export interface FileRoutesByTo {
   '/konto': typeof AuthenticatedKontoRoute
   '/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
+  '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -245,9 +261,11 @@ export interface FileRoutesById {
   '/_authenticated/konto': typeof AuthenticatedKontoRoute
   '/_authenticated/moje-rezerwacje': typeof AuthenticatedMojeRezerwacjeRoute
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
+  '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
+  '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
@@ -274,9 +292,11 @@ export interface FileRouteTypes {
     | '/konto'
     | '/moje-rezerwacje'
     | '/email/unsubscribe'
+    | '/platnosc/status'
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
+    | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -301,9 +321,11 @@ export interface FileRouteTypes {
     | '/konto'
     | '/moje-rezerwacje'
     | '/email/unsubscribe'
+    | '/platnosc/status'
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
+    | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -329,9 +351,11 @@ export interface FileRouteTypes {
     | '/_authenticated/konto'
     | '/_authenticated/moje-rezerwacje'
     | '/email/unsubscribe'
+    | '/platnosc/status'
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
+    | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
     | '/lovable/email/queue/process'
@@ -355,9 +379,11 @@ export interface RootRouteChildren {
   ZajeciaRoute: typeof ZajeciaRoute
   ZapomnialemHaslaRoute: typeof ZapomnialemHaslaRoute
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
+  PlatnoscStatusRoute: typeof PlatnoscStatusRoute
   ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
+  ApiPublicP24WebhookRoute: typeof ApiPublicP24WebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
   LovableEmailQueueProcessRoute: typeof LovableEmailQueueProcessRoute
@@ -465,6 +491,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/platnosc/status': {
+      id: '/platnosc/status'
+      path: '/platnosc/status'
+      fullPath: '/platnosc/status'
+      preLoaderRoute: typeof PlatnoscStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/email/unsubscribe': {
       id: '/email/unsubscribe'
       path: '/email/unsubscribe'
@@ -542,6 +575,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/p24/webhook': {
+      id: '/api/public/p24/webhook'
+      path: '/api/public/p24/webhook'
+      fullPath: '/api/public/p24/webhook'
+      preLoaderRoute: typeof ApiPublicP24WebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/process-reminders': {
       id: '/api/public/hooks/process-reminders'
       path: '/api/public/hooks/process-reminders'
@@ -584,9 +624,11 @@ const rootRouteChildren: RootRouteChildren = {
   ZajeciaRoute: ZajeciaRoute,
   ZapomnialemHaslaRoute: ZapomnialemHaslaRoute,
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
+  PlatnoscStatusRoute: PlatnoscStatusRoute,
   ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
+  ApiPublicP24WebhookRoute: ApiPublicP24WebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
   LovableEmailQueueProcessRoute: LovableEmailQueueProcessRoute,
