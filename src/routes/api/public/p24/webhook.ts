@@ -21,7 +21,7 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
 
         const { data: pay, error } = await supabaseAdmin
           .from("payments")
-          .select("id, amount_grosz, currency, status")
+          .select("id, user_id, amount_grosz, currency, status, class_id, booking_id")
           .eq("session_id", payload.sessionId)
           .maybeSingle();
 
@@ -45,6 +45,29 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
           return new Response("verify failed", { status: 400 });
         }
 
+        let bookingId = pay.booking_id as string | null;
+        if (pay.class_id && !bookingId) {
+          const { data: existing } = await supabaseAdmin
+            .from("bookings")
+            .select("id, status")
+            .eq("class_id", pay.class_id)
+            .eq("user_id", pay.user_id)
+            .maybeSingle();
+          if (existing) {
+            if (existing.status !== "confirmed") {
+              await supabaseAdmin.from("bookings").update({ status: "confirmed" }).eq("id", existing.id);
+            }
+            bookingId = existing.id;
+          } else {
+            const { data: ins, error: bErr } = await supabaseAdmin
+              .from("bookings")
+              .insert({ class_id: pay.class_id, user_id: pay.user_id, status: "confirmed" })
+              .select("id")
+              .single();
+            if (!bErr && ins) bookingId = ins.id;
+          }
+        }
+
         if (pay.status !== "paid") {
           await supabaseAdmin
             .from("payments")
@@ -52,6 +75,7 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
               status: "paid",
               p24_order_id: payload.orderId,
               paid_at: new Date().toISOString(),
+              booking_id: bookingId,
             })
             .eq("id", pay.id);
         }
