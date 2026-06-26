@@ -202,10 +202,35 @@ function GrafikPage() {
     setMyBookings(mm);
   }
 
-  async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean }) {
-    if (!pendingSlot || !user) return;
+  async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean; guest?: GuestData }) {
+    if (!pendingSlot) return;
     setBookingLoading(true);
     const desired = pendingSlot.slot.status === "available" ? "confirmed" : "waitlist";
+
+    // === Tryb gościa (niezalogowany) → wyłącznie płatne zajęcia ===
+    if (extras.guest && desired === "confirmed") {
+      try {
+        const { redirectUrl } = await startGuestPay({ data: {
+          classId: pendingSlot.classRow.id,
+          fullName: extras.guest.fullName,
+          email: extras.guest.email,
+          phone: extras.guest.phone,
+          smsOptIn: extras.guest.smsOptIn,
+          acceptTerms: true,
+        } });
+        setPendingSlot(null);
+        window.location.href = redirectUrl;
+      } catch (e) {
+        setBookingLoading(false);
+        toast.error(e instanceof Error ? e.message : "Nie udało się rozpocząć płatności");
+      }
+      return;
+    }
+
+    if (!user) {
+      setBookingLoading(false);
+      return;
+    }
 
     // Re-check capacity at confirm time (anti-race)
     if (desired === "confirmed") {
