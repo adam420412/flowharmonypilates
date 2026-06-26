@@ -57,6 +57,7 @@ function GrafikPage() {
   const [profile, setProfile] = useState<{ phone: string | null; sms_opt_in: boolean } | null>(null);
   const sendConfirm = useServerFn(sendBookingConfirmation);
   const startPay = useServerFn(startClassCheckout);
+  const startGuestPay = useServerFn(startGuestClassCheckout);
 
   const weekDays = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
