@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { BookingConfirmModal, type SlotInfo } from "@/components/booking/BookingConfirmModal";
 import { sendBookingConfirmation } from "@/lib/notifications.functions";
+import { startClassCheckout } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
