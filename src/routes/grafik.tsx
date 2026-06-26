@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { BookingConfirmModal, type SlotInfo } from "@/components/booking/BookingConfirmModal";
 import { sendBookingConfirmation } from "@/lib/notifications.functions";
+import { startClassCheckout } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
@@ -54,6 +55,7 @@ function GrafikPage() {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [profile, setProfile] = useState<{ phone: string | null; sms_opt_in: boolean } | null>(null);
   const sendConfirm = useServerFn(sendBookingConfirmation);
+  const startPay = useServerFn(startClassCheckout);
 
   const weekDays = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
@@ -231,6 +233,20 @@ function GrafikPage() {
       }));
     }
 
+    // CONFIRMED → płatność online (rezerwacja powstaje po opłaceniu)
+    if (desired === "confirmed") {
+      try {
+        const { redirectUrl } = await startPay({ data: { classId: pendingSlot.classRow.id } });
+        setPendingSlot(null);
+        window.location.href = redirectUrl;
+      } catch (e) {
+        setBookingLoading(false);
+        toast.error(e instanceof Error ? e.message : "Nie udało się rozpocząć płatności");
+      }
+      return;
+    }
+
+    // WAITLIST → bez płatności
     const { data: inserted, error } = await supabase.from("bookings").upsert(
       { class_id: pendingSlot.classRow.id, user_id: user.id, status: desired },
       { onConflict: "class_id,user_id" },
@@ -238,18 +254,14 @@ function GrafikPage() {
 
     if (error) {
       setBookingLoading(false);
-      const msg = /Brak wolnych miejsc|check_violation|capacity/i.test(error.message)
-        ? `Brak wolnych miejsc — limit ${effectiveCapacity(pendingSlot.classRow)} osób na zajęciach został osiągnięty.`
-        : error.message;
-      toast.error(msg);
+      toast.error(error.message);
       refreshAll();
       return;
     }
-    toast.success(desired === "confirmed" ? "Zarezerwowano!" : "Dopisano do listy rezerwowej");
+    toast.success("Dopisano do listy rezerwowej");
     setPendingSlot(null);
     refreshAll();
 
-    // Mock potwierdzenie email (nie blokuje UX)
     if (inserted?.id) {
       sendConfirm({ data: { bookingId: inserted.id } }).catch((e) => {
         console.warn("send confirmation failed:", e);
@@ -257,6 +269,7 @@ function GrafikPage() {
     }
     setBookingLoading(false);
   }
+
 
 
   return (

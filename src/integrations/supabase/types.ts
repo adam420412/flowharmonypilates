@@ -364,6 +364,8 @@ export type Database = {
       payments: {
         Row: {
           amount_grosz: number
+          booking_id: string | null
+          class_id: string | null
           created_at: string
           currency: string
           email: string
@@ -380,6 +382,8 @@ export type Database = {
         }
         Insert: {
           amount_grosz: number
+          booking_id?: string | null
+          class_id?: string | null
           created_at?: string
           currency?: string
           email: string
@@ -396,6 +400,8 @@ export type Database = {
         }
         Update: {
           amount_grosz?: number
+          booking_id?: string | null
+          class_id?: string | null
           created_at?: string
           currency?: string
           email?: string
@@ -410,7 +416,22 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "payments_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {

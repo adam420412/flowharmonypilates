@@ -66,11 +66,16 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
           </DialogDescription>
         </DialogHeader>
 
-        {isWaitlist && (
+        {isWaitlist ? (
           <div className="rounded-md border border-terracotta/30 bg-terracotta/10 px-3 py-2 text-xs text-terracotta">
-            Komplet — limit 4 miejsc został wyczerpany. Możesz dołączyć do listy rezerwowej.
+            Komplet — limit 4 miejsc został wyczerpany. Możesz dołączyć do listy rezerwowej (bez opłaty).
+          </div>
+        ) : (
+          <div className="rounded-md border border-foreground/20 bg-foreground/5 px-3 py-2 text-xs text-foreground/80">
+            Rezerwacja wymaga opłacenia online (Przelewy24). <strong>Tryb testowy: 1,00 zł</strong>. Po opłaceniu miejsce zostanie potwierdzone automatycznie.
           </div>
         )}
+
 
         <div className="space-y-3 rounded-lg border border-border bg-cream/40 p-4">
           <div className="flex items-center gap-2">
@@ -130,7 +135,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             Anuluj
           </Button>
           <Button onClick={handleConfirm} disabled={loading}>
-            {loading ? "Zapisywanie…" : isWaitlist ? "Dopisz na rezerwę" : "Rezerwuję"}
+            {loading ? "Przekierowuję…" : isWaitlist ? "Dopisz na rezerwę" : "Zapłać i zarezerwuj (1 zł)"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -15,7 +15,7 @@ export const Route = createFileRoute("/platnosc/status")({
 function StatusPage() {
   const { sessionId } = useSearch({ from: "/platnosc/status" });
   const fetchStatus = useServerFn(getPaymentStatus);
-  const [state, setState] = useState<{ status: string; package_name: string; amount_grosz: number } | null>(null);
+  const [state, setState] = useState<{ status: string; package_name: string; amount_grosz: number; booking_id?: string | null; class_id?: string | null } | null>(null);
   const [tries, setTries] = useState(0);
 
   useEffect(() => {
@@ -58,9 +58,15 @@ function StatusPage() {
             </p>
           )}
           <div className="mt-10 flex flex-wrap justify-center gap-4">
-            <Link to="/grafik" className="rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta">
-              Przejdź do grafiku
-            </Link>
+            {paid && state?.booking_id ? (
+              <Link to="/moje-rezerwacje" className="rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta">
+                Moje rezerwacje
+              </Link>
+            ) : (
+              <Link to="/grafik" className="rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta">
+                Przejdź do grafiku
+              </Link>
+            )}
             <Link to="/cennik" className="text-xs uppercase tracking-widest hover:text-terracotta">
               ← Wróć do cennika
             </Link>
