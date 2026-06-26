@@ -27,7 +27,7 @@ function env() {
     ].filter(Boolean).join("; ");
     throw new Error(`P24 credentials are not configured correctly${details ? ` (${details})` : ""}`);
   }
-  return { merchantId, posId, crc, apiKey };
+  return { merchantId, posId, crc: crc!, apiKey: apiKey! };
 }
 
 function sign(obj: Record<string, unknown>) {
