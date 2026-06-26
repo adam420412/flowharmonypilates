@@ -361,6 +361,57 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount_grosz: number
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          p24_order_id: number | null
+          p24_token: string | null
+          package_code: string
+          package_name: string
+          paid_at: string | null
+          session_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_grosz: number
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          p24_order_id?: number | null
+          p24_token?: string | null
+          package_code: string
+          package_name: string
+          paid_at?: string | null
+          session_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_grosz?: number
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          p24_order_id?: number | null
+          p24_token?: string | null
+          package_code?: string
+          package_name?: string
+          paid_at?: string | null
+          session_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
