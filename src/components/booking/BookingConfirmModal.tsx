@@ -135,7 +135,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             Anuluj
           </Button>
           <Button onClick={handleConfirm} disabled={loading}>
-            {loading ? "Zapisywanie…" : isWaitlist ? "Dopisz na rezerwę" : "Rezerwuję"}
+            {loading ? "Przekierowuję…" : isWaitlist ? "Dopisz na rezerwę" : "Zapłać i zarezerwuj (1 zł)"}
           </Button>
         </DialogFooter>
       </DialogContent>
