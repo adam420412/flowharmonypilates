@@ -159,14 +159,15 @@ function GrafikPage() {
   }
 
   function openBooking(c: ClassRow) {
-    if (!isAuthenticated || !user) {
-      toast.info("Załóż darmowe konto, aby zarezerwować zajęcia.");
+    const status = statusOf(c);
+    if (status === "full" || status === "cancelled") return;
+    // Lista rezerwowa wymaga konta
+    if (status === "waitlist" && (!isAuthenticated || !user)) {
+      toast.info("Lista rezerwowa wymaga konta. Zaloguj się lub załóż darmowe konto.");
       navigate({ to: "/rejestracja" });
       return;
     }
-    const status = statusOf(c);
-    if (status === "full" || status === "cancelled") return;
-    if (myBookings[c.id]) return;
+    if (isAuthenticated && user && myBookings[c.id]) return;
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
     setPendingSlot({
