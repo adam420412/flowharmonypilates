@@ -9,9 +9,10 @@ import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { BookingConfirmModal, type SlotInfo } from "@/components/booking/BookingConfirmModal";
+import { BookingConfirmModal, type SlotInfo, type GuestData } from "@/components/booking/BookingConfirmModal";
 import { sendBookingConfirmation } from "@/lib/notifications.functions";
 import { startClassCheckout } from "@/lib/payments.functions";
+import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
