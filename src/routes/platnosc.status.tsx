@@ -15,7 +15,7 @@ export const Route = createFileRoute("/platnosc/status")({
 function StatusPage() {
   const { sessionId } = useSearch({ from: "/platnosc/status" });
   const fetchStatus = useServerFn(getPaymentStatus);
-  const [state, setState] = useState<{ status: string; package_name: string; amount_grosz: number } | null>(null);
+  const [state, setState] = useState<{ status: string; package_name: string; amount_grosz: number; booking_id?: string | null; class_id?: string | null } | null>(null);
   const [tries, setTries] = useState(0);
 
   useEffect(() => {
