@@ -488,7 +488,8 @@ function GrafikPage() {
         slot={pendingSlot?.slot ?? null}
         onConfirm={confirmBooking}
         loading={bookingLoading}
-        askPhone={!profile?.phone}
+        askPhone={isAuthenticated && !profile?.phone}
+        guestMode={!isAuthenticated}
       />
     </div>
   );
