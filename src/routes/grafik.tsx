@@ -9,9 +9,10 @@ import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
-import { BookingConfirmModal, type SlotInfo } from "@/components/booking/BookingConfirmModal";
+import { BookingConfirmModal, type SlotInfo, type GuestData } from "@/components/booking/BookingConfirmModal";
 import { sendBookingConfirmation } from "@/lib/notifications.functions";
 import { startClassCheckout } from "@/lib/payments.functions";
+import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
@@ -56,6 +57,7 @@ function GrafikPage() {
   const [profile, setProfile] = useState<{ phone: string | null; sms_opt_in: boolean } | null>(null);
   const sendConfirm = useServerFn(sendBookingConfirmation);
   const startPay = useServerFn(startClassCheckout);
+  const startGuestPay = useServerFn(startGuestClassCheckout);
 
   const weekDays = useMemo(
     () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
@@ -157,14 +159,15 @@ function GrafikPage() {
   }
 
   function openBooking(c: ClassRow) {
-    if (!isAuthenticated || !user) {
-      toast.info("Załóż darmowe konto, aby zarezerwować zajęcia.");
+    const status = statusOf(c);
+    if (status === "full" || status === "cancelled") return;
+    // Lista rezerwowa wymaga konta
+    if (status === "waitlist" && (!isAuthenticated || !user)) {
+      toast.info("Lista rezerwowa wymaga konta. Zaloguj się lub załóż darmowe konto.");
       navigate({ to: "/rejestracja" });
       return;
     }
-    const status = statusOf(c);
-    if (status === "full" || status === "cancelled") return;
-    if (myBookings[c.id]) return;
+    if (isAuthenticated && user && myBookings[c.id]) return;
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
     setPendingSlot({
@@ -199,10 +202,35 @@ function GrafikPage() {
     setMyBookings(mm);
   }
 
-  async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean }) {
-    if (!pendingSlot || !user) return;
+  async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean; guest?: GuestData }) {
+    if (!pendingSlot) return;
     setBookingLoading(true);
     const desired = pendingSlot.slot.status === "available" ? "confirmed" : "waitlist";
+
+    // === Tryb gościa (niezalogowany) → wyłącznie płatne zajęcia ===
+    if (extras.guest && desired === "confirmed") {
+      try {
+        const { redirectUrl } = await startGuestPay({ data: {
+          classId: pendingSlot.classRow.id,
+          fullName: extras.guest.fullName,
+          email: extras.guest.email,
+          phone: extras.guest.phone,
+          smsOptIn: extras.guest.smsOptIn,
+          acceptTerms: true,
+        } });
+        setPendingSlot(null);
+        window.location.href = redirectUrl;
+      } catch (e) {
+        setBookingLoading(false);
+        toast.error(e instanceof Error ? e.message : "Nie udało się rozpocząć płatności");
+      }
+      return;
+    }
+
+    if (!user) {
+      setBookingLoading(false);
+      return;
+    }
 
     // Re-check capacity at confirm time (anti-race)
     if (desired === "confirmed") {
@@ -460,7 +488,8 @@ function GrafikPage() {
         slot={pendingSlot?.slot ?? null}
         onConfirm={confirmBooking}
         loading={bookingLoading}
-        askPhone={!profile?.phone}
+        askPhone={isAuthenticated && !profile?.phone}
+        guestMode={!isAuthenticated}
       />
     </div>
   );
