@@ -370,6 +370,7 @@ export type Database = {
           currency: string
           email: string
           id: string
+          is_guest: boolean
           p24_order_id: number | null
           p24_token: string | null
           package_code: string
@@ -388,6 +389,7 @@ export type Database = {
           currency?: string
           email: string
           id?: string
+          is_guest?: boolean
           p24_order_id?: number | null
           p24_token?: string | null
           package_code: string
@@ -406,6 +408,7 @@ export type Database = {
           currency?: string
           email?: string
           id?: string
+          is_guest?: boolean
           p24_order_id?: number | null
           p24_token?: string | null
           package_code?: string
@@ -533,6 +536,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      find_user_id_by_email: { Args: { _email: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
