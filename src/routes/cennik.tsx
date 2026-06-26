@@ -3,6 +3,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { z } from "zod";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
+import { BuyPackageButton } from "@/components/payments/BuyPackageButton";
 
 const searchSchema = z.object({
   typ: z.enum(["reformer", "vip", "intro"]).optional(),
@@ -22,6 +23,7 @@ export const Route = createFileRoute("/cennik")({
 });
 
 type Membership = {
+  code: string;
   name: string;
   price: string;
   note: string;
@@ -32,6 +34,7 @@ type Membership = {
 
 const introOffers: Membership[] = [
   {
+    code: "intro",
     name: "Wejście Intro",
     price: "99",
     note: "Pierwsza wizyta",
@@ -42,6 +45,7 @@ const introOffers: Membership[] = [
 
 const reformerOffers: Membership[] = [
   {
+    code: "pack-4",
     name: "4 wejścia",
     price: "390",
     note: "97,50 zł / sesja",
@@ -49,6 +53,7 @@ const reformerOffers: Membership[] = [
     perks: ["4 sesje grupowe (max 4 osoby)", "Ważność 30 dni", "Rezerwacja online"],
   },
   {
+    code: "pack-8",
     name: "8 wejść",
     price: "670",
     note: "83,75 zł / sesja",
@@ -59,10 +64,10 @@ const reformerOffers: Membership[] = [
 ];
 
 const vipOffers = [
-  { name: "VIP Solo · 1 sesja", price: "260", note: "Trening 1:1 (reformer lub cadillac)" },
-  { name: "VIP Solo · pakiet 5", price: "1 200", note: "240 zł / sesja" },
-  { name: "VIP Duo · 1 sesja", price: "320", note: "Trening 1:2 (160 zł / os.)" },
-  { name: "VIP Duo · pakiet 5", price: "1 450", note: "145 zł / os. / sesja" },
+  { code: "vip-solo-1", name: "VIP Solo · 1 sesja", price: "260", note: "Trening 1:1 (reformer lub cadillac)" },
+  { code: "vip-solo-5", name: "VIP Solo · pakiet 5", price: "1 200", note: "240 zł / sesja" },
+  { code: "vip-duo-1", name: "VIP Duo · 1 sesja", price: "320", note: "Trening 1:2 (160 zł / os.)" },
+  { code: "vip-duo-5", name: "VIP Duo · pakiet 5", price: "1 450", note: "145 zł / os. / sesja" },
 ];
 
 function CennikPage() {
@@ -147,12 +152,15 @@ function CennikPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to="/rejestracja"
-                  className="mt-8 inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta"
-                >
-                  Załóż konto
-                </Link>
+                <div className="mt-8 flex flex-col gap-2">
+                  <BuyPackageButton packageCode={m.code} label="Kup online" />
+                  <Link
+                    to="/rejestracja"
+                    className="text-center text-[11px] uppercase tracking-widest text-foreground/70 hover:text-terracotta"
+                  >
+                    Nie masz konta? Załóż
+                  </Link>
+                </div>
               </article>
             ))}
           </div>
@@ -171,13 +179,16 @@ function CennikPage() {
             </p>
             <div className="mt-12 grid gap-px bg-cream/10 md:grid-cols-2 lg:grid-cols-4">
               {vipOffers.map((v) => (
-                <div key={v.name} className="bg-ink p-8">
+                <div key={v.name} className="flex flex-col bg-ink p-8">
                   <h3 className="font-display text-lg text-cream">{v.name}</h3>
                   <div className="mt-5 flex items-baseline gap-1">
                     <span className="font-display text-4xl text-nude">{v.price}</span>
                     <span className="text-sm text-cream/90">zł</span>
                   </div>
                   <p className="mt-2 text-xs uppercase tracking-widest text-cream/75">{v.note}</p>
+                  <div className="mt-6">
+                    <BuyPackageButton packageCode={v.code} label="Kup online" />
+                  </div>
                 </div>
               ))}
             </div>
