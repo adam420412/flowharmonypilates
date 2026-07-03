@@ -47,7 +47,7 @@ export const startCheckout = createServerFn({ method: "POST" })
       amountGrosz: pkg.amountGrosz,
       description: `${pkg.name} — ${profile?.display_name ?? email}`,
       email,
-      urlReturn: `${base}/platnosc/status?sessionId=${encodeURIComponent(sessionId)}`,
+      urlReturn: `${base}/payment-success?sessionId=${encodeURIComponent(sessionId)}`,
       urlStatus: `${base}/api/public/p24/webhook`,
     });
 
