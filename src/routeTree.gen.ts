@@ -18,6 +18,7 @@ import { Route as RejestracjaRouteImport } from './routes/rejestracja'
 import { Route as RegulaminRouteImport } from './routes/regulamin'
 import { Route as PolitykaPrywatnosciRouteImport } from './routes/polityka-prywatnosci'
 import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
+import { Route as PaymentErrorRouteImport } from './routes/payment-error'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as GrafikRouteImport } from './routes/grafik'
@@ -82,6 +83,11 @@ const PolitykaPrywatnosciRoute = PolitykaPrywatnosciRouteImport.update({
 const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
   id: '/payment-success',
   path: '/payment-success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentErrorRoute = PaymentErrorRouteImport.update({
+  id: '/payment-error',
+  path: '/payment-error',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/payment-error': typeof PaymentErrorRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
   '/regulamin': typeof RegulaminRoute
@@ -225,6 +232,7 @@ export interface FileRoutesByTo {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/payment-error': typeof PaymentErrorRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
   '/regulamin': typeof RegulaminRoute
@@ -257,6 +265,7 @@ export interface FileRoutesById {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/payment-error': typeof PaymentErrorRoute
   '/payment-success': typeof PaymentSuccessRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
   '/regulamin': typeof RegulaminRoute
@@ -289,6 +298,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/payment-error'
     | '/payment-success'
     | '/polityka-prywatnosci'
     | '/regulamin'
@@ -319,6 +329,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/payment-error'
     | '/payment-success'
     | '/polityka-prywatnosci'
     | '/regulamin'
@@ -350,6 +361,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/payment-error'
     | '/payment-success'
     | '/polityka-prywatnosci'
     | '/regulamin'
@@ -382,6 +394,7 @@ export interface RootRouteChildren {
   GrafikRoute: typeof GrafikRoute
   KontaktRoute: typeof KontaktRoute
   LoginRoute: typeof LoginRoute
+  PaymentErrorRoute: typeof PaymentErrorRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
   PolitykaPrywatnosciRoute: typeof PolitykaPrywatnosciRoute
   RegulaminRoute: typeof RegulaminRoute
@@ -467,6 +480,13 @@ declare module '@tanstack/react-router' {
       path: '/payment-success'
       fullPath: '/payment-success'
       preLoaderRoute: typeof PaymentSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-error': {
+      id: '/payment-error'
+      path: '/payment-error'
+      fullPath: '/payment-error'
+      preLoaderRoute: typeof PaymentErrorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -635,6 +655,7 @@ const rootRouteChildren: RootRouteChildren = {
   GrafikRoute: GrafikRoute,
   KontaktRoute: KontaktRoute,
   LoginRoute: LoginRoute,
+  PaymentErrorRoute: PaymentErrorRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
   PolitykaPrywatnosciRoute: PolitykaPrywatnosciRoute,
   RegulaminRoute: RegulaminRoute,
@@ -659,3 +680,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
