@@ -17,6 +17,7 @@ import { Route as ResetHaslaRouteImport } from './routes/reset-hasla'
 import { Route as RejestracjaRouteImport } from './routes/rejestracja'
 import { Route as RegulaminRouteImport } from './routes/regulamin'
 import { Route as PolitykaPrywatnosciRouteImport } from './routes/polityka-prywatnosci'
+import { Route as PaymentSuccessRouteImport } from './routes/payment-success'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as GrafikRouteImport } from './routes/grafik'
@@ -76,6 +77,11 @@ const RegulaminRoute = RegulaminRouteImport.update({
 const PolitykaPrywatnosciRoute = PolitykaPrywatnosciRouteImport.update({
   id: '/polityka-prywatnosci',
   path: '/polityka-prywatnosci',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentSuccessRoute = PaymentSuccessRouteImport.update({
+  id: '/payment-success',
+  path: '/payment-success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -189,6 +195,7 @@ export interface FileRoutesByFullPath {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/payment-success': typeof PaymentSuccessRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
   '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/payment-success': typeof PaymentSuccessRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
   '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
@@ -249,6 +257,7 @@ export interface FileRoutesById {
   '/grafik': typeof GrafikRoute
   '/kontakt': typeof KontaktRoute
   '/login': typeof LoginRoute
+  '/payment-success': typeof PaymentSuccessRoute
   '/polityka-prywatnosci': typeof PolitykaPrywatnosciRoute
   '/regulamin': typeof RegulaminRoute
   '/rejestracja': typeof RejestracjaRoute
@@ -280,6 +289,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/payment-success'
     | '/polityka-prywatnosci'
     | '/regulamin'
     | '/rejestracja'
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/payment-success'
     | '/polityka-prywatnosci'
     | '/regulamin'
     | '/rejestracja'
@@ -339,6 +350,7 @@ export interface FileRouteTypes {
     | '/grafik'
     | '/kontakt'
     | '/login'
+    | '/payment-success'
     | '/polityka-prywatnosci'
     | '/regulamin'
     | '/rejestracja'
@@ -370,6 +382,7 @@ export interface RootRouteChildren {
   GrafikRoute: typeof GrafikRoute
   KontaktRoute: typeof KontaktRoute
   LoginRoute: typeof LoginRoute
+  PaymentSuccessRoute: typeof PaymentSuccessRoute
   PolitykaPrywatnosciRoute: typeof PolitykaPrywatnosciRoute
   RegulaminRoute: typeof RegulaminRoute
   RejestracjaRoute: typeof RejestracjaRoute
@@ -447,6 +460,13 @@ declare module '@tanstack/react-router' {
       path: '/polityka-prywatnosci'
       fullPath: '/polityka-prywatnosci'
       preLoaderRoute: typeof PolitykaPrywatnosciRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payment-success': {
+      id: '/payment-success'
+      path: '/payment-success'
+      fullPath: '/payment-success'
+      preLoaderRoute: typeof PaymentSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -615,6 +635,7 @@ const rootRouteChildren: RootRouteChildren = {
   GrafikRoute: GrafikRoute,
   KontaktRoute: KontaktRoute,
   LoginRoute: LoginRoute,
+  PaymentSuccessRoute: PaymentSuccessRoute,
   PolitykaPrywatnosciRoute: PolitykaPrywatnosciRoute,
   RegulaminRoute: RegulaminRoute,
   RejestracjaRoute: RejestracjaRoute,
