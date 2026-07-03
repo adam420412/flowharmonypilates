@@ -31,6 +31,7 @@ import { Route as AuthenticatedMojeRezerwacjeRouteImport } from './routes/_authe
 import { Route as AuthenticatedKontoRouteImport } from './routes/_authenticated/konto'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as LovableEmailSuppressionRouteImport } from './routes/lovable/email/suppression'
+import { Route as ApiPublicP24TestRouteImport } from './routes/api/public/p24-test'
 import { Route as ApiPublicBootstrapAdminRouteImport } from './routes/api/public/bootstrap-admin'
 import { Route as LovableEmailTransactionalSendRouteImport } from './routes/lovable/email/transactional/send'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -150,6 +151,11 @@ const LovableEmailSuppressionRoute = LovableEmailSuppressionRouteImport.update({
   path: '/lovable/email/suppression',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicP24TestRoute = ApiPublicP24TestRouteImport.update({
+  id: '/api/public/p24-test',
+  path: '/api/public/p24-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicBootstrapAdminRoute = ApiPublicBootstrapAdminRouteImport.update({
   id: '/api/public/bootstrap-admin',
   path: '/api/public/bootstrap-admin',
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
+  '/api/public/p24-test': typeof ApiPublicP24TestRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
+  '/api/public/p24-test': typeof ApiPublicP24TestRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/email/unsubscribe': typeof EmailUnsubscribeRoute
   '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
+  '/api/public/p24-test': typeof ApiPublicP24TestRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
@@ -314,6 +323,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/platnosc/status'
     | '/api/public/bootstrap-admin'
+    | '/api/public/p24-test'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
     | '/api/public/p24/webhook'
@@ -345,6 +355,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/platnosc/status'
     | '/api/public/bootstrap-admin'
+    | '/api/public/p24-test'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
     | '/api/public/p24/webhook'
@@ -377,6 +388,7 @@ export interface FileRouteTypes {
     | '/email/unsubscribe'
     | '/platnosc/status'
     | '/api/public/bootstrap-admin'
+    | '/api/public/p24-test'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
     | '/api/public/p24/webhook'
@@ -407,6 +419,7 @@ export interface RootRouteChildren {
   EmailUnsubscribeRoute: typeof EmailUnsubscribeRoute
   PlatnoscStatusRoute: typeof PlatnoscStatusRoute
   ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
+  ApiPublicP24TestRoute: typeof ApiPublicP24TestRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
   ApiPublicP24WebhookRoute: typeof ApiPublicP24WebhookRoute
@@ -573,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailSuppressionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/p24-test': {
+      id: '/api/public/p24-test'
+      path: '/api/public/p24-test'
+      fullPath: '/api/public/p24-test'
+      preLoaderRoute: typeof ApiPublicP24TestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/bootstrap-admin': {
       id: '/api/public/bootstrap-admin'
       path: '/api/public/bootstrap-admin'
@@ -668,6 +688,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmailUnsubscribeRoute: EmailUnsubscribeRoute,
   PlatnoscStatusRoute: PlatnoscStatusRoute,
   ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
+  ApiPublicP24TestRoute: ApiPublicP24TestRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
   ApiPublicP24WebhookRoute: ApiPublicP24WebhookRoute,
