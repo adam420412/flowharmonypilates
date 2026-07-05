@@ -119,6 +119,7 @@ export type Database = {
           instructor_id: string
           is_cancelled: boolean
           notes: string | null
+          price_grosz: number
           starts_at: string
           updated_at: string
           waitlist_capacity: number
@@ -132,6 +133,7 @@ export type Database = {
           instructor_id: string
           is_cancelled?: boolean
           notes?: string | null
+          price_grosz?: number
           starts_at: string
           updated_at?: string
           waitlist_capacity?: number
@@ -145,6 +147,7 @@ export type Database = {
           instructor_id?: string
           is_cancelled?: boolean
           notes?: string | null
+          price_grosz?: number
           starts_at?: string
           updated_at?: string
           waitlist_capacity?: number
