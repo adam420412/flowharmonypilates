@@ -98,23 +98,23 @@ export function CalendarView() {
 
     const userIds = Array.from(new Set(rows.map((b) => b.user_id)));
     const [{ data: profiles }, { data: payments }] = await Promise.all([
-      supabase.from("profiles").select("id, display_name, phone, email").in("id", userIds),
+      supabase.from("profiles").select("id, display_name, phone").in("id", userIds),
       supabase
         .from("payments")
-        .select("user_id, status, amount_grosz")
+        .select("user_id, status, amount_grosz, email")
         .eq("class_id", c.id)
         .in("user_id", userIds),
     ]);
-    const profMap = new Map<string, { display_name: string | null; phone: string | null; email: string | null }>(
-      (profiles ?? []).map((p: { id: string; display_name: string | null; phone: string | null; email: string | null }) => [p.id, p]),
+    const profMap = new Map<string, { display_name: string | null; phone: string | null }>(
+      (profiles ?? []).map((p: { id: string; display_name: string | null; phone: string | null }) => [p.id, { display_name: p.display_name, phone: p.phone }]),
     );
-    const paidMap = new Map<string, { paid: boolean; amount: number | null }>();
-    for (const p of (payments ?? []) as Array<{ user_id: string; status: string; amount_grosz: number | null }>) {
-      const cur = paidMap.get(p.user_id) ?? { paid: false, amount: null };
+    const paidMap = new Map<string, { paid: boolean; amount: number | null; email: string | null }>();
+    for (const p of (payments ?? []) as Array<{ user_id: string; status: string; amount_grosz: number | null; email: string | null }>) {
+      const cur = paidMap.get(p.user_id) ?? { paid: false, amount: null, email: p.email };
       if (p.status === "paid") {
-        paidMap.set(p.user_id, { paid: true, amount: p.amount_grosz });
+        paidMap.set(p.user_id, { paid: true, amount: p.amount_grosz, email: p.email ?? cur.email });
       } else if (!cur.paid) {
-        paidMap.set(p.user_id, cur);
+        paidMap.set(p.user_id, { ...cur, email: p.email ?? cur.email });
       }
     }
 
@@ -127,7 +127,7 @@ export function CalendarView() {
         status: b.status,
         created_at: b.created_at,
         display_name: prof?.display_name ?? null,
-        email: prof?.email ?? null,
+        email: pay?.email ?? null,
         phone: prof?.phone ?? null,
         paid: pay?.paid ?? false,
         amount_grosz: pay?.amount ?? null,
