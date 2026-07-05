@@ -3,7 +3,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { z } from "zod";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
-import { BuyPackageButton } from "@/components/payments/BuyPackageButton";
+
 
 const searchSchema = z.object({
   typ: z.enum(["reformer", "vip", "intro"]).optional(),
