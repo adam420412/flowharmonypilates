@@ -13,8 +13,6 @@ const guestCheckoutSchema = z.object({
   }),
 });
 
-const TEST_CLASS_PRICE_GROSZ = 100;
-
 export const startGuestClassCheckout = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => guestCheckoutSchema.parse(d))
   .handler(async ({ data }) => {
@@ -24,11 +22,27 @@ export const startGuestClassCheckout = createServerFn({ method: "POST" })
     // Load class
     const { data: cls, error: clsErr } = await supabaseAdmin
       .from("classes")
-      .select("id, starts_at, is_cancelled, class_type:class_types(name)")
+      .select("id, starts_at, is_cancelled, price_grosz, capacity, class_type:class_types(name)")
       .eq("id", data.classId)
       .maybeSingle();
     if (clsErr || !cls) throw new Error("Nie znaleziono zajęć");
-    if (cls.is_cancelled) throw new Error("Zajęcia odwołane");
+    if (cls.is_cancelled) throw new Error("Zajęcia zostały odwołane");
+    if (!cls.price_grosz || cls.price_grosz < 100) {
+      throw new Error("Zajęcia nie mają ustawionej ceny — skontaktuj się ze studiem.");
+    }
+    if (new Date(cls.starts_at).getTime() < Date.now()) {
+      throw new Error("Zajęcia już się rozpoczęły lub odbyły");
+    }
+
+    // Sprawdź miejsca
+    const { count: confirmedCount } = await supabaseAdmin
+      .from("bookings")
+      .select("id", { count: "exact", head: true })
+      .eq("class_id", cls.id)
+      .eq("status", "confirmed");
+    if ((confirmedCount ?? 0) >= cls.capacity) {
+      throw new Error("Brak wolnych miejsc na tych zajęciach");
+    }
 
     const phoneDigits = data.phone.replace(/\s|-/g, "");
     const normalizedPhone = phoneDigits.startsWith("+")
@@ -67,14 +81,14 @@ export const startGuestClassCheckout = createServerFn({ method: "POST" })
     }).eq("id", userId);
 
     const className = (cls.class_type as { name?: string } | null)?.name ?? "Zajęcia";
-    const when = new Date(cls.starts_at).toLocaleString("pl-PL", { dateStyle: "short", timeStyle: "short" });
+    const when = new Date(cls.starts_at).toLocaleString("pl-PL", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Warsaw" });
     const sessionId = `fhg_${userId.slice(0, 8)}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
     const { error: insErr } = await supabaseAdmin.from("payments").insert({
       user_id: userId,
       package_code: "class-booking-guest",
       package_name: `${className} — ${when}`,
-      amount_grosz: TEST_CLASS_PRICE_GROSZ,
+      amount_grosz: cls.price_grosz,
       currency: "PLN",
       session_id: sessionId,
       email: data.email,
@@ -89,7 +103,7 @@ export const startGuestClassCheckout = createServerFn({ method: "POST" })
 
     const { token, redirectUrl } = await p24Register({
       sessionId,
-      amountGrosz: TEST_CLASS_PRICE_GROSZ,
+      amountGrosz: cls.price_grosz,
       description: `${className} — ${when}`,
       email: data.email,
       urlReturn: `${base}/platnosc/status?sessionId=${encodeURIComponent(sessionId)}`,
