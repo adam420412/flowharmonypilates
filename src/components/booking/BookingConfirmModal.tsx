@@ -14,7 +14,14 @@ export type SlotInfo = {
   instructorName: string;
   durationMinutes: number;
   status: "available" | "waitlist";
+  priceGrosz?: number;
 };
+
+function formatPln(grosz?: number) {
+  if (!grosz) return "";
+  const zl = grosz / 100;
+  return Number.isInteger(zl) ? `${zl} zł` : `${zl.toFixed(2).replace(".", ",")} zł`;
+}
 
 export type GuestData = {
   fullName: string;
@@ -110,7 +117,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
           </div>
         ) : (
           <div className="rounded-md border border-foreground/20 bg-foreground/5 px-3 py-2 text-xs text-foreground/80">
-            Rezerwacja wymaga opłacenia online (Przelewy24). <strong>Tryb testowy: 1,00 zł</strong>. Po opłaceniu miejsce zostanie potwierdzone automatycznie.
+            Rezerwacja wymaga opłacenia online (Przelewy24){slot.priceGrosz ? <>: <strong>{formatPln(slot.priceGrosz)}</strong></> : null}. Po opłaceniu miejsce zostanie potwierdzone automatycznie.
           </div>
         )}
 
@@ -218,7 +225,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             Anuluj
           </Button>
           <Button onClick={handleConfirm} disabled={loading || (guestMode && isWaitlist)}>
-            {loading ? "Przekierowuję…" : isWaitlist ? "Dopisz na rezerwę" : "Zapłać i zarezerwuj (1 zł)"}
+            {loading ? "Przekierowuję…" : isWaitlist ? "Dopisz na rezerwę" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
           </Button>
         </DialogFooter>
       </DialogContent>

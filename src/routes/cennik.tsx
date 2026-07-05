@@ -3,7 +3,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { z } from "zod";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
-import { BuyPackageButton } from "@/components/payments/BuyPackageButton";
+
 
 const searchSchema = z.object({
   typ: z.enum(["reformer", "vip", "intro"]).optional(),
@@ -153,13 +153,15 @@ function CennikPage() {
                   ))}
                 </ul>
                 <div className="mt-8 flex flex-col gap-2">
-                  <BuyPackageButton packageCode={m.code} label="Kup online" />
                   <Link
-                    to="/rejestracja"
-                    className="text-center text-[11px] uppercase tracking-widest text-foreground/70 hover:text-terracotta"
+                    to="/grafik"
+                    className="inline-flex items-center justify-center rounded-full bg-terracotta px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-foreground"
                   >
-                    Nie masz konta? Załóż
+                    Zarezerwuj termin
                   </Link>
+                  <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                    Wybierz termin w grafiku i zapłać online
+                  </p>
                 </div>
               </article>
             ))}
@@ -187,7 +189,12 @@ function CennikPage() {
                   </div>
                   <p className="mt-2 text-xs uppercase tracking-widest text-cream/75">{v.note}</p>
                   <div className="mt-6">
-                    <BuyPackageButton packageCode={v.code} label="Kup online" />
+                    <Link
+                      to="/grafik"
+                      className="inline-flex w-full items-center justify-center rounded-full bg-nude px-6 py-3 text-xs uppercase tracking-widest text-ink hover:bg-cream"
+                    >
+                      Zarezerwuj termin
+                    </Link>
                   </div>
                 </div>
               ))}

@@ -181,6 +181,7 @@ function GrafikPage() {
         instructorName: ins?.full_name ?? "—",
         durationMinutes: c.duration_minutes,
         status: status === "available" ? "available" : "waitlist",
+        priceGrosz: c.price_grosz,
       },
     });
   }
