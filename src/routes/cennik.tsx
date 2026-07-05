@@ -189,7 +189,12 @@ function CennikPage() {
                   </div>
                   <p className="mt-2 text-xs uppercase tracking-widest text-cream/75">{v.note}</p>
                   <div className="mt-6">
-                    <BuyPackageButton packageCode={v.code} label="Kup online" />
+                    <Link
+                      to="/grafik"
+                      className="inline-flex w-full items-center justify-center rounded-full bg-nude px-6 py-3 text-xs uppercase tracking-widest text-ink hover:bg-cream"
+                    >
+                      Zarezerwuj termin
+                    </Link>
                   </div>
                 </div>
               ))}
