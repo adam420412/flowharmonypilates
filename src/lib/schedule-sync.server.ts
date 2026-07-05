@@ -2,7 +2,7 @@ import { fromZonedTime } from "date-fns-tz";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const SHEET_TAB = "Grafik";
-const SHEET_RANGE = `${SHEET_TAB}!A2:H1000`;
+const SHEET_RANGE = `${SHEET_TAB}!A2:I1000`;
 const TIMEZONE = "Europe/Warsaw";
 
 // Default duration + capacity per class-type slug (matches enforce_class_capacity)
@@ -70,6 +70,7 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
     duration_minutes: number;
     capacity: number;
     waitlist_capacity: number;
+    price_grosz: number;
     notes: string | null;
     is_cancelled: boolean;
     slug: string;
@@ -79,11 +80,11 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
 
   rows.forEach((row, idx) => {
     const rowNum = idx + 2; // sheet row (header = 1)
-    const [dateS, timeS, slugS, instrS, capS, waitS, notesS, cancelledS] = [
-      row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],
+    const [dateS, timeS, slugS, instrS, priceS, capS, waitS, notesS, cancelledS] = [
+      row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
     ].map((v) => (v ?? "").toString().trim());
 
-    if (!dateS && !timeS && !slugS && !instrS) return; // empty row
+    if (!dateS && !timeS && !slugS && !instrS && !priceS) return; // empty row
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateS)) {
       errors.push({ row: rowNum, reason: `Zła data (oczekiwano YYYY-MM-DD): "${dateS}"` });
@@ -110,6 +111,18 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
     const waitlist = waitS ? Math.max(0, parseInt(waitS, 10) || 0) : 0;
     const isCancelled = /^(tak|yes|true|1)$/i.test(cancelledS);
 
+    // Price: required, PLN → grosze
+    if (!priceS) {
+      errors.push({ row: rowNum, reason: `Brak ceny (kolumna E) — zajęcia pominięte` });
+      return;
+    }
+    const priceNum = parseFloat(priceS.replace(",", ".").replace(/\s/g, ""));
+    if (!isFinite(priceNum) || priceNum < 0) {
+      errors.push({ row: rowNum, reason: `Zła cena: "${priceS}" (podaj np. 90 lub 89.50)` });
+      return;
+    }
+    const priceGrosz = Math.round(priceNum * 100);
+
     // Interpret date+time as Europe/Warsaw local → UTC ISO
     const [hh, mm] = timeS.split(":");
     const localIso = `${dateS}T${hh.padStart(2, "0")}:${mm}:00`;
@@ -133,6 +146,7 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
       duration_minutes: defaults.duration,
       capacity,
       waitlist_capacity: waitlist,
+      price_grosz: priceGrosz,
       notes: notesS || null,
       is_cancelled: isCancelled,
       slug,
@@ -168,6 +182,7 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
       duration_minutes: p.duration_minutes,
       capacity: p.capacity,
       waitlist_capacity: p.waitlist_capacity,
+      price_grosz: p.price_grosz,
       notes: p.notes,
       is_cancelled: p.is_cancelled,
     };
