@@ -111,6 +111,18 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
     const waitlist = waitS ? Math.max(0, parseInt(waitS, 10) || 0) : 0;
     const isCancelled = /^(tak|yes|true|1)$/i.test(cancelledS);
 
+    // Price: required, PLN → grosze
+    if (!priceS) {
+      errors.push({ row: rowNum, reason: `Brak ceny (kolumna E) — zajęcia pominięte` });
+      return;
+    }
+    const priceNum = parseFloat(priceS.replace(",", ".").replace(/\s/g, ""));
+    if (!isFinite(priceNum) || priceNum < 0) {
+      errors.push({ row: rowNum, reason: `Zła cena: "${priceS}" (podaj np. 90 lub 89.50)` });
+      return;
+    }
+    const priceGrosz = Math.round(priceNum * 100);
+
     // Interpret date+time as Europe/Warsaw local → UTC ISO
     const [hh, mm] = timeS.split(":");
     const localIso = `${dateS}T${hh.padStart(2, "0")}:${mm}:00`;
@@ -134,6 +146,7 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
       duration_minutes: defaults.duration,
       capacity,
       waitlist_capacity: waitlist,
+      price_grosz: priceGrosz,
       notes: notesS || null,
       is_cancelled: isCancelled,
       slug,
