@@ -2,7 +2,7 @@ import { fromZonedTime } from "date-fns-tz";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const SHEET_TAB = "Grafik";
-const SHEET_RANGE = `${SHEET_TAB}!A2:H1000`;
+const SHEET_RANGE = `${SHEET_TAB}!A2:I1000`;
 const TIMEZONE = "Europe/Warsaw";
 
 // Default duration + capacity per class-type slug (matches enforce_class_capacity)
@@ -70,6 +70,7 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
     duration_minutes: number;
     capacity: number;
     waitlist_capacity: number;
+    price_grosz: number;
     notes: string | null;
     is_cancelled: boolean;
     slug: string;
@@ -79,11 +80,11 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
 
   rows.forEach((row, idx) => {
     const rowNum = idx + 2; // sheet row (header = 1)
-    const [dateS, timeS, slugS, instrS, capS, waitS, notesS, cancelledS] = [
-      row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],
+    const [dateS, timeS, slugS, instrS, priceS, capS, waitS, notesS, cancelledS] = [
+      row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
     ].map((v) => (v ?? "").toString().trim());
 
-    if (!dateS && !timeS && !slugS && !instrS) return; // empty row
+    if (!dateS && !timeS && !slugS && !instrS && !priceS) return; // empty row
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dateS)) {
       errors.push({ row: rowNum, reason: `Zła data (oczekiwano YYYY-MM-DD): "${dateS}"` });
