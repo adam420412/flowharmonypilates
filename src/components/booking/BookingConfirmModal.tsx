@@ -14,7 +14,14 @@ export type SlotInfo = {
   instructorName: string;
   durationMinutes: number;
   status: "available" | "waitlist";
+  priceGrosz?: number;
 };
+
+function formatPln(grosz?: number) {
+  if (!grosz) return "";
+  const zl = grosz / 100;
+  return Number.isInteger(zl) ? `${zl} zł` : `${zl.toFixed(2).replace(".", ",")} zł`;
+}
 
 export type GuestData = {
   fullName: string;
