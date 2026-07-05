@@ -153,13 +153,15 @@ function CennikPage() {
                   ))}
                 </ul>
                 <div className="mt-8 flex flex-col gap-2">
-                  <BuyPackageButton packageCode={m.code} label="Kup online" />
                   <Link
-                    to="/rejestracja"
-                    className="text-center text-[11px] uppercase tracking-widest text-foreground/70 hover:text-terracotta"
+                    to="/grafik"
+                    className="inline-flex items-center justify-center rounded-full bg-terracotta px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-foreground"
                   >
-                    Nie masz konta? Załóż
+                    Zarezerwuj termin
                   </Link>
+                  <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                    Wybierz termin w grafiku i zapłać online
+                  </p>
                 </div>
               </article>
             ))}
