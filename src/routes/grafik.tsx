@@ -35,6 +35,7 @@ type ClassRow = {
   capacity: number;
   waitlist_capacity: number;
   is_cancelled: boolean;
+  price_grosz: number;
   class_type_id: string;
   instructor_id: string;
 };
@@ -87,7 +88,7 @@ function GrafikPage() {
     Promise.all([
       supabase
         .from("classes")
-        .select("id,starts_at,duration_minutes,capacity,waitlist_capacity,is_cancelled,class_type_id,instructor_id")
+        .select("id,starts_at,duration_minutes,capacity,waitlist_capacity,is_cancelled,price_grosz,class_type_id,instructor_id")
         .gte("starts_at", from)
         .lt("starts_at", to)
         .order("starts_at"),
@@ -430,15 +431,22 @@ function GrafikPage() {
                             {ct?.name ?? "—"}
                           </div>
                           <div className="mt-1 text-xs text-muted-foreground">{ins?.full_name}</div>
-                          <div className="mt-1 text-[11px] text-muted-foreground">
-                            {(() => {
-                              const cap = effectiveCapacity(c);
-                              const free = Math.max(0, cap - cnt.confirmed);
-                              if (status === "cancelled") return "Zajęcia odwołane";
-                              if (status === "full") return `Komplet · ${cap}/${cap} miejsc`;
-                              if (status === "waitlist") return `Komplet ${cnt.confirmed}/${cap} · rezerwa ${cnt.waitlist}/${c.waitlist_capacity}`;
-                              return `Wolne: ${free} z ${cap}`;
-                            })()}
+                          <div className="mt-1 flex items-center justify-between gap-2">
+                            <span className="text-[11px] text-muted-foreground">
+                              {(() => {
+                                const cap = effectiveCapacity(c);
+                                const free = Math.max(0, cap - cnt.confirmed);
+                                if (status === "cancelled") return "Zajęcia odwołane";
+                                if (status === "full") return `Komplet · ${cap}/${cap}`;
+                                if (status === "waitlist") return `Komplet ${cnt.confirmed}/${cap} · rez. ${cnt.waitlist}/${c.waitlist_capacity}`;
+                                return `Wolne: ${free} z ${cap}`;
+                              })()}
+                            </span>
+                            {c.price_grosz > 0 && status !== "cancelled" && (
+                              <span className="rounded-sm bg-foreground/5 px-1.5 py-0.5 text-[11px] font-medium text-foreground">
+                                {(c.price_grosz / 100).toFixed(0)} zł
+                              </span>
+                            )}
                           </div>
                           {mine && (
                             <div className="mt-1 text-[11px] font-medium text-terracotta">
