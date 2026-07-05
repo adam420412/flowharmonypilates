@@ -182,6 +182,7 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
       duration_minutes: p.duration_minutes,
       capacity: p.capacity,
       waitlist_capacity: p.waitlist_capacity,
+      price_grosz: p.price_grosz,
       notes: p.notes,
       is_cancelled: p.is_cancelled,
     };
