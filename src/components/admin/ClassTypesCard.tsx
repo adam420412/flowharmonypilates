@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
-import { Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { Loader2, Plus, Save, Trash2, UploadCloud, DownloadCloud } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  pushClassTypesToSheetFn,
+  pullClassTypesFromSheetFn,
+} from "@/lib/class-types-sync.functions";
 
 type ClassType = {
   id: string;
