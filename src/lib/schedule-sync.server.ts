@@ -114,17 +114,26 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
     const waitlist = waitS ? Math.max(0, parseInt(waitS, 10) || 0) : 0;
     const isCancelled = /^(tak|yes|true|1)$/i.test(cancelledS);
 
-    // Price: required, PLN → grosze
-    if (!priceS) {
-      errors.push({ row: rowNum, reason: `Brak ceny (kolumna E) — zajęcia pominięte` });
-      return;
+    // Price: use sheet value if provided, otherwise fall back to class type default
+    let priceGrosz: number;
+    if (priceS) {
+      const priceNum = parseFloat(priceS.replace(",", ".").replace(/\s/g, ""));
+      if (!isFinite(priceNum) || priceNum < 0) {
+        errors.push({ row: rowNum, reason: `Zła cena: "${priceS}" (podaj np. 90 lub 89.50)` });
+        return;
+      }
+      priceGrosz = Math.round(priceNum * 100);
+    } else {
+      const fallback = defaultPriceBySlug.get(slug);
+      if (fallback == null) {
+        errors.push({
+          row: rowNum,
+          reason: `Brak ceny (kolumna E) i brak domyślnej ceny dla typu "${slug}" — ustaw ją w Adminie → Typy zajęć`,
+        });
+        return;
+      }
+      priceGrosz = fallback;
     }
-    const priceNum = parseFloat(priceS.replace(",", ".").replace(/\s/g, ""));
-    if (!isFinite(priceNum) || priceNum < 0) {
-      errors.push({ row: rowNum, reason: `Zła cena: "${priceS}" (podaj np. 90 lub 89.50)` });
-      return;
-    }
-    const priceGrosz = Math.round(priceNum * 100);
 
     // Interpret date+time as Europe/Warsaw local → UTC ISO
     const [hh, mm] = timeS.split(":");
