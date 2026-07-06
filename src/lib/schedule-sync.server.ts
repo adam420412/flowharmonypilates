@@ -51,12 +51,15 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
 
   // 2. Load reference data
   const [typesRes, instrRes] = await Promise.all([
-    supabaseAdmin.from("class_types").select("id, slug"),
+    supabaseAdmin.from("class_types").select("id, slug, default_price_grosz"),
     supabaseAdmin.from("instructors").select("id, full_name, is_active"),
   ]);
   if (typesRes.error) throw typesRes.error;
   if (instrRes.error) throw instrRes.error;
   const typeBySlug = new Map(typesRes.data!.map((t) => [t.slug, t.id]));
+  const defaultPriceBySlug = new Map(
+    typesRes.data!.map((t) => [t.slug, t.default_price_grosz as number | null]),
+  );
   const instructorByName = new Map(
     instrRes.data!.map((i) => [i.full_name.trim().toLowerCase(), i.id]),
   );
