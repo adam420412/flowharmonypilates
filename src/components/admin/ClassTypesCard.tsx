@@ -12,6 +12,7 @@ type ClassType = {
   duration_minutes: number;
   is_active: boolean;
   sort_order: number;
+  default_price_grosz: number | null;
 };
 
 const empty: Omit<ClassType, "id"> = {
@@ -22,6 +23,7 @@ const empty: Omit<ClassType, "id"> = {
   duration_minutes: 55,
   is_active: true,
   sort_order: 0,
+  default_price_grosz: null,
 };
 
 export function ClassTypesCard() {
