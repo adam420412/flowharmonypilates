@@ -12,6 +12,7 @@ type ClassType = {
   duration_minutes: number;
   is_active: boolean;
   sort_order: number;
+  default_price_grosz: number | null;
 };
 
 const empty: Omit<ClassType, "id"> = {
@@ -22,6 +23,7 @@ const empty: Omit<ClassType, "id"> = {
   duration_minutes: 55,
   is_active: true,
   sort_order: 0,
+  default_price_grosz: null,
 };
 
 export function ClassTypesCard() {
@@ -58,6 +60,7 @@ export function ClassTypesCard() {
         duration_minutes: row.duration_minutes,
         is_active: row.is_active,
         sort_order: row.sort_order,
+        default_price_grosz: row.default_price_grosz,
       })
       .eq("id", row.id);
     setSaving(null);
@@ -116,6 +119,15 @@ export function ClassTypesCard() {
             value={String(newRow.sort_order)}
             onChange={(v) => setNewRow({ ...newRow, sort_order: Number(v) })}
           />
+          <Input
+            label="Domyślna cena (zł)"
+            type="number"
+            value={newRow.default_price_grosz != null ? String(newRow.default_price_grosz / 100) : ""}
+            onChange={(v) => {
+              const n = parseFloat(v.replace(",", "."));
+              setNewRow({ ...newRow, default_price_grosz: isFinite(n) && n >= 0 ? Math.round(n * 100) : null });
+            }}
+          />
           <div className="flex items-end">
             <button
               onClick={create}
@@ -164,6 +176,17 @@ export function ClassTypesCard() {
                   type="number"
                   value={String(r.sort_order)}
                   onChange={(v) => updateRow(setRows, r.id, { sort_order: Number(v) })}
+                />
+                <Input
+                  label="Domyślna cena (zł)"
+                  type="number"
+                  value={r.default_price_grosz != null ? String(r.default_price_grosz / 100) : ""}
+                  onChange={(v) => {
+                    const n = parseFloat(v.replace(",", "."));
+                    updateRow(setRows, r.id, {
+                      default_price_grosz: isFinite(n) && n >= 0 ? Math.round(n * 100) : null,
+                    });
+                  }}
                 />
                 <div className="flex items-end gap-2">
                   <label className="flex items-center gap-2 text-xs">

@@ -51,12 +51,15 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
 
   // 2. Load reference data
   const [typesRes, instrRes] = await Promise.all([
-    supabaseAdmin.from("class_types").select("id, slug"),
+    supabaseAdmin.from("class_types").select("id, slug, default_price_grosz"),
     supabaseAdmin.from("instructors").select("id, full_name, is_active"),
   ]);
   if (typesRes.error) throw typesRes.error;
   if (instrRes.error) throw instrRes.error;
   const typeBySlug = new Map(typesRes.data!.map((t) => [t.slug, t.id]));
+  const defaultPriceBySlug = new Map(
+    typesRes.data!.map((t) => [t.slug, t.default_price_grosz as number | null]),
+  );
   const instructorByName = new Map(
     instrRes.data!.map((i) => [i.full_name.trim().toLowerCase(), i.id]),
   );
@@ -111,17 +114,26 @@ export async function syncScheduleFromSheet(): Promise<SyncSummary> {
     const waitlist = waitS ? Math.max(0, parseInt(waitS, 10) || 0) : 0;
     const isCancelled = /^(tak|yes|true|1)$/i.test(cancelledS);
 
-    // Price: required, PLN → grosze
-    if (!priceS) {
-      errors.push({ row: rowNum, reason: `Brak ceny (kolumna E) — zajęcia pominięte` });
-      return;
+    // Price: use sheet value if provided, otherwise fall back to class type default
+    let priceGrosz: number;
+    if (priceS) {
+      const priceNum = parseFloat(priceS.replace(",", ".").replace(/\s/g, ""));
+      if (!isFinite(priceNum) || priceNum < 0) {
+        errors.push({ row: rowNum, reason: `Zła cena: "${priceS}" (podaj np. 90 lub 89.50)` });
+        return;
+      }
+      priceGrosz = Math.round(priceNum * 100);
+    } else {
+      const fallback = defaultPriceBySlug.get(slug);
+      if (fallback == null) {
+        errors.push({
+          row: rowNum,
+          reason: `Brak ceny (kolumna E) i brak domyślnej ceny dla typu "${slug}" — ustaw ją w Adminie → Typy zajęć`,
+        });
+        return;
+      }
+      priceGrosz = fallback;
     }
-    const priceNum = parseFloat(priceS.replace(",", ".").replace(/\s/g, ""));
-    if (!isFinite(priceNum) || priceNum < 0) {
-      errors.push({ row: rowNum, reason: `Zła cena: "${priceS}" (podaj np. 90 lub 89.50)` });
-      return;
-    }
-    const priceGrosz = Math.round(priceNum * 100);
 
     // Interpret date+time as Europe/Warsaw local → UTC ISO
     const [hh, mm] = timeS.split(":");

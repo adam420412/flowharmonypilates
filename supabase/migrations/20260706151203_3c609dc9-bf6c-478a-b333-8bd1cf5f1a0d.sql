@@ -1,0 +1,1 @@
+ALTER TABLE public.class_types ADD COLUMN IF NOT EXISTS default_price_grosz integer;
