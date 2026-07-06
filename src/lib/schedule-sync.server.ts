@@ -133,20 +133,21 @@ type SyncSummary = {
 
 export async function syncScheduleFromSheet(): Promise<SyncSummary> {
   const sheetId = process.env.SCHEDULE_SHEET_ID;
-  const lovableKey = process.env.LOVABLE_API_KEY;
-  const gwKey = process.env.GOOGLE_SHEETS_API_KEY;
-  if (!sheetId || !lovableKey || !gwKey) {
-    throw new Error("Brak konfiguracji: SCHEDULE_SHEET_ID / LOVABLE_API_KEY / GOOGLE_SHEETS_API_KEY");
+  if (!sheetId) {
+    throw new Error("Brak konfiguracji: SCHEDULE_SHEET_ID");
+  }
+  const headers = gatewayHeaders();
+
+  // 0. Pull class-type defaults (name + price) from Zajęcia tab into DB
+  try {
+    await syncClassTypesFromSheet();
+  } catch (e) {
+    console.warn("syncClassTypesFromSheet failed:", e);
   }
 
-  // 1. Read sheet
+  // 1. Read Grafik sheet
   const url = `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(SHEET_RANGE)}`;
-  const resp = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${lovableKey}`,
-      "X-Connection-Api-Key": gwKey,
-    },
-  });
+  const resp = await fetch(url, { headers });
   if (!resp.ok) {
     const body = await resp.text();
     throw new Error(`Google Sheets ${resp.status}: ${body}`);
