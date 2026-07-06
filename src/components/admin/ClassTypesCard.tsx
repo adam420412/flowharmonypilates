@@ -119,6 +119,15 @@ export function ClassTypesCard() {
             value={String(newRow.sort_order)}
             onChange={(v) => setNewRow({ ...newRow, sort_order: Number(v) })}
           />
+          <Input
+            label="Domyślna cena (zł)"
+            type="number"
+            value={newRow.default_price_grosz != null ? String(newRow.default_price_grosz / 100) : ""}
+            onChange={(v) => {
+              const n = parseFloat(v.replace(",", "."));
+              setNewRow({ ...newRow, default_price_grosz: isFinite(n) && n >= 0 ? Math.round(n * 100) : null });
+            }}
+          />
           <div className="flex items-end">
             <button
               onClick={create}
