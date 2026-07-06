@@ -3,7 +3,112 @@ import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const SHEET_TAB = "Grafik";
 const SHEET_RANGE = `${SHEET_TAB}!A2:I1000`;
+const TYPES_TAB = "Zajęcia";
+const TYPES_RANGE = `${TYPES_TAB}!A2:D200`;
 const TIMEZONE = "Europe/Warsaw";
+
+function gatewayHeaders() {
+  const lovableKey = process.env.LOVABLE_API_KEY;
+  const gwKey = process.env.GOOGLE_SHEETS_API_KEY;
+  if (!lovableKey || !gwKey) {
+    throw new Error("Brak konfiguracji: LOVABLE_API_KEY / GOOGLE_SHEETS_API_KEY");
+  }
+  return {
+    Authorization: `Bearer ${lovableKey}`,
+    "X-Connection-Api-Key": gwKey,
+  };
+}
+
+/**
+ * Pull class-type definitions from the "Zajęcia" tab and update matching rows
+ * in public.class_types (by slug). Columns: A=slug, B=name, C=capacity (info),
+ * D=default price (zł). Only name and default_price_grosz are written to DB;
+ * capacity per class stays on the classes table / Grafik tab.
+ */
+export async function syncClassTypesFromSheet(): Promise<{ updated: number; errors: string[] }> {
+  const sheetId = process.env.SCHEDULE_SHEET_ID;
+  if (!sheetId) throw new Error("Brak SCHEDULE_SHEET_ID");
+
+  const url = `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(TYPES_RANGE)}`;
+  const resp = await fetch(url, { headers: gatewayHeaders() });
+  if (!resp.ok) throw new Error(`Zajęcia read ${resp.status}: ${await resp.text()}`);
+  const data = (await resp.json()) as { values?: string[][] };
+  const rows = data.values ?? [];
+
+  const errors: string[] = [];
+  let updated = 0;
+
+  for (const row of rows) {
+    const slug = (row[0] ?? "").toString().trim().toLowerCase();
+    if (!slug) continue;
+    const name = (row[1] ?? "").toString().trim();
+    const priceStr = (row[3] ?? "").toString().trim();
+
+    const patch: { name?: string; default_price_grosz?: number | null } = {};
+    if (name) patch.name = name;
+    if (priceStr === "") {
+      patch.default_price_grosz = null;
+    } else {
+      const n = parseFloat(priceStr.replace(",", ".").replace(/\s/g, ""));
+      if (!isFinite(n) || n < 0) {
+        errors.push(`Zajęcia "${slug}": zła cena "${priceStr}"`);
+        continue;
+      }
+      patch.default_price_grosz = Math.round(n * 100);
+    }
+    if (Object.keys(patch).length === 0) continue;
+
+    const { error, count } = await supabaseAdmin
+      .from("class_types")
+      .update(patch, { count: "exact" })
+      .eq("slug", slug);
+    if (error) errors.push(`Zajęcia "${slug}": ${error.message}`);
+    else updated += count ?? 0;
+  }
+
+  return { updated, errors };
+}
+
+/**
+ * Push all class_types rows to the "Zajęcia" tab so admin edits made in the
+ * app appear in the sheet. Overwrites A2:D{n+1}.
+ */
+export async function pushClassTypesToSheet(): Promise<{ written: number }> {
+  const sheetId = process.env.SCHEDULE_SHEET_ID;
+  if (!sheetId) throw new Error("Brak SCHEDULE_SHEET_ID");
+
+  const { data, error } = await supabaseAdmin
+    .from("class_types")
+    .select("slug, name, default_price_grosz")
+    .order("sort_order");
+  if (error) throw error;
+  const types = data ?? [];
+
+  const values = types.map((t) => [
+    t.slug,
+    t.name,
+    TYPE_DEFAULTS[t.slug]?.capacity?.toString() ?? "",
+    t.default_price_grosz != null ? (t.default_price_grosz / 100).toString().replace(".", ",") : "",
+  ]);
+
+  // Clear existing then write (keeps stale rows from lingering).
+  const clearUrl = `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(TYPES_RANGE)}:clear`;
+  const clearResp = await fetch(clearUrl, { method: "POST", headers: gatewayHeaders() });
+  if (!clearResp.ok) throw new Error(`Zajęcia clear ${clearResp.status}: ${await clearResp.text()}`);
+
+  if (values.length === 0) return { written: 0 };
+
+  const writeRange = `${TYPES_TAB}!A2:D${values.length + 1}`;
+  const writeUrl = `https://connector-gateway.lovable.dev/google_sheets/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(writeRange)}?valueInputOption=USER_ENTERED`;
+  const writeResp = await fetch(writeUrl, {
+    method: "PUT",
+    headers: { ...gatewayHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ values }),
+  });
+  if (!writeResp.ok) throw new Error(`Zajęcia write ${writeResp.status}: ${await writeResp.text()}`);
+
+  return { written: values.length };
+}
 
 // Default duration + capacity per class-type slug (matches enforce_class_capacity)
 const TYPE_DEFAULTS: Record<string, { duration: number; capacity: number }> = {
