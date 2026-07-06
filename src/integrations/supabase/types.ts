@@ -74,6 +74,7 @@ export type Database = {
         Row: {
           color: string
           created_at: string
+          default_price_grosz: number | null
           description: string | null
           duration_minutes: number
           id: string
@@ -86,6 +87,7 @@ export type Database = {
         Insert: {
           color?: string
           created_at?: string
+          default_price_grosz?: number | null
           description?: string | null
           duration_minutes?: number
           id?: string
@@ -98,6 +100,7 @@ export type Database = {
         Update: {
           color?: string
           created_at?: string
+          default_price_grosz?: number | null
           description?: string | null
           duration_minutes?: number
           id?: string
