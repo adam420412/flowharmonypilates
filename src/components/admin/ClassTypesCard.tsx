@@ -60,6 +60,7 @@ export function ClassTypesCard() {
         duration_minutes: row.duration_minutes,
         is_active: row.is_active,
         sort_order: row.sort_order,
+        default_price_grosz: row.default_price_grosz,
       })
       .eq("id", row.id);
     setSaving(null);
