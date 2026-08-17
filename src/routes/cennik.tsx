@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 import { z } from "zod";
 import { Navigation } from "@/components/site/Navigation";
+import { BuyPackageButton } from "@/components/payments/BuyPackageButton";
 import { Footer } from "@/components/site/Footer";
 
 
@@ -153,15 +154,26 @@ function CennikPage() {
                   ))}
                 </ul>
                 <div className="mt-8 flex flex-col gap-2">
-                  <Link
-                    to="/grafik"
-                    className="inline-flex items-center justify-center rounded-full bg-terracotta px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-foreground"
-                  >
-                    Zarezerwuj termin
-                  </Link>
-                  <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
-                    Wybierz termin w grafiku i zapłać online
-                  </p>
+                  {m.code === "intro" ? (
+                    <>
+                      <Link
+                        to="/grafik"
+                        className="inline-flex items-center justify-center rounded-full bg-terracotta px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-foreground"
+                      >
+                        Zarezerwuj termin
+                      </Link>
+                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                        Wybierz termin w grafiku i zapłać online
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <BuyPackageButton packageCode={m.code} label="Kup karnet" />
+                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                        Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
+                      </p>
+                    </>
+                  )}
                 </div>
               </article>
             ))}
@@ -189,12 +201,20 @@ function CennikPage() {
                   </div>
                   <p className="mt-2 text-xs uppercase tracking-widest text-cream/75">{v.note}</p>
                   <div className="mt-6">
-                    <Link
-                      to="/grafik"
-                      className="inline-flex w-full items-center justify-center rounded-full bg-nude px-6 py-3 text-xs uppercase tracking-widest text-ink hover:bg-cream"
-                    >
-                      Zarezerwuj termin
-                    </Link>
+                    {v.code.endsWith("-5") ? (
+                      <BuyPackageButton
+                        packageCode={v.code}
+                        label="Kup pakiet"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-nude px-6 py-3 text-xs uppercase tracking-widest text-ink hover:bg-cream disabled:opacity-60"
+                      />
+                    ) : (
+                      <Link
+                        to="/grafik"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-nude px-6 py-3 text-xs uppercase tracking-widest text-ink hover:bg-cream"
+                      >
+                        Zarezerwuj termin
+                      </Link>
+                    )}
                   </div>
                 </div>
               ))}
