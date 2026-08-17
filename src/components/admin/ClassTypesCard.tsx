@@ -142,30 +142,10 @@ export function ClassTypesCard() {
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs text-foreground/60">
-          Ceny i nazwy są zsynchronizowane z zakładką <strong>Zajęcia</strong> w arkuszu Google.
-          Edycja tutaj wysyła zmiany do arkusza automatycznie.
-        </p>
-        <div className="flex gap-2">
-          <button
-            onClick={handlePull}
-            disabled={syncing !== null}
-            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-3 py-1.5 text-xs hover:bg-foreground/5 disabled:opacity-50"
-          >
-            {syncing === "pull" ? <Loader2 className="h-3 w-3 animate-spin" /> : <DownloadCloud className="h-3 w-3" />}
-            Pobierz z arkusza
-          </button>
-          <button
-            onClick={handlePush}
-            disabled={syncing !== null}
-            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-3 py-1.5 text-xs hover:bg-foreground/5 disabled:opacity-50"
-          >
-            {syncing === "push" ? <Loader2 className="h-3 w-3 animate-spin" /> : <UploadCloud className="h-3 w-3" />}
-            Wyślij do arkusza
-          </button>
-        </div>
-      </div>
+      <p className="text-xs text-foreground/60">
+        Cena ustawiona przy typie zajęć jest automatycznie używana przy dodawaniu nowych zajęć do grafiku.
+      </p>
+
 
       <div className="rounded-2xl border border-border bg-background p-6">
         <h3 className="font-display text-xl">Dodaj typ zajęć</h3>
