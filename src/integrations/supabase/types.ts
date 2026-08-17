@@ -367,6 +367,45 @@ export type Database = {
         }
         Relationships: []
       }
+      package_redemptions: {
+        Row: {
+          booking_id: string
+          created_at: string
+          id: string
+          package_id: string
+          user_id: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          id?: string
+          package_id: string
+          user_id: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          id?: string
+          package_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_redemptions_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "package_redemptions_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "user_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payments: {
         Row: {
           amount_grosz: number
@@ -499,6 +538,56 @@ export type Database = {
         }
         Relationships: []
       }
+      user_packages: {
+        Row: {
+          class_type_slugs: string[]
+          created_at: string
+          credits_total: number
+          expires_at: string
+          id: string
+          package_code: string
+          package_name: string
+          payment_id: string | null
+          purchased_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          class_type_slugs?: string[]
+          created_at?: string
+          credits_total: number
+          expires_at: string
+          id?: string
+          package_code: string
+          package_name: string
+          payment_id?: string | null
+          purchased_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          class_type_slugs?: string[]
+          created_at?: string
+          credits_total?: number
+          expires_at?: string
+          id?: string
+          package_code?: string
+          package_name?: string
+          payment_id?: string | null
+          purchased_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_packages_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -525,6 +614,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      book_with_package: {
+        Args: { _class_id: string; _package_id?: string }
+        Returns: Json
+      }
       cancel_booking: { Args: { _booking_id: string }; Returns: Json }
       class_booked_counts: {
         Args: { _from: string; _to: string }
@@ -559,6 +652,19 @@ export type Database = {
           source_queue: string
         }
         Returns: number
+      }
+      my_active_packages: {
+        Args: never
+        Returns: {
+          class_type_slugs: string[]
+          credits_left: number
+          credits_total: number
+          credits_used: number
+          expires_at: string
+          id: string
+          package_code: string
+          package_name: string
+        }[]
       }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
