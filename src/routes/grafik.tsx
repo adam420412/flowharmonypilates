@@ -49,7 +49,7 @@ type UserPackage = {
 };
 
 function GrafikPage() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, session, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [classTypes, setClassTypes] = useState<ClassType[]>([]);
@@ -64,6 +64,8 @@ function GrafikPage() {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [profile, setProfile] = useState<{ phone: string | null; sms_opt_in: boolean } | null>(null);
   const [packages, setPackages] = useState<UserPackage[]>([]);
+  const [packagesLoading, setPackagesLoading] = useState(false);
+  const [packagesError, setPackagesError] = useState(false);
   const sendConfirm = useServerFn(sendBookingConfirmation);
   const startPay = useServerFn(startClassCheckout);
   const startGuestPay = useServerFn(startGuestClassCheckout);
@@ -84,11 +86,18 @@ function GrafikPage() {
   }, []);
 
   useEffect(() => {
-    if (!isAuthenticated || !user) { setPackages([]); return; }
-    supabase.rpc("my_active_packages").then(({ data }) => {
+    if (!isAuthenticated || !user || !session) { setPackages([]); setPackagesLoading(false); return; }
+    let active = true;
+    setPackagesLoading(true);
+    setPackagesError(false);
+    supabase.rpc("my_active_packages").then(({ data, error }) => {
+      if (!active) return;
       setPackages(((data ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
+      setPackagesError(!!error);
+      setPackagesLoading(false);
     });
-  }, [isAuthenticated, user]);
+    return () => { active = false; };
+  }, [isAuthenticated, user?.id, session?.access_token]);
 
   useEffect(() => {
     if (!isAuthenticated || !user) { setProfile(null); return; }
@@ -206,6 +215,7 @@ function GrafikPage() {
         durationMinutes: c.duration_minutes,
         status: status === "available" ? "available" : "waitlist",
         priceGrosz: c.price_grosz,
+        packageId: pkg?.id,
         packageName: pkg?.package_name,
         packageCreditsLeft: pkg?.credits_left,
       },
@@ -295,6 +305,7 @@ function GrafikPage() {
     if (desired === "confirmed" && pendingSlot.slot.packageCreditsLeft) {
       const { data: res, error: rpcErr } = await supabase.rpc("book_with_package", {
         _class_id: pendingSlot.classRow.id,
+        _package_id: pendingSlot.slot.packageId,
       });
       const out = res as { ok: boolean; error?: string; booking_id?: string; credits_left?: number } | null;
       if (rpcErr || !out?.ok) {
@@ -389,6 +400,23 @@ function GrafikPage() {
           <CalendarIcon className="h-4 w-4" />
           {format(weekStart, "d MMM", { locale: pl })} – {format(addDays(weekStart, 6), "d MMM yyyy", { locale: pl })}
         </p>
+
+        {isAuthenticated && (
+          <div className="mt-6 border-y border-foreground/10 py-4 text-sm">
+            {packagesLoading ? (
+              <span className="text-muted-foreground">Sprawdzam dostępne wejścia…</span>
+            ) : packagesError ? (
+              <span className="text-destructive">Nie udało się pobrać karnetu. Odśwież stronę lub zaloguj się ponownie.</span>
+            ) : packages.length > 0 ? (
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span><strong>{packages[0].package_name}</strong>: {packages[0].credits_left} dostępne wejścia</span>
+                <span className="text-xs text-muted-foreground">Przy pasujących zajęciach rezerwacja użyje wejścia automatycznie.</span>
+              </div>
+            ) : (
+              <span className="text-muted-foreground">Nie masz obecnie aktywnego karnetu.</span>
+            )}
+          </div>
+        )}
 
         {/* Filters */}
         <div className="mt-8 flex flex-wrap items-center gap-3 rounded-2xl border border-foreground/10 bg-background p-4">
