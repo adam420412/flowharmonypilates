@@ -13,6 +13,16 @@ import { BookingConfirmModal, type SlotInfo, type GuestData } from "@/components
 import { sendBookingConfirmation } from "@/lib/notifications.functions";
 import { startClassCheckout } from "@/lib/payments.functions";
 import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
@@ -56,7 +66,9 @@ function GrafikPage() {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [classes, setClasses] = useState<ClassRow[]>([]);
   const [counts, setCounts] = useState<Counts>({});
-  const [myBookings, setMyBookings] = useState<Record<string, string>>({});
+  const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string }>>({});
+  const [cancelClassId, setCancelClassId] = useState<string | null>(null);
+  const [cancelling, setCancelling] = useState(false);
   const [filterType, setFilterType] = useState<string>("all");
   const [filterInstructor, setFilterInstructor] = useState<string>("all");
   const [loading, setLoading] = useState(true);
@@ -129,9 +141,9 @@ function GrafikPage() {
         map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
       });
       setCounts(map);
-      const m: Record<string, string> = {};
+      const m: Record<string, { id: string; status: string }> = {};
       (mine.data ?? []).forEach((b) => {
-        m[b.class_id] = b.status;
+        m[b.class_id] = { id: b.id, status: b.status };
       });
       setMyBookings(m);
       setLoading(false);
@@ -235,12 +247,38 @@ function GrafikPage() {
       map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
     });
     setCounts(map);
-    const mm: Record<string, string> = {};
-    (mine ?? []).forEach((b) => { mm[b.class_id] = b.status; });
+    const mm: Record<string, { id: string; status: string }> = {};
+    (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status }; });
     setMyBookings(mm);
     const { data: pk } = await supabase.rpc("my_active_packages");
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
   }
+
+  async function cancelMyBooking() {
+    const classId = cancelClassId;
+    const booking = classId ? myBookings[classId] : null;
+    if (!booking) return;
+    setCancelling(true);
+    const { data, error } = await supabase.rpc("cancel_booking", { _booking_id: booking.id });
+    setCancelling(false);
+    setCancelClassId(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const res = data as { ok: boolean; error?: string; hours_before?: number } | null;
+    if (!res?.ok) {
+      if (res?.error === "too_late") {
+        toast.error(`Rezerwację można odwołać najpóźniej ${res.hours_before} h przed zajęciami.`);
+      } else {
+        toast.error("Nie udało się odwołać rezerwacji");
+      }
+      return;
+    }
+    toast.success("Rezerwacja odwołana");
+    refreshAll();
+  }
+
 
   async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean; guest?: GuestData }) {
     if (!pendingSlot) return;
@@ -490,12 +528,22 @@ function GrafikPage() {
                       const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
                       const status = statusOf(c);
                       const mine = myBookings[c.id];
+                      const clickable = !(status === "full" || status === "cancelled" || !!mine);
                       return (
-                        <button
+                        <div
                           key={c.id}
-                          onClick={() => openBooking(c)}
-                          disabled={status === "full" || status === "cancelled" || !!mine}
-                          className="group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all hover:border-terracotta/40 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+                          role={clickable ? "button" : undefined}
+                          tabIndex={clickable ? 0 : undefined}
+                          onClick={() => clickable && openBooking(c)}
+                          onKeyDown={(e) => {
+                            if (clickable && (e.key === "Enter" || e.key === " ")) {
+                              e.preventDefault();
+                              openBooking(c);
+                            }
+                          }}
+                          className={`group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all ${
+                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : "opacity-60"
+                          }`}
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium text-sm text-foreground">
@@ -532,11 +580,22 @@ function GrafikPage() {
                             )}
                           </div>
                           {mine && (
-                            <div className="mt-1 text-[11px] font-medium text-terracotta">
-                              {mine === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
+                            <div className="mt-1 flex items-center justify-between gap-2">
+                              <span className="text-[11px] font-medium text-terracotta">
+                                {mine.status === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
+                              </span>
+                              {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setCancelClassId(c.id); }}
+                                  className="rounded-full border border-foreground/20 px-2 py-0.5 text-[10px] uppercase tracking-widest text-foreground transition-colors hover:border-destructive hover:text-destructive"
+                                >
+                                  Odwołaj
+                                </button>
+                              )}
                             </div>
                           )}
-                        </button>
+                        </div>
                       );
                     })}
                   </div>
@@ -583,6 +642,23 @@ function GrafikPage() {
         askPhone={isAuthenticated && !profile?.phone}
         guestMode={!isAuthenticated}
       />
+
+      <AlertDialog open={!!cancelClassId} onOpenChange={(o) => !o && setCancelClassId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Odwołać rezerwację?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Jeśli rezerwacja była opłacona karnetem, wejście wróci na Twój karnet i będziesz mogła zapisać się ponownie.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={cancelling}>Wróć</AlertDialogCancel>
+            <AlertDialogAction onClick={cancelMyBooking} disabled={cancelling}>
+              {cancelling ? "Odwoływanie…" : "Tak, odwołaj"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
