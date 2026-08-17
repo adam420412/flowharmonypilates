@@ -244,6 +244,32 @@ function GrafikPage() {
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
   }
 
+  async function cancelMyBooking() {
+    const classId = cancelClassId;
+    const booking = classId ? myBookings[classId] : null;
+    if (!booking) return;
+    setCancelling(true);
+    const { data, error } = await supabase.rpc("cancel_booking", { _booking_id: booking.id });
+    setCancelling(false);
+    setCancelClassId(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const res = data as { ok: boolean; error?: string; hours_before?: number } | null;
+    if (!res?.ok) {
+      if (res?.error === "too_late") {
+        toast.error(`Rezerwację można odwołać najpóźniej ${res.hours_before} h przed zajęciami.`);
+      } else {
+        toast.error("Nie udało się odwołać rezerwacji");
+      }
+      return;
+    }
+    toast.success("Rezerwacja odwołana");
+    refreshAll();
+  }
+
+
   async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean; guest?: GuestData }) {
     if (!pendingSlot) return;
     setBookingLoading(true);
