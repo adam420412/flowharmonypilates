@@ -107,10 +107,11 @@ function LoginPage() {
           </div>
           <button
             type="submit"
-            disabled={loading}
+            disabled={submitting}
             className="w-full rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream transition-all hover:bg-foreground/90 disabled:opacity-60"
           >
-            {loading ? "Logowanie…" : "Zaloguj się"}
+            {submitting ? "Logowanie…" : "Zaloguj się"}
+
           </button>
         </form>
 
