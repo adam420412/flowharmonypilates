@@ -168,7 +168,10 @@ function CennikPage() {
                     </>
                   ) : (
                     <>
-                      <BuyPackageButton packageCode={m.code} label="Kup karnet" />
+                      <BuyPackageButton
+                        packageCode={m.code}
+                        label={`Kup ${m.name.toLowerCase()} — ${m.price} zł`}
+                      />
                       <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
                         Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
                       </p>
