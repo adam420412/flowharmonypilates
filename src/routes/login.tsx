@@ -1,14 +1,21 @@
-import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { Logo } from "@/components/site/Logo";
 
+function safeRedirect(value: unknown): string {
+  const v = typeof value === "string" ? value : "/";
+  if (!v.startsWith("/") || v.startsWith("//")) return "/";
+  if (v.startsWith("/login") || v.startsWith("/rejestracja")) return "/";
+  return v;
+}
+
 export const Route = createFileRoute("/login")({
   validateSearch: (s: Record<string, unknown>) => ({
-    redirect: (s.redirect as string) || "/",
+    redirect: safeRedirect(s.redirect),
   }),
   component: LoginPage,
 });
@@ -16,27 +23,32 @@ export const Route = createFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  if (isAuthenticated) {
-    navigate({ to: search.redirect });
-  }
+  const target = safeRedirect(search.redirect);
+
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      navigate({ to: target, replace: true });
+    }
+  }, [loading, isAuthenticated, target, navigate]);
 
   async function handleEmail(e: FormEvent) {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
+    setSubmitting(false);
     if (error) {
       toast.error(error.message);
       return;
     }
     toast.success("Witaj z powrotem");
-    navigate({ to: search.redirect });
+    navigate({ to: target, replace: true });
   }
+
 
   async function handleGoogle() {
     const result = await lovable.auth.signInWithOAuth("google", {
