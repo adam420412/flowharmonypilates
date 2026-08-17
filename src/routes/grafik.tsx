@@ -580,21 +580,22 @@ function GrafikPage() {
                             )}
                           </div>
                           {mine && (
-                            <div className="mt-1 flex items-center justify-between gap-2">
-                              <span className="text-[11px] font-medium text-terracotta">
+                            <div className="mt-2 border-t border-foreground/10 pt-2">
+                              <span className="block text-[11px] font-medium text-terracotta">
                                 {mine.status === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
                               </span>
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
                                   type="button"
                                   onClick={(e) => { e.stopPropagation(); setCancelClassId(c.id); }}
-                                  className="rounded-full border border-foreground/20 px-2 py-0.5 text-[10px] uppercase tracking-widest text-foreground transition-colors hover:border-destructive hover:text-destructive"
+                                  className="mt-2 w-full rounded-full border border-foreground/20 px-2 py-1.5 text-center text-[10px] uppercase tracking-widest text-foreground transition-colors hover:border-destructive hover:text-destructive"
                                 >
                                   Odwołaj
                                 </button>
                               )}
                             </div>
                           )}
+
                         </div>
                       );
                     })}
