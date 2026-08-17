@@ -13,6 +13,16 @@ import { BookingConfirmModal, type SlotInfo, type GuestData } from "@/components
 import { sendBookingConfirmation } from "@/lib/notifications.functions";
 import { startClassCheckout } from "@/lib/payments.functions";
 import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/grafik")({
   head: () => ({
@@ -632,6 +642,23 @@ function GrafikPage() {
         askPhone={isAuthenticated && !profile?.phone}
         guestMode={!isAuthenticated}
       />
+
+      <AlertDialog open={!!cancelClassId} onOpenChange={(o) => !o && setCancelClassId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Odwołać rezerwację?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Jeśli rezerwacja była opłacona karnetem, wejście wróci na Twój karnet i będziesz mogła zapisać się ponownie.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={cancelling}>Wróć</AlertDialogCancel>
+            <AlertDialogAction onClick={cancelMyBooking} disabled={cancelling}>
+              {cancelling ? "Odwoływanie…" : "Tak, odwołaj"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
