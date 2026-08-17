@@ -518,12 +518,22 @@ function GrafikPage() {
                       const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
                       const status = statusOf(c);
                       const mine = myBookings[c.id];
+                      const clickable = !(status === "full" || status === "cancelled" || !!mine);
                       return (
-                        <button
+                        <div
                           key={c.id}
-                          onClick={() => openBooking(c)}
-                          disabled={status === "full" || status === "cancelled" || !!mine}
-                          className="group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all hover:border-terracotta/40 hover:bg-cream disabled:cursor-not-allowed disabled:opacity-60"
+                          role={clickable ? "button" : undefined}
+                          tabIndex={clickable ? 0 : undefined}
+                          onClick={() => clickable && openBooking(c)}
+                          onKeyDown={(e) => {
+                            if (clickable && (e.key === "Enter" || e.key === " ")) {
+                              e.preventDefault();
+                              openBooking(c);
+                            }
+                          }}
+                          className={`group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all ${
+                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : "opacity-60"
+                          }`}
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium text-sm text-foreground">
@@ -560,11 +570,22 @@ function GrafikPage() {
                             )}
                           </div>
                           {mine && (
-                            <div className="mt-1 text-[11px] font-medium text-terracotta">
-                              {mine === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
+                            <div className="mt-1 flex items-center justify-between gap-2">
+                              <span className="text-[11px] font-medium text-terracotta">
+                                {mine.status === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
+                              </span>
+                              {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => { e.stopPropagation(); setCancelClassId(c.id); }}
+                                  className="rounded-full border border-foreground/20 px-2 py-0.5 text-[10px] uppercase tracking-widest text-foreground transition-colors hover:border-destructive hover:text-destructive"
+                                >
+                                  Odwołaj
+                                </button>
+                              )}
                             </div>
                           )}
-                        </button>
+                        </div>
                       );
                     })}
                   </div>
