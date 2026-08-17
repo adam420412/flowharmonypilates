@@ -38,7 +38,6 @@ import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/e
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicP24WebhookRouteImport } from './routes/api/public/p24/webhook'
-import { Route as ApiPublicHooksSyncScheduleRouteImport } from './routes/api/public/hooks/sync-schedule'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
 
 const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
@@ -189,12 +188,6 @@ const ApiPublicP24WebhookRoute = ApiPublicP24WebhookRouteImport.update({
   path: '/api/public/p24/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicHooksSyncScheduleRoute =
-  ApiPublicHooksSyncScheduleRouteImport.update({
-    id: '/api/public/hooks/sync-schedule',
-    path: '/api/public/hooks/sync-schedule',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const ApiPublicHooksProcessRemindersRoute =
   ApiPublicHooksProcessRemindersRouteImport.update({
     id: '/api/public/hooks/process-reminders',
@@ -226,7 +219,6 @@ export interface FileRoutesByFullPath {
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
-  '/api/public/hooks/sync-schedule': typeof ApiPublicHooksSyncScheduleRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -258,7 +250,6 @@ export interface FileRoutesByTo {
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
-  '/api/public/hooks/sync-schedule': typeof ApiPublicHooksSyncScheduleRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -292,7 +283,6 @@ export interface FileRoutesById {
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
-  '/api/public/hooks/sync-schedule': typeof ApiPublicHooksSyncScheduleRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
@@ -326,7 +316,6 @@ export interface FileRouteTypes {
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
-    | '/api/public/hooks/sync-schedule'
     | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -358,7 +347,6 @@ export interface FileRouteTypes {
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
-    | '/api/public/hooks/sync-schedule'
     | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -391,7 +379,6 @@ export interface FileRouteTypes {
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
     | '/api/public/hooks/process-reminders'
-    | '/api/public/hooks/sync-schedule'
     | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
@@ -422,7 +409,6 @@ export interface RootRouteChildren {
   ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
-  ApiPublicHooksSyncScheduleRoute: typeof ApiPublicHooksSyncScheduleRoute
   ApiPublicP24WebhookRoute: typeof ApiPublicP24WebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
@@ -636,13 +622,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicP24WebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/hooks/sync-schedule': {
-      id: '/api/public/hooks/sync-schedule'
-      path: '/api/public/hooks/sync-schedule'
-      fullPath: '/api/public/hooks/sync-schedule'
-      preLoaderRoute: typeof ApiPublicHooksSyncScheduleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/public/hooks/process-reminders': {
       id: '/api/public/hooks/process-reminders'
       path: '/api/public/hooks/process-reminders'
@@ -691,7 +670,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
-  ApiPublicHooksSyncScheduleRoute: ApiPublicHooksSyncScheduleRoute,
   ApiPublicP24WebhookRoute: ApiPublicP24WebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,

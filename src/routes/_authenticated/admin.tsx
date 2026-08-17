@@ -324,7 +324,13 @@ function SettingField({
 
 /* -------------------- Add Class -------------------- */
 
-type ClassTypeOption = { id: string; name: string; slug: string; duration_minutes: number };
+type ClassTypeOption = {
+  id: string;
+  name: string;
+  slug: string;
+  duration_minutes: number;
+  default_price_grosz: number | null;
+};
 
 function toLocalInput(d: Date) {
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -356,7 +362,7 @@ function AddClassCard() {
       const [{ data: t }, { data: i }] = await Promise.all([
         supabase
           .from("class_types")
-          .select("id,name,slug,duration_minutes")
+          .select("id,name,slug,duration_minutes,default_price_grosz")
           .eq("is_active", true)
           .order("sort_order"),
         supabase
@@ -432,6 +438,7 @@ function AddClassCard() {
         capacity: parsed.data.capacity,
         waitlist_capacity: parsed.data.waitlist_capacity,
         notes: parsed.data.notes ? parsed.data.notes : null,
+        price_grosz: t?.default_price_grosz ?? 0,
       };
     });
 
@@ -456,7 +463,9 @@ function AddClassCard() {
     <section className="mb-16 rounded-2xl border border-border bg-background p-8 md:p-10">
       <h2 className="font-display text-3xl">Dodaj zajęcia</h2>
       <p className="mt-2 text-sm text-foreground/80">
-        Utwórz nowy termin w grafiku. Możesz powielić wpis na kolejne tygodnie.
+        Utwórz nowy termin w grafiku. Cena pobierana jest automatycznie z ustawień typu zajęć.
+        Nowe zajęcia pojawiają się w publicznym grafiku po 5 minutach — masz czas, by je usunąć,
+        jeśli dodałaś je przez pomyłkę.
       </p>
 
       {loading ? (

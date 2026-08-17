@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import { Loader2, Plus, Save, Trash2, UploadCloud, DownloadCloud } from "lucide-react";
+import { Loader2, Plus, Save, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  pushClassTypesToSheetFn,
-  pullClassTypesFromSheetFn,
-} from "@/lib/class-types-sync.functions";
 
 type ClassType = {
   id: string;
@@ -36,11 +31,7 @@ export function ClassTypesCard() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
-  const [syncing, setSyncing] = useState<"push" | "pull" | null>(null);
   const [newRow, setNewRow] = useState(empty);
-
-  const pushToSheet = useServerFn(pushClassTypesToSheetFn);
-  const pullFromSheet = useServerFn(pullClassTypesFromSheetFn);
 
   useEffect(() => {
     void load();
@@ -55,15 +46,6 @@ export function ClassTypesCard() {
     if (error) toast.error("Błąd pobierania typów");
     setRows((data ?? []) as ClassType[]);
     setLoading(false);
-  }
-
-  async function syncPush(silent = false) {
-    try {
-      const res = await pushToSheet();
-      if (!silent) toast.success(`Zsynchronizowano do arkusza (${res.written} wierszy)`);
-    } catch (e) {
-      if (!silent) toast.error(`Nie udało się wysłać do arkusza: ${(e as Error).message}`);
-    }
   }
 
   async function save(row: ClassType) {
@@ -87,7 +69,6 @@ export function ClassTypesCard() {
       return;
     }
     toast.success("Zapisano");
-    void syncPush(true);
   }
 
   async function create() {
@@ -103,7 +84,6 @@ export function ClassTypesCard() {
       toast.success("Dodano typ zajęć");
       setNewRow(empty);
       void load();
-      void syncPush(true);
     }
   }
 
@@ -114,58 +94,16 @@ export function ClassTypesCard() {
     else {
       toast.success("Usunięto");
       void load();
-      void syncPush(true);
     }
   }
 
-  async function handlePush() {
-    setSyncing("push");
-    await syncPush(false);
-    setSyncing(null);
-  }
-
-  async function handlePull() {
-    setSyncing("pull");
-    try {
-      const res = await pullFromSheet();
-      if (res.errors.length > 0) {
-        toast.error(`Pobrano z błędami: ${res.errors.join("; ")}`);
-      } else {
-        toast.success(`Pobrano z arkusza (${res.updated} wierszy)`);
-      }
-      await load();
-    } catch (e) {
-      toast.error(`Nie udało się pobrać z arkusza: ${(e as Error).message}`);
-    }
-    setSyncing(null);
-  }
 
   return (
     <section className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-xs text-foreground/60">
-          Ceny i nazwy są zsynchronizowane z zakładką <strong>Zajęcia</strong> w arkuszu Google.
-          Edycja tutaj wysyła zmiany do arkusza automatycznie.
-        </p>
-        <div className="flex gap-2">
-          <button
-            onClick={handlePull}
-            disabled={syncing !== null}
-            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-3 py-1.5 text-xs hover:bg-foreground/5 disabled:opacity-50"
-          >
-            {syncing === "pull" ? <Loader2 className="h-3 w-3 animate-spin" /> : <DownloadCloud className="h-3 w-3" />}
-            Pobierz z arkusza
-          </button>
-          <button
-            onClick={handlePush}
-            disabled={syncing !== null}
-            className="inline-flex items-center gap-2 rounded-full border border-foreground/20 px-3 py-1.5 text-xs hover:bg-foreground/5 disabled:opacity-50"
-          >
-            {syncing === "push" ? <Loader2 className="h-3 w-3 animate-spin" /> : <UploadCloud className="h-3 w-3" />}
-            Wyślij do arkusza
-          </button>
-        </div>
-      </div>
+      <p className="text-xs text-foreground/60">
+        Cena ustawiona przy typie zajęć jest automatycznie używana przy dodawaniu nowych zajęć do grafiku.
+      </p>
+
 
       <div className="rounded-2xl border border-border bg-background p-6">
         <h3 className="font-display text-xl">Dodaj typ zajęć</h3>
