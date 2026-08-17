@@ -56,7 +56,9 @@ function GrafikPage() {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [classes, setClasses] = useState<ClassRow[]>([]);
   const [counts, setCounts] = useState<Counts>({});
-  const [myBookings, setMyBookings] = useState<Record<string, string>>({});
+  const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string }>>({});
+  const [cancelClassId, setCancelClassId] = useState<string | null>(null);
+  const [cancelling, setCancelling] = useState(false);
   const [filterType, setFilterType] = useState<string>("all");
   const [filterInstructor, setFilterInstructor] = useState<string>("all");
   const [loading, setLoading] = useState(true);
@@ -129,9 +131,9 @@ function GrafikPage() {
         map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
       });
       setCounts(map);
-      const m: Record<string, string> = {};
+      const m: Record<string, { id: string; status: string }> = {};
       (mine.data ?? []).forEach((b) => {
-        m[b.class_id] = b.status;
+        m[b.class_id] = { id: b.id, status: b.status };
       });
       setMyBookings(m);
       setLoading(false);
@@ -235,8 +237,8 @@ function GrafikPage() {
       map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
     });
     setCounts(map);
-    const mm: Record<string, string> = {};
-    (mine ?? []).forEach((b) => { mm[b.class_id] = b.status; });
+    const mm: Record<string, { id: string; status: string }> = {};
+    (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status }; });
     setMyBookings(mm);
     const { data: pk } = await supabase.rpc("my_active_packages");
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
