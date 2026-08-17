@@ -481,6 +481,7 @@ function GrafikPage() {
               </Link>
               <Link
                 to="/login"
+                search={{ redirect: "/grafik" }}
                 className="rounded-full border border-foreground/30 px-7 py-3 text-xs uppercase tracking-widest text-foreground hover:border-terracotta hover:text-terracotta"
               >
                 Mam już konto
