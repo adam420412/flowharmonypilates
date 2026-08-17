@@ -31,11 +31,7 @@ export function ClassTypesCard() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
-  const [syncing, setSyncing] = useState<"push" | "pull" | null>(null);
   const [newRow, setNewRow] = useState(empty);
-
-  const pushToSheet = useServerFn(pushClassTypesToSheetFn);
-  const pullFromSheet = useServerFn(pullClassTypesFromSheetFn);
 
   useEffect(() => {
     void load();
@@ -50,15 +46,6 @@ export function ClassTypesCard() {
     if (error) toast.error("Błąd pobierania typów");
     setRows((data ?? []) as ClassType[]);
     setLoading(false);
-  }
-
-  async function syncPush(silent = false) {
-    try {
-      const res = await pushToSheet();
-      if (!silent) toast.success(`Zsynchronizowano do arkusza (${res.written} wierszy)`);
-    } catch (e) {
-      if (!silent) toast.error(`Nie udało się wysłać do arkusza: ${(e as Error).message}`);
-    }
   }
 
   async function save(row: ClassType) {
@@ -82,7 +69,6 @@ export function ClassTypesCard() {
       return;
     }
     toast.success("Zapisano");
-    void syncPush(true);
   }
 
   async function create() {
@@ -98,7 +84,6 @@ export function ClassTypesCard() {
       toast.success("Dodano typ zajęć");
       setNewRow(empty);
       void load();
-      void syncPush(true);
     }
   }
 
@@ -109,31 +94,9 @@ export function ClassTypesCard() {
     else {
       toast.success("Usunięto");
       void load();
-      void syncPush(true);
     }
   }
 
-  async function handlePush() {
-    setSyncing("push");
-    await syncPush(false);
-    setSyncing(null);
-  }
-
-  async function handlePull() {
-    setSyncing("pull");
-    try {
-      const res = await pullFromSheet();
-      if (res.errors.length > 0) {
-        toast.error(`Pobrano z błędami: ${res.errors.join("; ")}`);
-      } else {
-        toast.success(`Pobrano z arkusza (${res.updated} wierszy)`);
-      }
-      await load();
-    } catch (e) {
-      toast.error(`Nie udało się pobrać z arkusza: ${(e as Error).message}`);
-    }
-    setSyncing(null);
-  }
 
   return (
     <section className="space-y-6">
