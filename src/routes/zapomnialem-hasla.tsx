@@ -81,7 +81,7 @@ function ForgotPasswordPage() {
         )}
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          <Link to="/login" className="text-terracotta underline-offset-4 hover:underline">
+          <Link to="/login" search={{ redirect: "/" }} className="text-terracotta underline-offset-4 hover:underline">
             ← Wróć do logowania
           </Link>
         </p>

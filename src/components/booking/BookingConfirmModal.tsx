@@ -113,7 +113,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
         {isWaitlist ? (
           <div className="rounded-md border border-terracotta/30 bg-terracotta/10 px-3 py-2 text-xs text-terracotta">
             Komplet — limit miejsc wyczerpany. Możesz dołączyć do listy rezerwowej (bez opłaty).
-            {guestMode && <div className="mt-1">Lista rezerwowa wymaga konta — <Link to="/logowanie" className="underline">zaloguj się</Link> lub <Link to="/rejestracja" className="underline">załóż konto</Link>.</div>}
+            {guestMode && <div className="mt-1">Lista rezerwowa wymaga konta — <Link to="/login" search={{ redirect: "/" }} className="underline">zaloguj się</Link> lub <Link to="/rejestracja" className="underline">załóż konto</Link>.</div>}
           </div>
         ) : (
           <div className="rounded-md border border-foreground/20 bg-foreground/5 px-3 py-2 text-xs text-foreground/80">
@@ -146,7 +146,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             <div className="flex items-start gap-2 text-xs text-mocha">
               <UserPlus className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               <span>
-                Rezerwujesz bez logowania. Po opłaceniu utworzymy Ci konto i wyślemy e-mail z linkiem do ustawienia hasła. Masz już konto? <Link to="/logowanie" className="underline">Zaloguj się</Link>.
+                Rezerwujesz bez logowania. Po opłaceniu utworzymy Ci konto i wyślemy e-mail z linkiem do ustawienia hasła. Masz już konto? <Link to="/login" search={{ redirect: "/" }} className="underline">Zaloguj się</Link>.
               </span>
             </div>
             <div>

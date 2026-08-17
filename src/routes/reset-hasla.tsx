@@ -59,7 +59,7 @@ function ResetPasswordPage() {
     }
     toast.success("Hasło zmienione. Możesz się zalogować.");
     await supabase.auth.signOut();
-    navigate({ to: "/login" });
+    navigate({ to: "/login", search: { redirect: "/" } });
   }
 
   return (
