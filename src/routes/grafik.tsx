@@ -40,6 +40,13 @@ type ClassRow = {
   instructor_id: string;
 };
 type Counts = Record<string, { confirmed: number; waitlist: number }>;
+type UserPackage = {
+  id: string;
+  package_name: string;
+  credits_left: number;
+  class_type_slugs: string[];
+  expires_at: string;
+};
 
 function GrafikPage() {
   const { user, isAuthenticated } = useAuth();
@@ -56,6 +63,7 @@ function GrafikPage() {
   const [pendingSlot, setPendingSlot] = useState<{ slot: SlotInfo; classRow: ClassRow } | null>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [profile, setProfile] = useState<{ phone: string | null; sms_opt_in: boolean } | null>(null);
+  const [packages, setPackages] = useState<UserPackage[]>([]);
   const sendConfirm = useServerFn(sendBookingConfirmation);
   const startPay = useServerFn(startClassCheckout);
   const startGuestPay = useServerFn(startGuestClassCheckout);
@@ -74,6 +82,13 @@ function GrafikPage() {
       setInstructors(i.data ?? []);
     });
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user) { setPackages([]); return; }
+    supabase.rpc("my_active_packages").then(({ data }) => {
+      setPackages(((data ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
+    });
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (!isAuthenticated || !user) { setProfile(null); return; }
@@ -151,6 +166,12 @@ function GrafikPage() {
     return Math.min(c.capacity, typeCapBySlug(slug));
   }
 
+  function packageFor(c: ClassRow): UserPackage | null {
+    const slug = ctMap[c.class_type_id]?.slug;
+    if (!slug) return null;
+    return packages.find((p) => p.credits_left > 0 && p.class_type_slugs.includes(slug)) ?? null;
+  }
+
   function statusOf(c: ClassRow): "available" | "waitlist" | "full" | "cancelled" {
     if (c.is_cancelled) return "cancelled";
     const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
@@ -171,6 +192,7 @@ function GrafikPage() {
     if (isAuthenticated && user && myBookings[c.id]) return;
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
+    const pkg = status === "available" ? packageFor(c) : null;
     setPendingSlot({
       classRow: c,
       slot: {
@@ -182,6 +204,8 @@ function GrafikPage() {
         durationMinutes: c.duration_minutes,
         status: status === "available" ? "available" : "waitlist",
         priceGrosz: c.price_grosz,
+        packageName: pkg?.package_name,
+        packageCreditsLeft: pkg?.credits_left,
       },
     });
   }
@@ -202,6 +226,8 @@ function GrafikPage() {
     const mm: Record<string, string> = {};
     (mine ?? []).forEach((b) => { mm[b.class_id] = b.status; });
     setMyBookings(mm);
+    const { data: pk } = await supabase.rpc("my_active_packages");
+    setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
   }
 
   async function confirmBooking(extras: { phone?: string; smsOptIn?: boolean; guest?: GuestData }) {
@@ -261,6 +287,28 @@ function GrafikPage() {
         phone: extras.phone ?? p?.phone ?? null,
         sms_opt_in: extras.smsOptIn ?? p?.sms_opt_in ?? false,
       }));
+    }
+
+    // CONFIRMED z karnetu — bez płatności
+    if (desired === "confirmed" && pendingSlot.slot.packageCreditsLeft) {
+      const { data: res, error: rpcErr } = await supabase.rpc("book_with_package", {
+        _class_id: pendingSlot.classRow.id,
+      });
+      const out = res as { ok: boolean; error?: string; booking_id?: string; credits_left?: number } | null;
+      if (rpcErr || !out?.ok) {
+        setBookingLoading(false);
+        toast.error(rpcErr?.message ?? out?.error ?? "Nie udało się zapisać z karnetu");
+        refreshAll();
+        return;
+      }
+      toast.success(`Zapisano z karnetu. Pozostało wejść: ${out.credits_left ?? 0}`);
+      setPendingSlot(null);
+      refreshAll();
+      if (out.booking_id) {
+        sendConfirm({ data: { bookingId: out.booking_id } }).catch(() => {});
+      }
+      setBookingLoading(false);
+      return;
     }
 
     // CONFIRMED → płatność online (rezerwacja powstaje po opłaceniu)
