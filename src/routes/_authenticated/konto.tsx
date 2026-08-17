@@ -15,6 +15,12 @@ function AccountPage() {
   const [smsOptIn, setSmsOptIn] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [packages, setPackages] = useState<Array<{ id: string; package_name: string; credits_total: number; credits_left: number; expires_at: string }>>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.rpc("my_active_packages").then(({ data }) => setPackages((data ?? []) as never));
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -66,6 +72,26 @@ function AccountPage() {
                 </span>
               ))}
             </div>
+          </div>
+
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted-foreground">Moje karnety</div>
+            {packages.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">
+                Brak aktywnych karnetów. <Link to="/cennik" className="underline">Zobacz cennik</Link>
+              </p>
+            ) : (
+              <ul className="mt-2 space-y-2">
+                {packages.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between rounded-md border border-foreground/10 bg-cream/40 px-4 py-2.5 text-sm">
+                    <span className="text-foreground">{p.package_name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {p.credits_left}/{p.credits_total} wejść · ważny do {new Date(p.expires_at).toLocaleDateString("pl-PL")}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <Link to="/moje-rezerwacje" className="block rounded-md border border-foreground/15 px-4 py-2.5 text-center text-xs uppercase tracking-widest text-foreground transition-all hover:bg-foreground/5">
