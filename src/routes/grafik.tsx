@@ -491,7 +491,11 @@ function GrafikPage() {
                                 return `Wolne: ${free} z ${cap}`;
                               })()}
                             </span>
-                            {c.price_grosz > 0 && status !== "cancelled" && (
+                            {status === "available" && packageFor(c) ? (
+                              <span className="rounded-sm bg-forest/15 px-1.5 py-0.5 text-[11px] font-medium text-forest">
+                                Karnet
+                              </span>
+                            ) : c.price_grosz > 0 && status !== "cancelled" && (
                               <span className="rounded-sm bg-foreground/5 px-1.5 py-0.5 text-[11px] font-medium text-foreground">
                                 {(c.price_grosz / 100).toFixed(0)} zł
                               </span>
