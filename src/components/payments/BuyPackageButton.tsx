@@ -22,7 +22,7 @@ export function BuyPackageButton({ packageCode, label = "Kup online", className 
     try {
       const { data: s } = await supabase.auth.getSession();
       if (!s.session) {
-        navigate({ to: "/login", search: { next: `/cennik` } as any });
+        navigate({ to: "/login", search: { redirect: "/cennik" } });
         return;
       }
       const r = await checkout({ data: { packageCode } });

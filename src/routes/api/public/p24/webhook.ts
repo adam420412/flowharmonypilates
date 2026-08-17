@@ -25,7 +25,7 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
 
         const { data: pay, error } = await supabaseAdmin
           .from("payments")
-          .select("id, user_id, amount_grosz, currency, status, class_id, booking_id")
+          .select("id, user_id, amount_grosz, currency, status, class_id, booking_id, package_code")
           .eq("session_id", payload.sessionId)
           .maybeSingle();
 
@@ -79,6 +79,33 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
               .select("id")
               .single();
             if (!bErr && ins) bookingId = ins.id;
+          }
+        }
+
+        // Karnety — nadaj wejścia po opłaceniu
+        if (!pay.class_id) {
+          const { PACKAGES } = await import("@/lib/p24.server");
+          const pkg = PACKAGES[pay.package_code as string];
+          if (pkg?.credits && pkg.classTypeSlugs?.length) {
+            const { data: already } = await supabaseAdmin
+              .from("user_packages")
+              .select("id")
+              .eq("payment_id", pay.id)
+              .maybeSingle();
+            if (!already) {
+              const expires = new Date(Date.now() + (pkg.validDays ?? 30) * 24 * 60 * 60 * 1000).toISOString();
+              const { error: pkgErr } = await supabaseAdmin.from("user_packages").insert({
+                user_id: pay.user_id,
+                payment_id: pay.id,
+                package_code: pkg.code,
+                package_name: pkg.name,
+                credits_total: pkg.credits,
+                class_type_slugs: pkg.classTypeSlugs,
+                expires_at: expires,
+              });
+              if (pkgErr) console.error("[P24 webhook] package grant failed", pkgErr);
+              else console.log("[P24 webhook] package granted", { code: pkg.code, user: pay.user_id });
+            }
           }
         }
 

@@ -15,6 +15,8 @@ export type SlotInfo = {
   durationMinutes: number;
   status: "available" | "waitlist";
   priceGrosz?: number;
+  packageName?: string;
+  packageCreditsLeft?: number;
 };
 
 function formatPln(grosz?: number) {
@@ -61,6 +63,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
 
   if (!slot) return null;
   const isWaitlist = slot.status === "waitlist";
+  const usePackage = !isWaitlist && !!slot.packageCreditsLeft;
 
   function handleConfirm() {
     let trimmed = phone.trim();
@@ -113,7 +116,12 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
         {isWaitlist ? (
           <div className="rounded-md border border-terracotta/30 bg-terracotta/10 px-3 py-2 text-xs text-terracotta">
             Komplet — limit miejsc wyczerpany. Możesz dołączyć do listy rezerwowej (bez opłaty).
-            {guestMode && <div className="mt-1">Lista rezerwowa wymaga konta — <Link to="/logowanie" className="underline">zaloguj się</Link> lub <Link to="/rejestracja" className="underline">załóż konto</Link>.</div>}
+            {guestMode && <div className="mt-1">Lista rezerwowa wymaga konta — <Link to="/login" search={{ redirect: "/" }} className="underline">zaloguj się</Link> lub <Link to="/rejestracja" className="underline">załóż konto</Link>.</div>}
+          </div>
+        ) : usePackage ? (
+          <div className="rounded-md border border-forest/30 bg-forest/10 px-3 py-2 text-xs text-foreground/80">
+            Zapisujesz się z karnetu <strong>{slot.packageName}</strong> — bez dodatkowej płatności.
+            Pozostałe wejścia po zapisie: <strong>{(slot.packageCreditsLeft ?? 1) - 1}</strong>.
           </div>
         ) : (
           <div className="rounded-md border border-foreground/20 bg-foreground/5 px-3 py-2 text-xs text-foreground/80">
@@ -141,12 +149,12 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
           </div>
         </div>
 
-        {guestMode && !isWaitlist && (
+        {guestMode && !isWaitlist && !usePackage && (
           <div className="space-y-3 rounded-lg border border-terracotta/20 bg-terracotta/5 p-4">
             <div className="flex items-start gap-2 text-xs text-mocha">
               <UserPlus className="mt-0.5 h-3.5 w-3.5 shrink-0" />
               <span>
-                Rezerwujesz bez logowania. Po opłaceniu utworzymy Ci konto i wyślemy e-mail z linkiem do ustawienia hasła. Masz już konto? <Link to="/logowanie" className="underline">Zaloguj się</Link>.
+                Rezerwujesz bez logowania. Po opłaceniu utworzymy Ci konto i wyślemy e-mail z linkiem do ustawienia hasła. Masz już konto? <Link to="/login" search={{ redirect: "/" }} className="underline">Zaloguj się</Link>.
               </span>
             </div>
             <div>
@@ -225,7 +233,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             Anuluj
           </Button>
           <Button onClick={handleConfirm} disabled={loading || (guestMode && isWaitlist)}>
-            {loading ? "Przekierowuję…" : isWaitlist ? "Dopisz na rezerwę" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
+            {loading ? (usePackage ? "Zapisuję…" : "Przekierowuję…") : usePackage ? `Zapisz z karnetu (zostanie ${(slot.packageCreditsLeft ?? 1) - 1})` : isWaitlist ? "Dopisz na rezerwę" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
           </Button>
         </DialogFooter>
       </DialogContent>
