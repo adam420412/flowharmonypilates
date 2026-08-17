@@ -10,17 +10,32 @@ export const Route = createFileRoute("/_authenticated/konto")({
 });
 
 function AccountPage() {
-  const { user, roles, signOut } = useAuth();
+  const { user, session, roles, signOut } = useAuth();
   const [phone, setPhone] = useState("");
   const [smsOptIn, setSmsOptIn] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [packages, setPackages] = useState<Array<{ id: string; package_name: string; credits_total: number; credits_left: number; expires_at: string }>>([]);
+  const [packagesLoading, setPackagesLoading] = useState(true);
+  const [packagesError, setPackagesError] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
-    supabase.rpc("my_active_packages").then(({ data }) => setPackages((data ?? []) as never));
-  }, [user]);
+    if (!user || !session) {
+      setPackages([]);
+      setPackagesLoading(false);
+      return;
+    }
+    let active = true;
+    setPackagesLoading(true);
+    setPackagesError(false);
+    supabase.rpc("my_active_packages").then(({ data, error }) => {
+      if (!active) return;
+      setPackages((data ?? []) as never);
+      setPackagesError(!!error);
+      setPackagesLoading(false);
+    });
+    return () => { active = false; };
+  }, [user?.id, session?.access_token]);
 
   useEffect(() => {
     if (!user) return;
@@ -76,21 +91,30 @@ function AccountPage() {
 
           <div>
             <div className="text-xs uppercase tracking-widest text-muted-foreground">Moje karnety</div>
-            {packages.length === 0 ? (
+            {packagesLoading ? (
+              <p className="mt-2 text-sm text-muted-foreground">Sprawdzam aktywne karnety…</p>
+            ) : packagesError ? (
+              <p className="mt-2 text-sm text-destructive">Nie udało się pobrać karnetów. Odśwież stronę lub zaloguj się ponownie.</p>
+            ) : packages.length === 0 ? (
               <p className="mt-2 text-sm text-muted-foreground">
                 Brak aktywnych karnetów. <Link to="/cennik" className="underline">Zobacz cennik</Link>
               </p>
             ) : (
               <ul className="mt-2 space-y-2">
                 {packages.map((p) => (
-                  <li key={p.id} className="flex items-center justify-between rounded-md border border-foreground/10 bg-cream/40 px-4 py-2.5 text-sm">
-                    <span className="text-foreground">{p.package_name}</span>
-                    <span className="text-xs text-muted-foreground">
+                  <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-forest/30 bg-forest/10 px-4 py-3 text-sm">
+                    <span className="font-medium text-foreground">{p.package_name}</span>
+                    <span className="text-xs text-foreground/70">
                       {p.credits_left}/{p.credits_total} wejść · ważny do {new Date(p.expires_at).toLocaleDateString("pl-PL")}
                     </span>
                   </li>
                 ))}
               </ul>
+            )}
+            {packages.length > 0 && !packagesLoading && (
+              <Link to="/grafik" className="mt-3 inline-block text-xs uppercase tracking-widest text-forest underline underline-offset-4">
+                Wybierz zajęcia i wykorzystaj wejście
+              </Link>
             )}
           </div>
 

@@ -16,6 +16,7 @@ export type SlotInfo = {
   status: "available" | "waitlist";
   priceGrosz?: number;
   packageName?: string;
+  packageId?: string;
   packageCreditsLeft?: number;
 };
 
