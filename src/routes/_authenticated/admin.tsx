@@ -324,7 +324,13 @@ function SettingField({
 
 /* -------------------- Add Class -------------------- */
 
-type ClassTypeOption = { id: string; name: string; slug: string; duration_minutes: number };
+type ClassTypeOption = {
+  id: string;
+  name: string;
+  slug: string;
+  duration_minutes: number;
+  default_price_grosz: number | null;
+};
 
 function toLocalInput(d: Date) {
   const pad = (n: number) => String(n).padStart(2, "0");
