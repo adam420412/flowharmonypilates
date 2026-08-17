@@ -248,16 +248,26 @@ export type PackageDef = {
   code: string;
   name: string;
   amountGrosz: number;
+  /** Liczba wejść w karnecie (brak = pojedyncza płatność bez karnetu) */
+  credits?: number;
+  /** Slugi typów zajęć, na które karnet pozwala się zapisać */
+  classTypeSlugs?: string[];
+  /** Ważność karnetu w dniach */
+  validDays?: number;
 };
+
+const GROUP_SLUGS = ["intro", "reformer-basic"];
+const VIP_SOLO_SLUGS = ["vip-1on1", "cadillac-1on1"];
+const VIP_DUO_SLUGS = ["vip-duo"];
 
 export const PACKAGES: Record<string, PackageDef> = {
   intro: { code: "intro", name: "Wejście Intro", amountGrosz: 9900 },
-  "pack-4": { code: "pack-4", name: "Karnet 4 wejścia", amountGrosz: 39000 },
-  "pack-8": { code: "pack-8", name: "Karnet 8 wejść", amountGrosz: 67000 },
+  "pack-4": { code: "pack-4", name: "Karnet 4 wejścia", amountGrosz: 39000, credits: 4, classTypeSlugs: GROUP_SLUGS, validDays: 30 },
+  "pack-8": { code: "pack-8", name: "Karnet 8 wejść", amountGrosz: 67000, credits: 8, classTypeSlugs: GROUP_SLUGS, validDays: 30 },
   "vip-solo-1": { code: "vip-solo-1", name: "VIP Solo · 1 sesja", amountGrosz: 26000 },
-  "vip-solo-5": { code: "vip-solo-5", name: "VIP Solo · pakiet 5", amountGrosz: 120000 },
+  "vip-solo-5": { code: "vip-solo-5", name: "VIP Solo · pakiet 5", amountGrosz: 120000, credits: 5, classTypeSlugs: VIP_SOLO_SLUGS, validDays: 90 },
   "vip-duo-1": { code: "vip-duo-1", name: "VIP Duo · 1 sesja", amountGrosz: 32000 },
-  "vip-duo-5": { code: "vip-duo-5", name: "VIP Duo · pakiet 5", amountGrosz: 145000 },
+  "vip-duo-5": { code: "vip-duo-5", name: "VIP Duo · pakiet 5", amountGrosz: 145000, credits: 5, classTypeSlugs: VIP_DUO_SLUGS, validDays: 90 },
   // Test 1 zł — tylko do weryfikacji integracji
   "test-1pln": { code: "test-1pln", name: "TEST integracji P24 (1 zł)", amountGrosz: 100 },
 };
