@@ -298,8 +298,9 @@ function GrafikPage() {
     } else {
       setSettledBookingIds(new Set());
     }
-
+    const { data: pk } = await supabase.rpc("my_active_packages");
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
+
   }
 
   async function cancelMyBooking() {
