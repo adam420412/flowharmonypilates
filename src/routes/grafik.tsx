@@ -471,7 +471,7 @@ function GrafikPage() {
           </p>
           <p>
             <strong>Sesje VIP — nie ma pasującego terminu?</strong> W przypadku zajęć indywidualnych
-            (VIP Solo, VIP Duo, Cadillac 1 na 1), jeśli w grafiku nie widzisz godziny, która Ci
+            (VIP Solo, VIP Duo, Cadillac 1 na 1), jeśli w grafiku nie widzisz dnia, który Ci
             odpowiada, zadzwoń do nas:{" "}
             <a href="tel:+48501817979" className="font-semibold text-terracotta underline underline-offset-4">
               +48 501 817 979
@@ -480,8 +480,7 @@ function GrafikPage() {
             w terminach widocznych w grafiku.
           </p>
           <p>
-            <strong>Lista rezerwowa:</strong> działa dla wszystkich rodzajów zajęć — grupowych
-            Reformer Pilates oraz sesji VIP Solo i Duo. Gdy na wybranym terminie nie ma już wolnych
+            <strong>Lista rezerwowa:</strong> gdy na wybranym terminie nie ma już wolnych
             miejsc, możesz zapisać się na listę rezerwową bezpłatnie i bez zobowiązań. Jeśli ktoś
             odwoła rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie
             i rodzaju zajęć, na które zwolniło się miejsce.
