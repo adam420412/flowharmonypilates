@@ -680,7 +680,7 @@ function GrafikPage() {
                                     type="button"
                                     disabled={payingBookingId === mine.id}
                                     onClick={(e) => { e.stopPropagation(); payForExistingBooking(mine.id); }}
-                                    className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-60"
+                                    className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-widest text-cream shadow-sm ring-1 ring-terracotta/40 transition-transform hover:scale-[1.02] disabled:cursor-wait"
                                   >
                                     {payingBookingId === mine.id ? "Przekierowuję…" : `Zapłać ${(c.price_grosz / 100).toFixed(0)} zł`}
                                   </button>
