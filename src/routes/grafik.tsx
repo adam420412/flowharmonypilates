@@ -146,6 +146,8 @@ function GrafikPage() {
         .select("id,starts_at,duration_minutes,capacity,waitlist_capacity,is_cancelled,price_grosz,class_type_id,instructor_id")
         .gte("starts_at", from)
         .lt("starts_at", to)
+        // publikacja nowych zajęć z 5-minutowym opóźnieniem
+        .lte("created_at", new Date(Date.now() - 5 * 60 * 1000).toISOString())
         .order("starts_at"),
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
       isAuthenticated && user
