@@ -3,7 +3,9 @@ import { format } from "date-fns";
 import { pl } from "date-fns/locale";
 import { Loader2, Search, X } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { notifyWaitlistPromoted } from "@/lib/notifications.functions";
 
 type Row = {
   id: string;
