@@ -256,12 +256,12 @@ export type PackageDef = {
   validDays?: number;
 };
 
-const GROUP_SLUGS = ["intro", "reformer-basic"];
+const GROUP_SLUGS = ["reformer-basic", "intro"];
 const VIP_SOLO_SLUGS = ["vip-1on1", "cadillac-1on1"];
 const VIP_DUO_SLUGS = ["vip-duo"];
 
 export const PACKAGES: Record<string, PackageDef> = {
-  intro: { code: "intro", name: "Wejście Intro", amountGrosz: 9900 },
+  intro: { code: "intro", name: "Reformer Pilates · 1 wejście", amountGrosz: 9900, credits: 1, classTypeSlugs: GROUP_SLUGS, validDays: 30 },
   "pack-4": { code: "pack-4", name: "Karnet 4 wejścia", amountGrosz: 39000, credits: 4, classTypeSlugs: GROUP_SLUGS, validDays: 30 },
   "pack-8": { code: "pack-8", name: "Karnet 8 wejść", amountGrosz: 67000, credits: 8, classTypeSlugs: GROUP_SLUGS, validDays: 30 },
   "vip-solo-1": { code: "vip-solo-1", name: "VIP Solo · 1 sesja", amountGrosz: 26000 },
