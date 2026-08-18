@@ -186,3 +186,10 @@ export function formatWaitlistPromotedSms(opts: { className: string; startsAt: s
   });
   return `Flow & Harmony: dnia ${day} o godz. ${time} zwolnil sie termin na ${opts.className} - zachecamy do zapisu! Twoje miejsce z listy rezerwowej zostalo potwierdzone.`;
 }
+
+export function formatWaitlistAddedSms(opts: { className: string; startsAt: string }) {
+  const d = new Date(opts.startsAt);
+  const day = d.toLocaleDateString("pl-PL", { timeZone: "Europe/Warsaw", day: "numeric", month: "numeric" });
+  const time = d.toLocaleTimeString("pl-PL", { timeZone: "Europe/Warsaw", hour: "2-digit", minute: "2-digit" });
+  return `Flow & Harmony: jestes na liscie rezerwowej na ${opts.className} - ${day} o ${time}. Powiadomimy Cie, gdy zwolni sie miejsce.`;
+}
