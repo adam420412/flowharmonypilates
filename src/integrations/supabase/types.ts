@@ -40,6 +40,7 @@ export type Database = {
           class_id: string
           created_at: string
           id: string
+          payment_due_at: string | null
           status: Database["public"]["Enums"]["booking_status"]
           updated_at: string
           user_id: string
@@ -48,6 +49,7 @@ export type Database = {
           class_id: string
           created_at?: string
           id?: string
+          payment_due_at?: string | null
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string
           user_id: string
@@ -56,6 +58,7 @@ export type Database = {
           class_id?: string
           created_at?: string
           id?: string
+          payment_due_at?: string | null
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string
           user_id?: string
@@ -618,6 +621,7 @@ export type Database = {
         Args: { _class_id: string; _package_id?: string }
         Returns: Json
       }
+      booking_is_paid: { Args: { _booking_id: string }; Returns: boolean }
       cancel_booking: { Args: { _booking_id: string }; Returns: Json }
       class_booked_counts: {
         Args: { _from: string; _to: string }
@@ -636,6 +640,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      expire_unpaid_bookings: { Args: never; Returns: Json }
       find_user_id_by_email: { Args: { _email: string }; Returns: string }
       has_role: {
         Args: {

@@ -7,6 +7,7 @@ import {
   formatBookingEmail,
   formatReminderEmail,
   formatReminderSms,
+  formatWaitlistAddedSms,
   formatWaitlistPromotedEmail,
   formatWaitlistPromotedSms,
 } from "./notifications.server";
@@ -85,6 +86,11 @@ export const sendBookingConfirmation = createServerFn({ method: "POST" })
     const studioName = await getStudioName();
 
     const results: Record<string, unknown> = {};
+    const isWaitlist = booking.status === "waitlist";
+    const kind = isWaitlist ? ("waitlist_added" as const) : ("booking_confirmation" as const);
+    // Ponowny zapis na tę samą rezerwację ma wysłać powiadomienie jeszcze raz —
+    // deduplikujemy tylko wysyłki z ostatnich 5 minut.
+    const dedupeAfter = new Date(Date.now() - 5 * 60_000).toISOString();
 
     if (email && emailEnabled !== false) {
       const { subject, body } = formatBookingEmail({
@@ -100,10 +106,27 @@ export const sendBookingConfirmation = createServerFn({ method: "POST" })
         bookingId: booking.id,
         classId: cls.id,
         channel: "email",
-        kind: "booking_confirmation",
+        kind,
         recipient: email,
         subject,
         body,
+        dedupeAfter,
+      });
+    }
+
+    if (isWaitlist && profile?.sms_opt_in && profile.phone) {
+      results.sms = await sendNotification({
+        userId,
+        bookingId: booking.id,
+        classId: cls.id,
+        channel: "sms",
+        kind,
+        recipient: profile.phone,
+        body: formatWaitlistAddedSms({
+          className: ct?.name ?? "Pilates",
+          startsAt: cls.starts_at,
+        }),
+        dedupeAfter,
       });
     }
 

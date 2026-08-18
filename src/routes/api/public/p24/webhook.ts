@@ -69,7 +69,7 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
             .maybeSingle();
           if (existing) {
             if (existing.status !== "confirmed") {
-              await supabaseAdmin.from("bookings").update({ status: "confirmed" }).eq("id", existing.id);
+              await supabaseAdmin.from("bookings").update({ status: "confirmed", payment_due_at: null }).eq("id", existing.id);
             }
             bookingId = existing.id;
           } else {
@@ -119,6 +119,9 @@ export const Route = createFileRoute("/api/public/p24/webhook")({
               booking_id: bookingId,
             })
             .eq("id", pay.id);
+          if (bookingId) {
+            await supabaseAdmin.from("bookings").update({ payment_due_at: null }).eq("id", bookingId);
+          }
           console.log("[P24 webhook] payment marked as paid", { sessionId: payload.sessionId, orderId: payload.orderId });
         }
 

@@ -9,6 +9,7 @@ import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { notifyWaitlistPromoted } from "@/lib/notifications.functions";
+import { payForBooking, expireUnpaidBookings } from "@/lib/booking-payments.functions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +35,7 @@ type BookingRow = {
   id: string;
   status: "confirmed" | "waitlist" | "cancelled";
   created_at: string;
+  payment_due_at?: string | null;
   waitlist_position?: number | null;
   promotion_notices?: PromotionNotice[];
   classes: {
@@ -54,15 +56,30 @@ function MyBookingsPage() {
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const notifyWaitlistPromotedFn = useServerFn(notifyWaitlistPromoted);
+  const payFn = useServerFn(payForBooking);
+  const expireFn = useServerFn(expireUnpaidBookings);
+  const [payingId, setPayingId] = useState<string | null>(null);
+
+  async function pay(bookingId: string) {
+    setPayingId(bookingId);
+    try {
+      const { redirectUrl } = await payFn({ data: { bookingId } });
+      window.location.href = redirectUrl;
+    } catch (e) {
+      setPayingId(null);
+      toast.error(e instanceof Error ? e.message : "Nie udało się rozpocząć płatności");
+    }
+  }
 
   async function load() {
     if (!user) return;
     setLoading(true);
+    try { await expireFn(); } catch { /* ignore */ }
     const [{ data }, { data: settings }] = await Promise.all([
       supabase
         .from("bookings")
         .select(`
-          id, status, created_at,
+          id, status, created_at, payment_due_at,
           classes:class_id (
             id, starts_at, duration_minutes, is_cancelled,
             class_types:class_type_id (name, color),
@@ -104,6 +121,13 @@ function MyBookingsPage() {
   }
 
   useEffect(() => { load(); }, [user]);
+
+  // Odświeżaj co 30 s, by pilnować terminów płatności
+  useEffect(() => {
+    if (!user) return;
+    const t = setInterval(() => { load(); }, 30_000);
+    return () => clearInterval(t);
+  }, [user]);
 
   async function cancel() {
     if (!confirmId) return;
@@ -161,7 +185,14 @@ function MyBookingsPage() {
           ) : (
             <ul className="space-y-3">
               {upcoming.map((b) => (
-                <BookingCard key={b.id} booking={b} hoursBefore={hoursBefore} onCancel={() => setConfirmId(b.id)} />
+                <BookingCard
+                  key={b.id}
+                  booking={b}
+                  hoursBefore={hoursBefore}
+                  onCancel={() => setConfirmId(b.id)}
+                  onPay={() => pay(b.id)}
+                  paying={payingId === b.id}
+                />
               ))}
             </ul>
           )}
@@ -201,15 +232,18 @@ function MyBookingsPage() {
 }
 
 function BookingCard({
-  booking, hoursBefore, onCancel, pastView,
+  booking, hoursBefore, onCancel, onPay, paying, pastView,
 }: {
-  booking: BookingRow; hoursBefore: number; onCancel: () => void; pastView?: boolean;
+  booking: BookingRow; hoursBefore: number; onCancel: () => void; onPay?: () => void; paying?: boolean; pastView?: boolean;
 }) {
   const c = booking.classes;
   if (!c) return null;
   const startsAt = new Date(c.starts_at);
   const hoursUntil = differenceInHours(startsAt, new Date());
   const canCancel = !pastView && booking.status !== "cancelled" && hoursUntil >= hoursBefore && !c.is_cancelled;
+  const dueAt = booking.payment_due_at ? new Date(booking.payment_due_at) : null;
+  const needsPayment =
+    !pastView && booking.status === "confirmed" && !c.is_cancelled && !!dueAt && dueAt.getTime() > Date.now();
 
   const statusBadge =
     c.is_cancelled ? { label: "Zajęcia odwołane", cls: "bg-destructive/15 text-destructive" }
@@ -247,6 +281,13 @@ function BookingCard({
             Jesteś na <strong>{booking.waitlist_position}.</strong> miejscu listy rezerwowej. Powiadomimy Cię, gdy zwolni się miejsce.
           </p>
         )}
+        {!pastView && booking.status === "confirmed" && booking.payment_due_at && new Date(booking.payment_due_at).getTime() > Date.now() && (
+          <p className="mt-2 rounded-lg border border-terracotta/30 bg-terracotta/10 p-2.5 text-xs text-terracotta">
+            Rezerwacja nieopłacona — opłać do{" "}
+            <strong>{format(new Date(booking.payment_due_at), "d MMM, HH:mm", { locale: pl })}</strong>,
+            inaczej termin zostanie automatycznie zwolniony.
+          </p>
+        )}
         {booking.promotion_notices && booking.promotion_notices.length > 0 && (
           <div className="mt-2 rounded-lg border border-forest/30 bg-forest/10 p-2.5">
             <p className="text-[11px] font-medium uppercase tracking-widest text-forest">
@@ -271,7 +312,16 @@ function BookingCard({
         )}
       </div>
       {!pastView && booking.status !== "cancelled" && (
-        <div className="flex flex-col items-end gap-1">
+        <div className="flex flex-col items-end gap-2">
+          {needsPayment && onPay && (
+            <button
+              onClick={onPay}
+              disabled={paying}
+              className="rounded-full bg-terracotta px-5 py-2 text-xs uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-60"
+            >
+              {paying ? "Przekierowuję…" : "Zapłać"}
+            </button>
+          )}
           {canCancel ? (
             <button
               onClick={onCancel}

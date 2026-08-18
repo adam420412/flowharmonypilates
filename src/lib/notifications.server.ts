@@ -12,6 +12,7 @@ export type NotificationKind =
   | "reminder_24h"
   | "reminder_2h_sms"
   | "booking_cancelled"
+  | "waitlist_added"
   | "waitlist_promoted";
 
 export type NotificationChannel = "email" | "sms";
@@ -25,18 +26,21 @@ export async function sendNotification(params: {
   recipient: string;
   subject?: string;
   body: string;
+  /** Pomijaj tylko wysyłki wykonane po tej dacie (ISO) — pozwala wysłać ponownie po ponownym zapisie. */
+  dedupeAfter?: string;
 }) {
-  const { userId, bookingId, classId, channel, kind, recipient, subject, body } = params;
+  const { userId, bookingId, classId, channel, kind, recipient, subject, body, dedupeAfter } = params;
 
   // Idempotencja: jeśli już wysłano dla tej kombinacji booking+channel+kind, pomiń
   if (bookingId) {
-    const { data: existing } = await supabaseAdmin
+    let q = supabaseAdmin
       .from("notification_log")
       .select("id")
       .eq("booking_id", bookingId)
       .eq("channel", channel)
-      .eq("kind", kind)
-      .maybeSingle();
+      .eq("kind", kind);
+    if (dedupeAfter) q = q.gte("created_at", dedupeAfter);
+    const { data: existing } = await q.limit(1).maybeSingle();
     if (existing) {
       return { skipped: true as const, reason: "already_sent" };
     }
@@ -52,7 +56,9 @@ export async function sendNotification(params: {
       subject: subject ?? "Wiadomość od Flow & Harmony",
       body,
       label: kind,
-      idempotencyKey: bookingId ? `${kind}:${bookingId}` : undefined,
+      idempotencyKey: bookingId
+        ? `${kind}:${bookingId}${dedupeAfter ? `:${new Date(dedupeAfter).getTime()}` : ""}`
+        : undefined,
     });
     if (r.ok) {
       sendStatus = "queued";
@@ -179,4 +185,11 @@ export function formatWaitlistPromotedSms(opts: { className: string; startsAt: s
     minute: "2-digit",
   });
   return `Flow & Harmony: dnia ${day} o godz. ${time} zwolnil sie termin na ${opts.className} - zachecamy do zapisu! Twoje miejsce z listy rezerwowej zostalo potwierdzone.`;
+}
+
+export function formatWaitlistAddedSms(opts: { className: string; startsAt: string }) {
+  const d = new Date(opts.startsAt);
+  const day = d.toLocaleDateString("pl-PL", { timeZone: "Europe/Warsaw", day: "numeric", month: "numeric" });
+  const time = d.toLocaleTimeString("pl-PL", { timeZone: "Europe/Warsaw", hour: "2-digit", minute: "2-digit" });
+  return `Flow & Harmony: jestes na liscie rezerwowej na ${opts.className} - ${day} o ${time}. Powiadomimy Cie, gdy zwolni sie miejsce.`;
 }
