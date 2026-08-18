@@ -266,7 +266,7 @@ function GrafikPage() {
       toast.error(error.message);
       return;
     }
-    const res = data as { ok: boolean; error?: string; hours_before?: number } | null;
+    const res = data as { ok: boolean; error?: string; hours_before?: number; voucher_granted?: boolean } | null;
     if (!res?.ok) {
       if (res?.error === "too_late") {
         toast.error(`Rezerwację można odwołać najpóźniej ${res.hours_before} h przed zajęciami.`);
@@ -275,7 +275,11 @@ function GrafikPage() {
       }
       return;
     }
-    toast.success("Rezerwacja odwołana");
+    toast.success(
+      res.voucher_granted
+        ? "Rezerwacja odwołana — opłacone wejście wróciło na Twoje konto (ważne 60 dni)."
+        : "Rezerwacja odwołana",
+    );
     refreshAll();
   }
 
