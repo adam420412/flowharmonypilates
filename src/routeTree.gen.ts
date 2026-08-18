@@ -39,6 +39,7 @@ import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/em
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
 import { Route as ApiPublicP24WebhookRouteImport } from './routes/api/public/p24/webhook'
 import { Route as ApiPublicHooksProcessRemindersRouteImport } from './routes/api/public/hooks/process-reminders'
+import { Route as ApiPublicHooksExpireUnpaidRouteImport } from './routes/api/public/hooks/expire-unpaid'
 
 const ZapomnialemHaslaRoute = ZapomnialemHaslaRouteImport.update({
   id: '/zapomnialem-hasla',
@@ -194,6 +195,12 @@ const ApiPublicHooksProcessRemindersRoute =
     path: '/api/public/hooks/process-reminders',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksExpireUnpaidRoute =
+  ApiPublicHooksExpireUnpaidRouteImport.update({
+    id: '/api/public/hooks/expire-unpaid',
+    path: '/api/public/hooks/expire-unpaid',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/hooks/expire-unpaid': typeof ApiPublicHooksExpireUnpaidRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -249,6 +257,7 @@ export interface FileRoutesByTo {
   '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/hooks/expire-unpaid': typeof ApiPublicHooksExpireUnpaidRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -282,6 +291,7 @@ export interface FileRoutesById {
   '/platnosc/status': typeof PlatnoscStatusRoute
   '/api/public/bootstrap-admin': typeof ApiPublicBootstrapAdminRoute
   '/lovable/email/suppression': typeof LovableEmailSuppressionRoute
+  '/api/public/hooks/expire-unpaid': typeof ApiPublicHooksExpireUnpaidRoute
   '/api/public/hooks/process-reminders': typeof ApiPublicHooksProcessRemindersRoute
   '/api/public/p24/webhook': typeof ApiPublicP24WebhookRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/platnosc/status'
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
+    | '/api/public/hooks/expire-unpaid'
     | '/api/public/hooks/process-reminders'
     | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
@@ -346,6 +357,7 @@ export interface FileRouteTypes {
     | '/platnosc/status'
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
+    | '/api/public/hooks/expire-unpaid'
     | '/api/public/hooks/process-reminders'
     | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
@@ -378,6 +390,7 @@ export interface FileRouteTypes {
     | '/platnosc/status'
     | '/api/public/bootstrap-admin'
     | '/lovable/email/suppression'
+    | '/api/public/hooks/expire-unpaid'
     | '/api/public/hooks/process-reminders'
     | '/api/public/p24/webhook'
     | '/lovable/email/auth/preview'
@@ -408,6 +421,7 @@ export interface RootRouteChildren {
   PlatnoscStatusRoute: typeof PlatnoscStatusRoute
   ApiPublicBootstrapAdminRoute: typeof ApiPublicBootstrapAdminRoute
   LovableEmailSuppressionRoute: typeof LovableEmailSuppressionRoute
+  ApiPublicHooksExpireUnpaidRoute: typeof ApiPublicHooksExpireUnpaidRoute
   ApiPublicHooksProcessRemindersRoute: typeof ApiPublicHooksProcessRemindersRoute
   ApiPublicP24WebhookRoute: typeof ApiPublicP24WebhookRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
@@ -629,6 +643,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksProcessRemindersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/expire-unpaid': {
+      id: '/api/public/hooks/expire-unpaid'
+      path: '/api/public/hooks/expire-unpaid'
+      fullPath: '/api/public/hooks/expire-unpaid'
+      preLoaderRoute: typeof ApiPublicHooksExpireUnpaidRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -669,6 +690,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlatnoscStatusRoute: PlatnoscStatusRoute,
   ApiPublicBootstrapAdminRoute: ApiPublicBootstrapAdminRoute,
   LovableEmailSuppressionRoute: LovableEmailSuppressionRoute,
+  ApiPublicHooksExpireUnpaidRoute: ApiPublicHooksExpireUnpaidRoute,
   ApiPublicHooksProcessRemindersRoute: ApiPublicHooksProcessRemindersRoute,
   ApiPublicP24WebhookRoute: ApiPublicP24WebhookRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
