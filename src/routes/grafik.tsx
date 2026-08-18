@@ -146,9 +146,8 @@ function GrafikPage() {
         .select("id,starts_at,duration_minutes,capacity,waitlist_capacity,is_cancelled,price_grosz,class_type_id,instructor_id")
         .gte("starts_at", from)
         .lt("starts_at", to)
-        // publikacja nowych zajęć z 5-minutowym opóźnieniem
-        .lte("created_at", new Date(Date.now() - 5 * 60 * 1000).toISOString())
         .order("starts_at"),
+
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
       isAuthenticated && user
         ? supabase.from("bookings").select("id,class_id,status,payment_due_at").eq("user_id", user.id).neq("status", "cancelled")
@@ -286,8 +285,22 @@ function GrafikPage() {
     const mm: Record<string, { id: string; status: string; payment_due_at: string | null }> = {};
     (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null }; });
     setMyBookings(mm);
+    const ids = (mine ?? []).map((b) => b.id);
+    if (ids.length) {
+      const [pay, red] = await Promise.all([
+        supabase.from("payments").select("booking_id").eq("status", "paid").in("booking_id", ids),
+        supabase.from("package_redemptions").select("booking_id").in("booking_id", ids),
+      ]);
+      const s = new Set<string>();
+      (pay.data ?? []).forEach((r) => r.booking_id && s.add(r.booking_id));
+      (red.data ?? []).forEach((r) => r.booking_id && s.add(r.booking_id));
+      setSettledBookingIds(s);
+    } else {
+      setSettledBookingIds(new Set());
+    }
     const { data: pk } = await supabase.rpc("my_active_packages");
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
+
   }
 
   async function cancelMyBooking() {
