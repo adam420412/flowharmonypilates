@@ -515,14 +515,15 @@ function GrafikPage() {
             <a href="tel:+48501817979" className="font-semibold text-terracotta underline underline-offset-4">
               +48 501 817 979
             </a>{" "}
-            — ustalimy termin indywidualnie. Zajęcia grupowe Reformer Pilates odbywają się wyłącznie
-            w terminach widocznych w grafiku.
+            — ustalimy termin indywidualnie.
           </p>
           <p>
             <strong>Lista rezerwowa:</strong> gdy na wybranym terminie nie ma już wolnych
             miejsc, możesz zapisać się na listę rezerwową bezpłatnie i bez zobowiązań. Jeśli ktoś
             odwoła rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie
-            i rodzaju zajęć, na które zwolniło się miejsce.
+            i rodzaju zajęć, na które zwolniło się miejsce. Po zwolnieniu się miejsca masz{" "}
+            <strong>24 godziny na opłacenie zajęć</strong> — w przeciwnym razie rezerwacja przepada
+            i miejsce trafia do kolejnej osoby z listy.
           </p>
         </div>
 
