@@ -68,7 +68,7 @@ function GrafikPage() {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [classes, setClasses] = useState<ClassRow[]>([]);
   const [counts, setCounts] = useState<Counts>({});
-  const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string; payment_due_at: string | null }>>({});
+  const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string; payment_due_at: string | null; confirm_due_at: string | null }>>({});
   const [settledBookingIds, setSettledBookingIds] = useState<Set<string>>(new Set());
   const [payingBookingId, setPayingBookingId] = useState<string | null>(null);
   const [cancelClassId, setCancelClassId] = useState<string | null>(null);
@@ -150,8 +150,8 @@ function GrafikPage() {
 
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
       isAuthenticated && user
-        ? supabase.from("bookings").select("id,class_id,status,payment_due_at").eq("user_id", user.id).neq("status", "cancelled")
-        : Promise.resolve({ data: [] as Array<{ id: string; class_id: string; status: string; payment_due_at: string | null }> }),
+        ? supabase.from("bookings").select("id,class_id,status,payment_due_at,confirm_due_at").eq("user_id", user.id).neq("status", "cancelled")
+        : Promise.resolve({ data: [] as Array<{ id: string; class_id: string; status: string; payment_due_at: string | null; confirm_due_at: string | null }> }),
     ]).then(([c, cnt, mine]) => {
       setClasses(c.data ?? []);
       const map: Counts = {};
@@ -159,9 +159,9 @@ function GrafikPage() {
         map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
       });
       setCounts(map);
-      const m: Record<string, { id: string; status: string; payment_due_at: string | null }> = {};
+      const m: Record<string, { id: string; status: string; payment_due_at: string | null; confirm_due_at: string | null }> = {};
       (mine.data ?? []).forEach((b) => {
-        m[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null };
+        m[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null, confirm_due_at: b.confirm_due_at ?? null };
       });
       setMyBookings(m);
       setLoading(false);
@@ -275,15 +275,15 @@ function GrafikPage() {
     const to = addDays(weekStart, 7).toISOString();
     const [{ data: cnt }, { data: mine }] = await Promise.all([
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
-      supabase.from("bookings").select("id,class_id,status,payment_due_at").eq("user_id", user.id).neq("status", "cancelled"),
+      supabase.from("bookings").select("id,class_id,status,payment_due_at,confirm_due_at").eq("user_id", user.id).neq("status", "cancelled"),
     ]);
     const map: Counts = {};
     (cnt ?? []).forEach((r: { class_id: string; confirmed_count: number; waitlist_count: number }) => {
       map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
     });
     setCounts(map);
-    const mm: Record<string, { id: string; status: string; payment_due_at: string | null }> = {};
-    (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null }; });
+    const mm: Record<string, { id: string; status: string; payment_due_at: string | null; confirm_due_at: string | null }> = {};
+    (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null, confirm_due_at: b.confirm_due_at ?? null }; });
     setMyBookings(mm);
     const ids = (mine ?? []).map((b) => b.id);
     if (ids.length) {
@@ -420,7 +420,7 @@ function GrafikPage() {
         setSettledBookingIds((prev) => new Set(prev).add(bid));
         setMyBookings((prev) => ({
           ...prev,
-          [bookedClassId]: { id: bid, status: "confirmed", payment_due_at: null },
+          [bookedClassId]: { id: bid, status: "confirmed", payment_due_at: null, confirm_due_at: null },
         }));
       }
       await refreshAll();
