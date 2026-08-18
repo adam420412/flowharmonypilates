@@ -10,7 +10,7 @@ import { Footer } from "@/components/site/Footer";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { BookingConfirmModal, type SlotInfo, type GuestData } from "@/components/booking/BookingConfirmModal";
-import { sendBookingConfirmation } from "@/lib/notifications.functions";
+import { sendBookingConfirmation, notifyWaitlistPromoted } from "@/lib/notifications.functions";
 import { startClassCheckout } from "@/lib/payments.functions";
 import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
 import {
@@ -79,6 +79,7 @@ function GrafikPage() {
   const [packagesLoading, setPackagesLoading] = useState(false);
   const [packagesError, setPackagesError] = useState(false);
   const sendConfirm = useServerFn(sendBookingConfirmation);
+  const notifyPromoted = useServerFn(notifyWaitlistPromoted);
   const startPay = useServerFn(startClassCheckout);
   const startGuestPay = useServerFn(startGuestClassCheckout);
 
@@ -266,7 +267,7 @@ function GrafikPage() {
       toast.error(error.message);
       return;
     }
-    const res = data as { ok: boolean; error?: string; hours_before?: number; voucher_granted?: boolean } | null;
+    const res = data as { ok: boolean; error?: string; hours_before?: number; voucher_granted?: boolean; promoted_user_id?: string | null } | null;
     if (!res?.ok) {
       if (res?.error === "too_late") {
         toast.error(`Rezerwację można odwołać najpóźniej ${res.hours_before} h przed zajęciami.`);
@@ -280,6 +281,13 @@ function GrafikPage() {
         ? "Rezerwacja odwołana — opłacone wejście wróciło na Twoje konto (ważne 60 dni)."
         : "Rezerwacja odwołana",
     );
+    if (res.promoted_user_id && classId) {
+      try {
+        await notifyPromoted({ data: { classId, promotedUserId: res.promoted_user_id } });
+      } catch (e) {
+        console.error("notifyWaitlistPromoted failed", e);
+      }
+    }
     refreshAll();
   }
 
