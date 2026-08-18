@@ -212,7 +212,9 @@ function GrafikPage() {
       navigate({ to: "/rejestracja" });
       return;
     }
-    if (isAuthenticated && user && myBookings[c.id]) return;
+    // Osoba z listy rezerwowej może dokupić miejsce, gdy się zwolni — rezerwacja zastąpi wpis na liście
+    const existing = isAuthenticated && user ? myBookings[c.id] : null;
+    if (existing && !(existing.status === "waitlist" && status === "available")) return;
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
     const pkg = status === "available" ? packageFor(c) : null;
@@ -557,7 +559,7 @@ function GrafikPage() {
                       const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
                       const status = statusOf(c);
                       const mine = myBookings[c.id];
-                      const clickable = !(status === "full" || status === "cancelled" || !!mine);
+                      const clickable = !(status === "full" || status === "cancelled") && (!mine || (mine.status === "waitlist" && status === "available"));
                       return (
                         <div
                           key={c.id}
@@ -621,7 +623,7 @@ function GrafikPage() {
                           {mine && (
                             <div className="mt-2 border-t border-foreground/10 pt-2">
                               <span className="block text-[11px] font-medium text-terracotta">
-                                {mine.status === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
+                                {mine.status === "confirmed" ? "✓ Zarezerwowane" : status === "available" ? "⏳ Lista rezerwowa · kliknij, by zająć wolne miejsce" : "⏳ Lista rezerwowa"}
                               </span>
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
