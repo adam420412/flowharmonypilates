@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { BookingConfirmModal, type SlotInfo, type GuestData } from "@/components/booking/BookingConfirmModal";
 import { sendBookingConfirmation, notifyWaitlistPromoted } from "@/lib/notifications.functions";
 import { startClassCheckout } from "@/lib/payments.functions";
+import { payForBooking, expireUnpaidBookings } from "@/lib/booking-payments.functions";
 import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
 import {
   AlertDialog,
@@ -66,7 +67,8 @@ function GrafikPage() {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [classes, setClasses] = useState<ClassRow[]>([]);
   const [counts, setCounts] = useState<Counts>({});
-  const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string }>>({});
+  const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string; payment_due_at: string | null }>>({});
+  const [payingBookingId, setPayingBookingId] = useState<string | null>(null);
   const [cancelClassId, setCancelClassId] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
   const [filterType, setFilterType] = useState<string>("all");
@@ -81,6 +83,19 @@ function GrafikPage() {
   const sendConfirm = useServerFn(sendBookingConfirmation);
   const notifyPromoted = useServerFn(notifyWaitlistPromoted);
   const startPay = useServerFn(startClassCheckout);
+  const payBooking = useServerFn(payForBooking);
+  const expireUnpaid = useServerFn(expireUnpaidBookings);
+
+  async function payForExistingBooking(bookingId: string) {
+    setPayingBookingId(bookingId);
+    try {
+      const { redirectUrl } = await payBooking({ data: { bookingId } });
+      window.location.href = redirectUrl;
+    } catch (e) {
+      setPayingBookingId(null);
+      toast.error(e instanceof Error ? e.message : "Nie udało się rozpocząć płatności");
+    }
+  }
   const startGuestPay = useServerFn(startGuestClassCheckout);
 
   const weekDays = useMemo(
@@ -120,6 +135,7 @@ function GrafikPage() {
 
   useEffect(() => {
     setLoading(true);
+    try { await expireUnpaid(); } catch { /* ignore */ }
     const from = weekStart.toISOString();
     const to = addDays(weekStart, 7).toISOString();
     Promise.all([
@@ -237,19 +253,20 @@ function GrafikPage() {
 
   async function refreshAll() {
     if (!user) return;
+    try { await expireUnpaid(); } catch { /* ignore */ }
     const from = weekStart.toISOString();
     const to = addDays(weekStart, 7).toISOString();
     const [{ data: cnt }, { data: mine }] = await Promise.all([
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
-      supabase.from("bookings").select("id,class_id,status").eq("user_id", user.id).neq("status", "cancelled"),
+      supabase.from("bookings").select("id,class_id,status,payment_due_at").eq("user_id", user.id).neq("status", "cancelled"),
     ]);
     const map: Counts = {};
     (cnt ?? []).forEach((r: { class_id: string; confirmed_count: number; waitlist_count: number }) => {
       map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
     });
     setCounts(map);
-    const mm: Record<string, { id: string; status: string }> = {};
-    (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status }; });
+    const mm: Record<string, { id: string; status: string; payment_due_at: string | null }> = {};
+    (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null }; });
     setMyBookings(mm);
     const { data: pk } = await supabase.rpc("my_active_packages");
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
@@ -633,6 +650,21 @@ function GrafikPage() {
                               <span className="block text-[11px] font-medium text-terracotta">
                                 {mine.status === "confirmed" ? "✓ Zarezerwowane" : status === "available" ? "⏳ Lista rezerwowa · kliknij, by zająć wolne miejsce" : "⏳ Lista rezerwowa"}
                               </span>
+                              {mine.status === "confirmed" && mine.payment_due_at && new Date(mine.payment_due_at) > new Date() && !c.is_cancelled && (
+                                <>
+                                  <span className="mt-1 block text-[10px] text-terracotta">
+                                    Nieopłacone — zapłać do {format(new Date(mine.payment_due_at), "d MMM, HH:mm", { locale: pl })}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    disabled={payingBookingId === mine.id}
+                                    onClick={(e) => { e.stopPropagation(); payForExistingBooking(mine.id); }}
+                                    className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-60"
+                                  >
+                                    {payingBookingId === mine.id ? "Przekierowuję…" : "Zapłać"}
+                                  </button>
+                                </>
+                              )}
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
                                   type="button"
