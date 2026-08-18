@@ -250,16 +250,17 @@ function HomePage() {
           <Calendar size={28} className="mx-auto text-terracotta" strokeWidth={1.25} />
           <h2 className="mt-8 font-display text-5xl leading-tight md:text-7xl">
             Zacznij <em className="italic text-terracotta">dziś</em>.
-            <br />Pierwsza sesja Intro za 99 zł.
+            <br />Reformer Pilates za jedyne 99 zł.
           </h2>
           <p className="mx-auto mt-8 max-w-xl text-foreground/80">
-            Pakiet Intro dla nowych klientek — poznaj reformer, naszą filozofię i atmosferę studia.
+            Pojedyncze wejście na sesję reformer pilates — poznaj sprzęt, naszą filozofię
+            i atmosferę studia.
           </p>
           <Link
             to="/grafik"
             className="mt-10 inline-flex items-center gap-3 rounded-full bg-ink px-10 py-4 text-xs font-semibold uppercase tracking-widest text-cream shadow-lg shadow-ink/30 transition-all hover:bg-terracotta hover:shadow-terracotta/40"
           >
-            Zarezerwuj sesję Intro
+            Zarezerwuj sesję reformer
             <ArrowRight size={16} />
           </Link>
           <div className="mt-12 flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-mocha">
