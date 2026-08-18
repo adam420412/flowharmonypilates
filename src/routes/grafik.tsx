@@ -608,6 +608,16 @@ function GrafikPage() {
                               </span>
                             )}
                           </div>
+                          {!mine && status === "waitlist" && (
+                            <div className="mt-2 border-t border-foreground/10 pt-2">
+                              <span className="block text-[11px] font-medium text-terracotta">
+                                Zapisz się na listę rezerwową
+                              </span>
+                              <span className="mt-0.5 block text-[10px] text-muted-foreground">
+                                Bezpłatnie — powiadomimy Cię SMS-em, gdy zwolni się miejsce.
+                              </span>
+                            </div>
+                          )}
                           {mine && (
                             <div className="mt-2 border-t border-foreground/10 pt-2">
                               <span className="block text-[11px] font-medium text-terracotta">
