@@ -87,6 +87,9 @@ function typeCapBySlug(slug?: string | null): number {
       return 1;
     case "vip-duo":
       return 2;
+    case "reformer-basic":
+    case "reformer-flow":
+      return 4;
     default:
       return 20;
   }
