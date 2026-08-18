@@ -93,25 +93,6 @@ export const payForBooking = createServerFn({ method: "POST" })
 export const expireUnpaidBookings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { notifyPromotedBooking } = await import("./waitlist-notify.server");
-
-    const { data, error } = await supabaseAdmin.rpc("expire_unpaid_bookings");
-    if (error) return { ok: false, error: error.message };
-
-    const result = data as {
-      ok: boolean;
-      expired: number;
-      promotions: Array<{ class_id: string; user_id: string; booking_id: string }>;
-    };
-
-    for (const p of result?.promotions ?? []) {
-      try {
-        await notifyPromotedBooking({ classId: p.class_id, userId: p.user_id, bookingId: p.booking_id });
-      } catch (e) {
-        console.error("expireUnpaidBookings notify failed", e);
-      }
-    }
-
-    return { ok: true, expired: result?.expired ?? 0, promoted: result?.promotions?.length ?? 0 };
+    const { runExpireUnpaidBookings } = await import("./expire-unpaid.server");
+    return runExpireUnpaidBookings();
   });
