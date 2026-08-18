@@ -34,21 +34,21 @@ const classes = [
     img: classReformer,
   },
   {
-    name: "VIP Training",
-    sub: "Solo lub w parach",
-    desc: "Indywidualna opieka instruktora w prywatnej sali — solo lub w parze.",
+    name: "VIP Solo",
+    sub: "Trening 1:1",
+    desc: "Indywidualna opieka instruktora w prywatnej sali — reformer lub cadillac.",
     img: classVip,
   },
   {
-    name: "Pilates Intro",
-    sub: "Dla początkujących",
-    desc: "Pierwsza sesja próbna. Poznajemy reformer i fundamenty metody.",
+    name: "VIP Duo",
+    sub: "Trening w parze",
+    desc: "Prywatna sesja dla dwóch osób — pełna uwaga instruktora dla Was obu.",
     img: classIntro,
   },
 ];
 
 const memberships = [
-  { name: "1 Wejście Intro", price: "99", note: "Pierwsza wizyta" },
+  { name: "Reformer Pilates · 1 wejście", price: "99", note: "Pojedyncze zajęcia" },
   { name: "4 Wejścia", price: "390", note: "97,50 zł / sesja" },
   { name: "8 Wejść", price: "670", note: "83,75 zł / sesja" },
   { name: "VIP Solo", price: "260", note: "Trening 1:1 (reformer / cadillac)" },
