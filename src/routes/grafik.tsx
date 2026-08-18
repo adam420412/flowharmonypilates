@@ -135,7 +135,7 @@ function GrafikPage() {
 
   useEffect(() => {
     setLoading(true);
-    try { await expireUnpaid(); } catch { /* ignore */ }
+    void (async () => { try { await expireUnpaid(); } catch { /* ignore */ } })();
     const from = weekStart.toISOString();
     const to = addDays(weekStart, 7).toISOString();
     Promise.all([
@@ -147,8 +147,8 @@ function GrafikPage() {
         .order("starts_at"),
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
       isAuthenticated && user
-        ? supabase.from("bookings").select("id,class_id,status").eq("user_id", user.id).neq("status", "cancelled")
-        : Promise.resolve({ data: [] as Array<{ id: string; class_id: string; status: string }> }),
+        ? supabase.from("bookings").select("id,class_id,status,payment_due_at").eq("user_id", user.id).neq("status", "cancelled")
+        : Promise.resolve({ data: [] as Array<{ id: string; class_id: string; status: string; payment_due_at: string | null }> }),
     ]).then(([c, cnt, mine]) => {
       setClasses(c.data ?? []);
       const map: Counts = {};
@@ -156,9 +156,9 @@ function GrafikPage() {
         map[r.class_id] = { confirmed: r.confirmed_count, waitlist: r.waitlist_count };
       });
       setCounts(map);
-      const m: Record<string, { id: string; status: string }> = {};
+      const m: Record<string, { id: string; status: string; payment_due_at: string | null }> = {};
       (mine.data ?? []).forEach((b) => {
-        m[b.class_id] = { id: b.id, status: b.status };
+        m[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null };
       });
       setMyBookings(m);
       setLoading(false);
