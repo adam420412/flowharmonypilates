@@ -665,10 +665,12 @@ function GrafikPage() {
                               <span className="block text-[11px] font-medium text-terracotta">
                                 {mine.status === "confirmed" ? "✓ Zarezerwowane" : status === "available" ? "⏳ Lista rezerwowa · kliknij, by zająć wolne miejsce" : "⏳ Lista rezerwowa"}
                               </span>
-                              {mine.status === "confirmed" && mine.payment_due_at && new Date(mine.payment_due_at) > new Date() && !c.is_cancelled && (
+                              {mine.status === "confirmed" && !c.is_cancelled && c.price_grosz > 0 && !settledBookingIds.has(mine.id) && new Date(c.starts_at) > new Date() && (
                                 <>
                                   <span className="mt-1 block text-[10px] text-terracotta">
-                                    Nieopłacone — zapłać do {format(new Date(mine.payment_due_at), "d MMM, HH:mm", { locale: pl })}
+                                    {mine.payment_due_at && new Date(mine.payment_due_at) > new Date()
+                                      ? `Nieopłacone — zapłać do ${format(new Date(mine.payment_due_at), "d MMM, HH:mm", { locale: pl })}`
+                                      : "Rezerwacja nieopłacona"}
                                   </span>
                                   <button
                                     type="button"
@@ -676,7 +678,7 @@ function GrafikPage() {
                                     onClick={(e) => { e.stopPropagation(); payForExistingBooking(mine.id); }}
                                     className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-60"
                                   >
-                                    {payingBookingId === mine.id ? "Przekierowuję…" : "Zapłać"}
+                                    {payingBookingId === mine.id ? "Przekierowuję…" : `Zapłać ${(c.price_grosz / 100).toFixed(0)} zł`}
                                   </button>
                                 </>
                               )}
