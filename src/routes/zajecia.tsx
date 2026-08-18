@@ -5,7 +5,6 @@ import { Footer } from "@/components/site/Footer";
 import classReformer from "@/assets/class-reformer.jpg";
 import classVip from "@/assets/class-vip.jpg";
 import classIntro from "@/assets/class-intro.jpg";
-import classCadillac from "@/assets/class-cadillac.jpg";
 
 export const Route = createFileRoute("/zajecia")({
   head: () => ({
