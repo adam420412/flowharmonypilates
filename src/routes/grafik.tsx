@@ -285,7 +285,20 @@ function GrafikPage() {
     const mm: Record<string, { id: string; status: string; payment_due_at: string | null }> = {};
     (mine ?? []).forEach((b) => { mm[b.class_id] = { id: b.id, status: b.status, payment_due_at: b.payment_due_at ?? null }; });
     setMyBookings(mm);
-    const { data: pk } = await supabase.rpc("my_active_packages");
+    const ids = (mine ?? []).map((b) => b.id);
+    if (ids.length) {
+      const [pay, red] = await Promise.all([
+        supabase.from("payments").select("booking_id").eq("status", "paid").in("booking_id", ids),
+        supabase.from("package_redemptions").select("booking_id").in("booking_id", ids),
+      ]);
+      const s = new Set<string>();
+      (pay.data ?? []).forEach((r) => r.booking_id && s.add(r.booking_id));
+      (red.data ?? []).forEach((r) => r.booking_id && s.add(r.booking_id));
+      setSettledBookingIds(s);
+    } else {
+      setSettledBookingIds(new Set());
+    }
+
     setPackages(((pk ?? []) as UserPackage[]).filter((p) => p.credits_left > 0));
   }
 
