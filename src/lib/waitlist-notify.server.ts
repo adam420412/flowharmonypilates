@@ -13,7 +13,7 @@ export async function notifyPromotedBooking(params: {
 }) {
   const { classId, userId, bookingId } = params;
 
-  const [{ data: cls }, { data: profile }, { data: authUser }, { data: studio }] = await Promise.all([
+  const [{ data: cls }, { data: profile }, { data: authUser }, { data: studio }, { data: booking }] = await Promise.all([
     supabaseAdmin
       .from("classes")
       .select("id,starts_at,class_type_id,instructor_id")
@@ -22,6 +22,7 @@ export async function notifyPromotedBooking(params: {
     supabaseAdmin.from("profiles").select("phone,sms_opt_in").eq("id", userId).maybeSingle(),
     supabaseAdmin.auth.admin.getUserById(userId),
     supabaseAdmin.from("app_settings").select("value").eq("key", "studio_name").maybeSingle(),
+    supabaseAdmin.from("bookings").select("confirm_due_at").eq("id", bookingId).maybeSingle(),
   ]);
   if (!cls) return { ok: false as const, reason: "class_not_found" };
 
@@ -34,6 +35,7 @@ export async function notifyPromotedBooking(params: {
   const className = ct?.name ?? "Pilates";
   const instructorName = ins?.full_name ?? "Instruktor";
   const email = authUser?.user?.email;
+  const mode: "payment" | "package" = booking?.confirm_due_at ? "package" : "payment";
 
   if (email) {
     const { subject, body } = formatWaitlistPromotedEmail({
@@ -41,7 +43,9 @@ export async function notifyPromotedBooking(params: {
       className,
       instructorName,
       startsAt: cls.starts_at,
+      mode,
     });
+
     await sendNotification({
       userId,
       bookingId,
