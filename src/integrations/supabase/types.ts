@@ -679,6 +679,10 @@ export type Database = {
           read_ct: number
         }[]
       }
+      try_redeem_package_for_booking: {
+        Args: { _booking_id: string }
+        Returns: boolean
+      }
       waitlist_position: { Args: { _booking_id: string }; Returns: number }
     }
     Enums: {
