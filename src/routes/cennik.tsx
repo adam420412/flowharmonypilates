@@ -153,7 +153,7 @@ function CennikPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="mt-8 flex flex-col gap-2">
+                <div className="mt-auto flex flex-col gap-2 pt-8">
                   <BuyPackageButton
                     packageCode={m.code}
                     label={m.code === "intro" ? `Kup wejście — ${m.price} zł` : `Kup ${m.name.toLowerCase()} — ${m.price} zł`}
@@ -187,7 +187,7 @@ function CennikPage() {
                     <span className="text-sm text-cream/90">zł</span>
                   </div>
                   <p className="mt-2 text-xs uppercase tracking-widest text-cream/75">{v.note}</p>
-                  <div className="mt-6">
+                  <div className="mt-auto pt-6">
                     {v.code.endsWith("-5") ? (
                       <BuyPackageButton
                         packageCode={v.code}
