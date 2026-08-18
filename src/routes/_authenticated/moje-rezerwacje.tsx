@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { notifyWaitlistPromoted } from "@/lib/notifications.functions";
 import { payForBooking, expireUnpaidBookings } from "@/lib/booking-payments.functions";
+import { PaymentCountdown } from "@/components/booking/PaymentCountdown";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -282,11 +283,14 @@ function BookingCard({
           </p>
         )}
         {!pastView && booking.status === "confirmed" && booking.payment_due_at && new Date(booking.payment_due_at).getTime() > Date.now() && (
-          <p className="mt-2 rounded-lg border border-terracotta/30 bg-terracotta/10 p-2.5 text-xs text-terracotta">
-            Rezerwacja nieopłacona — opłać do{" "}
-            <strong>{format(new Date(booking.payment_due_at), "d MMM, HH:mm", { locale: pl })}</strong>,
-            inaczej termin zostanie automatycznie zwolniony.
-          </p>
+          <div className="mt-2 rounded-lg border border-terracotta/30 bg-terracotta/10 p-2.5 text-xs text-terracotta">
+            <PaymentCountdown dueAt={booking.payment_due_at} />
+            <p className="mt-1">
+              Rezerwacja nieopłacona — opłać do{" "}
+              <strong>{format(new Date(booking.payment_due_at), "d MMM, HH:mm", { locale: pl })}</strong>,
+              inaczej termin zostanie automatycznie zwolniony.
+            </p>
+          </div>
         )}
         {booking.promotion_notices && booking.promotion_notices.length > 0 && (
           <div className="mt-2 rounded-lg border border-forest/30 bg-forest/10 p-2.5">
