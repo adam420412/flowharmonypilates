@@ -7,6 +7,7 @@ import {
   formatBookingEmail,
   formatReminderEmail,
   formatReminderSms,
+  formatWaitlistAddedSms,
   formatWaitlistPromotedEmail,
   formatWaitlistPromotedSms,
 } from "./notifications.server";
