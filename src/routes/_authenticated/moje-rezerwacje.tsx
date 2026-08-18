@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import { notifyWaitlistPromoted } from "@/lib/notifications.functions";
 import { payForBooking, expireUnpaidBookings } from "@/lib/booking-payments.functions";
+import { PaymentCountdown } from "@/components/booking/PaymentCountdown";
 import {
   AlertDialog,
   AlertDialogAction,

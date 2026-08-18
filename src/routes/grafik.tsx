@@ -14,6 +14,7 @@ import { sendBookingConfirmation, notifyWaitlistPromoted } from "@/lib/notificat
 import { startClassCheckout } from "@/lib/payments.functions";
 import { payForBooking, expireUnpaidBookings } from "@/lib/booking-payments.functions";
 import { startGuestClassCheckout } from "@/lib/guest-payments.functions";
+import { PaymentCountdown } from "@/components/booking/PaymentCountdown";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -669,7 +670,7 @@ function GrafikPage() {
                                 <>
                                   {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
                                     <span className="mt-1 block">
-                                      <PaymentCountdown dueAt={mine.payment_due_at} onExpire={() => { void refresh(); }} />
+                                      <PaymentCountdown dueAt={mine.payment_due_at} onExpire={() => { void refreshAll(); }} />
                                     </span>
                                   ) : (
                                     <span className="mt-1 block text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
