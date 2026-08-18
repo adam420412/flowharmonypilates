@@ -50,6 +50,7 @@ type ClassRow = {
   price_grosz: number;
   class_type_id: string;
   instructor_id: string;
+  created_at?: string;
 };
 type Counts = Record<string, { confirmed: number; waitlist: number }>;
 type UserPackage = {
@@ -158,7 +159,9 @@ function GrafikPage() {
     Promise.all([
       supabase
         .from("classes")
-        .select("id,starts_at,duration_minutes,capacity,waitlist_capacity,is_cancelled,price_grosz,class_type_id,instructor_id")
+        .select("id,starts_at,duration_minutes,capacity,waitlist_capacity,is_cancelled,price_grosz,class_type_id,instructor_id,created_at")
+        // 5-minutowe opóźnienie publikacji nowo dodanych zajęć
+        .lt("created_at", new Date(Date.now() - 5 * 60_000).toISOString())
         .gte("starts_at", from)
         .lt("starts_at", to)
         .order("starts_at"),
