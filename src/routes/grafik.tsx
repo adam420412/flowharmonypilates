@@ -266,7 +266,7 @@ function GrafikPage() {
       toast.error(error.message);
       return;
     }
-    const res = data as { ok: boolean; error?: string; hours_before?: number } | null;
+    const res = data as { ok: boolean; error?: string; hours_before?: number; voucher_granted?: boolean } | null;
     if (!res?.ok) {
       if (res?.error === "too_late") {
         toast.error(`Rezerwację można odwołać najpóźniej ${res.hours_before} h przed zajęciami.`);
@@ -275,7 +275,11 @@ function GrafikPage() {
       }
       return;
     }
-    toast.success("Rezerwacja odwołana");
+    toast.success(
+      res.voucher_granted
+        ? "Rezerwacja odwołana — opłacone wejście wróciło na Twoje konto (ważne 60 dni)."
+        : "Rezerwacja odwołana",
+    );
     refreshAll();
   }
 
@@ -455,6 +459,25 @@ function GrafikPage() {
             )}
           </div>
         )}
+
+        <div className="mt-6 space-y-3 rounded-2xl border border-terracotta/30 bg-terracotta/10 px-5 py-4 text-sm leading-relaxed text-foreground/85">
+          <p>
+            <strong>Odwoływanie rezerwacji:</strong> zajęcia możesz odwołać najpóźniej na{" "}
+            <strong>24 godziny</strong> przed ich rozpoczęciem — niezależnie od tego, czy korzystasz
+            z karnetu, czy z pojedynczo opłaconych zajęć. Opłacone pojedyncze wejście wraca wtedy na
+            Twoje konto i możesz zapisać się na inny termin bez ponownej płatności.
+          </p>
+          <p>
+            <strong>Zmiana terminu zajęć VIP:</strong> jeśli chcesz przenieść sesję VIP (Solo, Duo lub
+            Cadillac) na inny dzień, skontaktuj się z nami telefonicznie pod numerem{" "}
+            <a href="tel:+48501817979" className="font-semibold text-terracotta underline underline-offset-4">
+              +48 501 817 979
+            </a>{" "}
+            — ustalimy nowy termin indywidualnie.
+          </p>
+        </div>
+
+
 
         {/* Filters */}
         <div className="mt-8 flex flex-wrap items-center gap-3 rounded-2xl border border-foreground/10 bg-background p-4">

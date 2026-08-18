@@ -15,7 +15,7 @@ export const Route = createFileRoute("/cennik")({
   head: () => ({
     meta: [
       { title: "Cennik karnetów — Flow & Harmony | Joanna Konieczna" },
-      { name: "description", content: "Karnety na zajęcia reformer pilates prowadzone przez Joannę Konieczną. Pakiety 4, 8 wejść, sesje VIP oraz pierwsza sesja Intro za 99 zł." },
+      { name: "description", content: "Karnety na zajęcia reformer pilates prowadzone przez Joannę Konieczną. Pojedyncze wejście za 99 zł, pakiety 4 i 8 wejść oraz sesje VIP." },
       { property: "og:title", content: "Cennik — Flow & Harmony | Joanna Konieczna" },
       { property: "og:description", content: "Wybierz pakiet, który odpowiada Twojemu rytmowi." },
     ],
@@ -36,11 +36,11 @@ type Membership = {
 const introOffers: Membership[] = [
   {
     code: "intro",
-    name: "Wejście Intro",
+    name: "Reformer Pilates · 1 wejście",
     price: "99",
-    note: "Pierwsza wizyta",
-    desc: "Sesja próbna dla nowych klientek — poznaj reformer i naszą metodę.",
-    perks: ["Sesja 50 min", "Grupa max 4 osoby", "Indywidualne wprowadzenie"],
+    note: "Pojedyncze zajęcia",
+    desc: "Pojedyncze wejście na sesję reformer pilates — idealne na start lub gdy chcesz ćwiczyć bez karnetu.",
+    perks: ["Sesja 50 min", "Grupa max 4 osoby", "Ważność 30 dni"],
   },
 ];
 
@@ -79,7 +79,7 @@ function CennikPage() {
 
   const headline =
     typ === "intro"
-      ? "Pierwsza wizyta Intro"
+      ? "Pojedyncze wejście"
       : typ === "reformer"
         ? "Karnety na reformer pilates"
         : typ === "vip"
@@ -154,29 +154,13 @@ function CennikPage() {
                   ))}
                 </ul>
                 <div className="mt-8 flex flex-col gap-2">
-                  {m.code === "intro" ? (
-                    <>
-                      <Link
-                        to="/grafik"
-                        className="inline-flex items-center justify-center rounded-full bg-terracotta px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-foreground"
-                      >
-                        Zarezerwuj termin
-                      </Link>
-                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
-                        Wybierz termin w grafiku i zapłać online
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <BuyPackageButton
-                        packageCode={m.code}
-                        label={`Kup ${m.name.toLowerCase()} — ${m.price} zł`}
-                      />
-                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
-                        Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
-                      </p>
-                    </>
-                  )}
+                  <BuyPackageButton
+                    packageCode={m.code}
+                    label={m.code === "intro" ? `Kup wejście — ${m.price} zł` : `Kup ${m.name.toLowerCase()} — ${m.price} zł`}
+                  />
+                  <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                    Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
+                  </p>
                 </div>
               </article>
             ))}
@@ -232,7 +216,7 @@ function CennikPage() {
             Gotowa, by zacząć?
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-foreground/80">
-            Załóż konto online — w 2 minuty wybierzesz termin pierwszej sesji Intro.
+            Załóż konto online — w 2 minuty wybierzesz termin pierwszych zajęć.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link

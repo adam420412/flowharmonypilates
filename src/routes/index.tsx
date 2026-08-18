@@ -34,21 +34,21 @@ const classes = [
     img: classReformer,
   },
   {
-    name: "VIP Training",
-    sub: "Solo lub w parach",
-    desc: "Indywidualna opieka instruktora w prywatnej sali — solo lub w parze.",
+    name: "VIP Solo",
+    sub: "Trening 1:1",
+    desc: "Indywidualna opieka instruktora w prywatnej sali — reformer lub cadillac.",
     img: classVip,
   },
   {
-    name: "Pilates Intro",
-    sub: "Dla początkujących",
-    desc: "Pierwsza sesja próbna. Poznajemy reformer i fundamenty metody.",
+    name: "VIP Duo",
+    sub: "Trening w parze",
+    desc: "Prywatna sesja dla dwóch osób — pełna uwaga instruktora dla Was obu.",
     img: classIntro,
   },
 ];
 
 const memberships = [
-  { name: "1 Wejście Intro", price: "99", note: "Pierwsza wizyta" },
+  { name: "Reformer Pilates · 1 wejście", price: "99", note: "Pojedyncze zajęcia" },
   { name: "4 Wejścia", price: "390", note: "97,50 zł / sesja" },
   { name: "8 Wejść", price: "670", note: "83,75 zł / sesja" },
   { name: "VIP Solo", price: "260", note: "Trening 1:1 (reformer / cadillac)" },
@@ -250,16 +250,17 @@ function HomePage() {
           <Calendar size={28} className="mx-auto text-terracotta" strokeWidth={1.25} />
           <h2 className="mt-8 font-display text-5xl leading-tight md:text-7xl">
             Zacznij <em className="italic text-terracotta">dziś</em>.
-            <br />Pierwsza sesja Intro za 99 zł.
+            <br />Reformer Pilates za jedyne 99 zł.
           </h2>
           <p className="mx-auto mt-8 max-w-xl text-foreground/80">
-            Pakiet Intro dla nowych klientek — poznaj reformer, naszą filozofię i atmosferę studia.
+            Pojedyncze wejście na sesję reformer pilates — poznaj sprzęt, naszą filozofię
+            i atmosferę studia.
           </p>
           <Link
             to="/grafik"
             className="mt-10 inline-flex items-center gap-3 rounded-full bg-ink px-10 py-4 text-xs font-semibold uppercase tracking-widest text-cream shadow-lg shadow-ink/30 transition-all hover:bg-terracotta hover:shadow-terracotta/40"
           >
-            Zarezerwuj sesję Intro
+            Zarezerwuj sesję reformer
             <ArrowRight size={16} />
           </Link>
           <div className="mt-12 flex items-center justify-center gap-2 text-xs uppercase tracking-widest text-mocha">
