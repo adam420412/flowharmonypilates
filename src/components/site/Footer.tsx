@@ -55,8 +55,9 @@ export function Footer() {
                 <span>
                   <strong className="font-normal text-cream">Flow &amp; Harmony</strong><br />ul. Poznańska 117<br />62-023 Kamionki
                   <span className="mt-3 block text-cream/60">
-                    Dane firmy: Fites Joanna Konieczna<br />ul. Piotrowska 3, 61-353 Poznań<br />NIP 7822224858
+                    Dane firmy:<br />Fites Joanna Konieczna<br />ul. Piotrowska 3, 61-353 Poznań<br />NIP 7822224858
                   </span>
+
                 </span>
               </li>
 
