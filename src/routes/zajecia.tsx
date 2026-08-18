@@ -5,7 +5,6 @@ import { Footer } from "@/components/site/Footer";
 import classReformer from "@/assets/class-reformer.jpg";
 import classVip from "@/assets/class-vip.jpg";
 import classIntro from "@/assets/class-intro.jpg";
-import classCadillac from "@/assets/class-cadillac.jpg";
 
 export const Route = createFileRoute("/zajecia")({
   head: () => ({
@@ -45,43 +44,30 @@ const offers: Offer[] = [
     priceTyp: "reformer",
   },
   {
-    name: "VIP Training",
-    sub: "Solo lub w parach",
+    name: "VIP Solo",
+    sub: "Trening 1:1",
     duration: "50 min",
     img: classVip,
-    desc: "Indywidualna opieka instruktora w prywatnej sali — solo lub w parze. Plan szyty pod Ciebie, dla osób chcących pracować z konkretnym celem.",
+    desc: "Indywidualna opieka instruktora w prywatnej sali — reformer lub cadillac. Plan szyty pod Ciebie, dla osób chcących pracować z konkretnym celem.",
     bullets: [
       "Pełna personalizacja i biomechaniczna analiza",
       "Świetne dla rehabilitacji i okresu okołoporodowego",
-      "Możliwość treningu z partnerką / partnerem",
+      "Do wyboru reformer lub pełnowymiarowy cadillac",
     ],
     priceTyp: "vip",
   },
   {
-    name: "VIP Cadillac 1:1",
-    sub: "Indywidualne • rozbudowane urządzenie",
-    duration: "50 min",
-    img: classCadillac,
-    desc: "Sesja indywidualna na Cadillacu — rozbudowanym urządzeniu z trapezem, sprężynami i drążkami. Pełen wachlarz ćwiczeń mobilizacyjnych, wzmacniających i rehabilitacyjnych w pracy 1:1 z instruktorem. Rozliczana w cenach VIP Training.",
-    bullets: [
-      "Praca 1:1 na pełnowymiarowym Cadillacu",
-      "Idealne przy bólach pleców i ograniczeniach mobilności",
-      "Cena jak za VIP Training",
-    ],
-    priceTyp: "vip",
-  },
-  {
-    name: "Pilates Intro",
-    sub: "Dla początkujących",
+    name: "VIP Duo",
+    sub: "Trening w parze",
     duration: "50 min",
     img: classIntro,
-    desc: "Pierwsza sesja próbna. Poznajemy reformer, ustawiamy ciało, omawiamy fundamenty metody. Rekomendowana przed dołączeniem do zajęć grupowych.",
+    desc: "Prywatna sesja dla dwóch osób — pełna uwaga instruktora dla Was obu. Idealne, gdy chcecie ćwiczyć razem, zachowując kameralny, indywidualny charakter zajęć.",
     bullets: [
-      "Bez doświadczenia — prowadzimy krok po kroku",
-      "Omawiamy bezpieczeństwo i sprzęt",
-      "Pierwsza wizyta tylko 99 zł",
+      "Trening dla dwóch osób w prywatnej sali",
+      "Program dopasowany do możliwości obu osób",
+      "Świetny wybór na start z partnerką / partnerem",
     ],
-    priceTyp: "intro",
+    priceTyp: "vip",
   },
 ];
 

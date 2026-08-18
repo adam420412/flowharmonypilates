@@ -491,9 +491,16 @@ function GrafikPage() {
             ) : packagesError ? (
               <span className="text-destructive">Nie udało się pobrać karnetu. Odśwież stronę lub zaloguj się ponownie.</span>
             ) : packages.length > 0 ? (
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span><strong>{packages[0].package_name}</strong>: {packages[0].credits_left} dostępne wejścia</span>
-                <span className="text-xs text-muted-foreground">Przy pasujących zajęciach rezerwacja użyje wejścia automatycznie.</span>
+              <div className="space-y-2">
+                {packages.map((p) => (
+                  <div key={p.id} className="flex flex-wrap items-center justify-between gap-2">
+                    <span><strong>{p.package_name}</strong>: {p.credits_left} dostępne wejścia</span>
+                    <span className="text-xs text-muted-foreground">
+                      Ważny do {new Date(p.expires_at).toLocaleDateString("pl-PL", { day: "numeric", month: "long", year: "numeric" })}
+                    </span>
+                  </div>
+                ))}
+                <p className="text-xs text-muted-foreground">Przy pasujących zajęciach rezerwacja użyje wejścia automatycznie.</p>
               </div>
             ) : (
               <span className="text-muted-foreground">Nie masz obecnie aktywnego karnetu.</span>
