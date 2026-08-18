@@ -235,7 +235,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             Anuluj
           </Button>
           <Button onClick={handleConfirm} disabled={loading || (guestMode && isWaitlist)}>
-            {loading ? (usePackage ? "Zapisuję…" : "Przekierowuję…") : usePackage ? `Zapisz z karnetu (zostanie ${(slot.packageCreditsLeft ?? 1) - 1})` : isWaitlist ? "Dopisz na rezerwę" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
+            {loading ? (usePackage ? "Zapisuję…" : "Przekierowuję…") : usePackage ? `Zapisz z karnetu (zostanie ${(slot.packageCreditsLeft ?? 1) - 1})` : isWaitlist ? "Zapisz się na listę rezerwową" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
           </Button>
         </DialogFooter>
       </DialogContent>
