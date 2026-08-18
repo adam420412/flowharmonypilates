@@ -520,7 +520,7 @@ function GrafikPage() {
           <p>
             <strong>Lista rezerwowa:</strong> gdy na wybranym terminie nie ma już wolnych
             miejsc, możesz zapisać się na listę rezerwową bezpłatnie i bez zobowiązań. Jeśli ktoś
-            odwoła rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie
+            odwoła rezerwację, powiadomimy Cię e-mailem z informacją o dacie, godzinie
             i rodzaju zajęć, na które zwolniło się miejsce. Po zwolnieniu się miejsca masz{" "}
             <strong>24 godziny na opłacenie zajęć</strong> — w przeciwnym razie rezerwacja przepada
             i miejsce trafia do kolejnej osoby z listy.
