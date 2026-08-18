@@ -163,6 +163,20 @@ function GrafikPage() {
       });
       setMyBookings(m);
       setLoading(false);
+      const ids = (mine.data ?? []).map((b) => b.id);
+      if (ids.length) {
+        void Promise.all([
+          supabase.from("payments").select("booking_id").eq("status", "paid").in("booking_id", ids),
+          supabase.from("package_redemptions").select("booking_id").in("booking_id", ids),
+        ]).then(([pay, red]) => {
+          const s = new Set<string>();
+          (pay.data ?? []).forEach((r) => r.booking_id && s.add(r.booking_id));
+          (red.data ?? []).forEach((r) => r.booking_id && s.add(r.booking_id));
+          setSettledBookingIds(s);
+        });
+      } else {
+        setSettledBookingIds(new Set());
+      }
     });
   }, [weekStart, isAuthenticated, user]);
 
