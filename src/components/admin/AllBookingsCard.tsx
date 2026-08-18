@@ -78,17 +78,27 @@ export function AllBookingsCard() {
   async function cancel(row: Row) {
     if (!confirm(`Anulować rezerwację: ${row.profile?.display_name ?? "klientka"}?`)) return;
     setCancellingId(row.id);
-    const { error } = await supabase
-      .from("bookings")
-      .update({ status: "cancelled" })
-      .eq("id", row.id);
-    setCancellingId(null);
-    if (error) {
+    const { data, error } = await supabase.rpc("cancel_booking", { _booking_id: row.id });
+    const res = data as { ok: boolean; error?: string; promoted_user_id?: string | null } | null;
+    if (error || !res?.ok) {
+      setCancellingId(null);
       toast.error("Nie udało się anulować");
+      return;
+    }
+    if (res.promoted_user_id) {
+      try {
+        await notifyPromoted({
+          data: { classId: row.class_id, promotedUserId: res.promoted_user_id },
+        });
+        toast.success("Rezerwacja anulowana — osoba z listy rezerwowej dostała powiadomienie");
+      } catch {
+        toast.warning("Rezerwacja anulowana, ale nie udało się wysłać powiadomienia");
+      }
     } else {
       toast.success("Rezerwacja anulowana");
-      void load();
     }
+    setCancellingId(null);
+    void load();
   }
 
   return (
