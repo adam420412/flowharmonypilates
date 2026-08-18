@@ -26,18 +26,21 @@ export async function sendNotification(params: {
   recipient: string;
   subject?: string;
   body: string;
+  /** Pomijaj tylko wysyłki wykonane po tej dacie (ISO) — pozwala wysłać ponownie po ponownym zapisie. */
+  dedupeAfter?: string;
 }) {
-  const { userId, bookingId, classId, channel, kind, recipient, subject, body } = params;
+  const { userId, bookingId, classId, channel, kind, recipient, subject, body, dedupeAfter } = params;
 
   // Idempotencja: jeśli już wysłano dla tej kombinacji booking+channel+kind, pomiń
   if (bookingId) {
-    const { data: existing } = await supabaseAdmin
+    let q = supabaseAdmin
       .from("notification_log")
       .select("id")
       .eq("booking_id", bookingId)
       .eq("channel", channel)
-      .eq("kind", kind)
-      .maybeSingle();
+      .eq("kind", kind);
+    if (dedupeAfter) q = q.gte("created_at", dedupeAfter);
+    const { data: existing } = await q.limit(1).maybeSingle();
     if (existing) {
       return { skipped: true as const, reason: "already_sent" };
     }
@@ -53,7 +56,9 @@ export async function sendNotification(params: {
       subject: subject ?? "Wiadomość od Flow & Harmony",
       body,
       label: kind,
-      idempotencyKey: bookingId ? `${kind}:${bookingId}` : undefined,
+      idempotencyKey: bookingId
+        ? `${kind}:${bookingId}${dedupeAfter ? `:${new Date(dedupeAfter).getTime()}` : ""}`
+        : undefined,
     });
     if (r.ok) {
       sendStatus = "queued";
