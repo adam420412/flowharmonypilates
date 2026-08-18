@@ -515,14 +515,15 @@ function GrafikPage() {
             <a href="tel:+48501817979" className="font-semibold text-terracotta underline underline-offset-4">
               +48 501 817 979
             </a>{" "}
-            — ustalimy termin indywidualnie. Zajęcia grupowe Reformer Pilates odbywają się wyłącznie
-            w terminach widocznych w grafiku.
+            — ustalimy termin indywidualnie.
           </p>
           <p>
             <strong>Lista rezerwowa:</strong> gdy na wybranym terminie nie ma już wolnych
             miejsc, możesz zapisać się na listę rezerwową bezpłatnie i bez zobowiązań. Jeśli ktoś
             odwoła rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie
-            i rodzaju zajęć, na które zwolniło się miejsce.
+            i rodzaju zajęć, na które zwolniło się miejsce. Po zwolnieniu się miejsca masz{" "}
+            <strong>24 godziny na opłacenie zajęć</strong> — w przeciwnym razie rezerwacja przepada
+            i miejsce trafia do kolejnej osoby z listy.
           </p>
         </div>
 
@@ -614,7 +615,7 @@ function GrafikPage() {
                             }
                           }}
                           className={`group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all ${
-                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : "opacity-60"
+                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : mine ? "" : "opacity-60"
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
@@ -679,7 +680,7 @@ function GrafikPage() {
                                     type="button"
                                     disabled={payingBookingId === mine.id}
                                     onClick={(e) => { e.stopPropagation(); payForExistingBooking(mine.id); }}
-                                    className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-60"
+                                    className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-widest text-cream shadow-sm ring-1 ring-terracotta/40 transition-transform hover:scale-[1.02] disabled:cursor-wait"
                                   >
                                     {payingBookingId === mine.id ? "Przekierowuję…" : `Zapłać ${(c.price_grosz / 100).toFixed(0)} zł`}
                                   </button>
