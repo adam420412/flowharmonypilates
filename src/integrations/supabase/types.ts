@@ -38,6 +38,7 @@ export type Database = {
       bookings: {
         Row: {
           class_id: string
+          confirm_due_at: string | null
           created_at: string
           id: string
           payment_due_at: string | null
@@ -47,6 +48,7 @@ export type Database = {
         }
         Insert: {
           class_id: string
+          confirm_due_at?: string | null
           created_at?: string
           id?: string
           payment_due_at?: string | null
@@ -56,6 +58,7 @@ export type Database = {
         }
         Update: {
           class_id?: string
+          confirm_due_at?: string | null
           created_at?: string
           id?: string
           payment_due_at?: string | null
@@ -631,6 +634,7 @@ export type Database = {
           waitlist_count: number
         }[]
       }
+      confirm_attendance: { Args: { _booking_id: string }; Returns: Json }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
