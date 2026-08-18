@@ -669,13 +669,6 @@ function GrafikPage() {
                               </span>
                               {mine.status === "confirmed" && !c.is_cancelled && c.price_grosz > 0 && !settledBookingIds.has(mine.id) && new Date(c.starts_at) > new Date() && (
                                 <>
-                                  {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
-                                    <span className="mt-1 block">
-                                      <PaymentCountdown dueAt={mine.payment_due_at} onExpire={() => { void refreshAll(); }} />
-                                    </span>
-                                  ) : (
-                                    <span className="mt-1 block text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
-                                  )}
                                   <button
                                     type="button"
                                     disabled={payingBookingId === mine.id}
@@ -684,8 +677,18 @@ function GrafikPage() {
                                   >
                                     {payingBookingId === mine.id ? "Przekierowuję…" : `Zapłać ${(c.price_grosz / 100).toFixed(0)} zł`}
                                   </button>
+                                  {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
+                                    <PaymentCountdown
+                                      dueAt={mine.payment_due_at}
+                                      onExpire={() => { void refreshAll(); }}
+                                      className="mt-1 block text-center text-[10px] tabular-nums text-terracotta"
+                                    />
+                                  ) : (
+                                    <span className="mt-1 block text-center text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
+                                  )}
                                 </>
                               )}
+
 
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
