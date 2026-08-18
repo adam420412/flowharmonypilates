@@ -414,6 +414,10 @@ function GrafikPage() {
       }
       toast.success(`Zapisano z karnetu. Pozostało wejść: ${out.credits_left ?? 0}`);
       setPendingSlot(null);
+      if (out.booking_id) {
+        const bid = out.booking_id;
+        setSettledBookingIds((prev) => new Set(prev).add(bid));
+      }
       refreshAll();
       if (out.booking_id) {
         sendConfirm({ data: { bookingId: out.booking_id } }).catch(() => {});
