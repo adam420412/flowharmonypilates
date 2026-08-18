@@ -468,12 +468,18 @@ function GrafikPage() {
             Twoje konto i możesz zapisać się na inny termin bez ponownej płatności.
           </p>
           <p>
-            <strong>Zmiana terminu zajęć VIP:</strong> jeśli chcesz przenieść sesję VIP (Solo, Duo lub
-            Cadillac) na inny dzień, skontaktuj się z nami telefonicznie pod numerem{" "}
+            <strong>Nie ma pasującego terminu?</strong> Jeśli w grafiku nie znajdujesz godziny, która
+            Ci odpowiada (dotyczy to również sesji VIP — Solo, Duo i Cadillac), zadzwoń do nas:{" "}
             <a href="tel:+48501817979" className="font-semibold text-terracotta underline underline-offset-4">
               +48 501 817 979
             </a>{" "}
-            — ustalimy nowy termin indywidualnie.
+            — postaramy się dopasować termin indywidualnie.
+          </p>
+          <p>
+            <strong>Lista rezerwowa:</strong> gdy na zajęciach grupowych nie ma już wolnych miejsc,
+            możesz zapisać się na listę rezerwową — bezpłatnie i bez zobowiązań. Jeśli ktoś odwoła
+            rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie i rodzaju
+            zajęć, na które zwolniło się miejsce.
           </p>
         </div>
 
