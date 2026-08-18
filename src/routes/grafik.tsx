@@ -98,6 +98,21 @@ function GrafikPage() {
       toast.error(e instanceof Error ? e.message : "Nie udało się rozpocząć płatności");
     }
   }
+
+  const [confirmingBookingId, setConfirmingBookingId] = useState<string | null>(null);
+  async function confirmAttendance(bookingId: string) {
+    setConfirmingBookingId(bookingId);
+    const { data, error } = await supabase.rpc("confirm_attendance", { _booking_id: bookingId });
+    const out = data as { ok: boolean; error?: string } | null;
+    setConfirmingBookingId(null);
+    if (error || !out?.ok) {
+      toast.error(error?.message ?? out?.error ?? "Nie udało się potwierdzić obecności");
+      return;
+    }
+    toast.success("Obecność potwierdzona");
+    void refreshAll();
+  }
+
   const startGuestPay = useServerFn(startGuestClassCheckout);
 
   const weekDays = useMemo(
