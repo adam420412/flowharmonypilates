@@ -37,8 +37,10 @@ export function PaymentCountdown({
   }
 
   const total = Math.floor(left / 1000);
-  const mm = String(Math.floor(total / 60)).padStart(2, "0");
+  const hh = String(Math.floor(total / 3600)).padStart(2, "0");
+  const mm = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
   const ss = String(total % 60).padStart(2, "0");
+  const time = `${hh}:${mm}:${ss}`;
   const urgent = total <= 60;
 
   return (
@@ -51,7 +53,7 @@ export function PaymentCountdown({
       }
     >
       <span className={`inline-block h-1.5 w-1.5 rounded-full ${urgent ? "bg-destructive" : "bg-terracotta"} animate-pulse`} />
-      {compact ? `${mm}:${ss}` : `Pozostało ${mm}:${ss} na opłacenie`}
+      {compact ? time : `Pozostało ${time} na opłacenie`}
     </span>
   );
 }
