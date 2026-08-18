@@ -24,7 +24,7 @@ const WaitlistPromoted = ({ name, className = 'zajęcia', classColor = '#c2725a'
     <Body style={s.main}>
       <Container style={s.container}>
         <Heading style={s.h1}>{name ? `Świetna wiadomość, ${name}!` : 'Świetna wiadomość!'}</Heading>
-        <Text style={s.text}>Zwolniło się miejsce i Twoja rezerwacja z listy rezerwowej została automatycznie potwierdzona.</Text>
+        <Text style={s.text}>Zwolnił się termin na te zajęcia – zachęcamy do udziału! Byłaś na liście rezerwowej, więc Twoje miejsce zostało potwierdzone automatycznie.</Text>
         <div style={s.card}>
           <span style={{ ...s.label, backgroundColor: classColor }}>{className}</span>
           <Heading style={{ ...s.h2, margin: '12px 0 8px' }}>{formatDate(startsAt)}</Heading>
