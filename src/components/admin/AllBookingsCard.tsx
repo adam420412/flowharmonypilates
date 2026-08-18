@@ -29,6 +29,7 @@ export function AllBookingsCard() {
   const [status, setStatus] = useState<"all" | "confirmed" | "waitlist" | "cancelled">("all");
   const [scope, setScope] = useState<"future" | "all">("future");
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const notifyPromoted = useServerFn(notifyWaitlistPromoted);
 
   useEffect(() => {
     void load();
