@@ -153,6 +153,8 @@ export function formatWaitlistPromotedEmail(opts: {
   className: string;
   instructorName: string;
   startsAt: string;
+  /** "payment" – trzeba opłacić zajęcia, "package" – wejście z karnetu, trzeba potwierdzić obecność. */
+  mode?: "payment" | "package";
 }) {
   const d = new Date(opts.startsAt);
   const day = d.toLocaleDateString("pl-PL", {
@@ -166,11 +168,16 @@ export function formatWaitlistPromotedEmail(opts: {
     hour: "2-digit",
     minute: "2-digit",
   });
+  const action =
+    opts.mode === "package"
+      ? `Zajęcia zostały pokryte z Twojego karnetu. Jeśli chcesz w nich uczestniczyć, potwierdź swoją obecność – masz na to 24 godziny (przycisk „Potwierdź obecność” w grafiku oraz w panelu Moje rezerwacje). Bez potwierdzenia w ciągu 24 godzin rezerwacja zostanie automatycznie odwołana, a wejście wróci na Twój karnet.`
+      : `Jeśli chcesz uczestniczyć w zajęciach, opłać je – masz na to 24 godziny (przycisk „Zapłać” w grafiku oraz w panelu Moje rezerwacje). Brak płatności w ciągu 24 godzin oznacza automatyczne odwołanie rezerwacji, a miejsce trafi do kolejnej osoby z listy rezerwowej.`;
   return {
     subject: `Zwolnił się termin – ${opts.className}, ${day} o ${time}`,
-    body: `Dnia ${day} o godz. ${time} zwolnił się termin na zajęcia ${opts.className} – zachęcamy do zapisu!\n\nProwadzi: ${opts.instructorName}\nMiejsce: ${opts.studioName}\n\nByłaś na liście rezerwowej, więc Twoje miejsce zostało zarezerwowane automatycznie – znajdziesz je w panelu Moje rezerwacje.\n\nJeśli nie możesz przyjść, odwołaj rezerwację (najpóźniej 24 h przed zajęciami), by zwolnić miejsce kolejnej osobie.`,
+    body: `Dnia ${day} o godz. ${time} zwolnił się termin na zajęcia ${opts.className} – zachęcamy do zapisu!\n\nProwadzi: ${opts.instructorName}\nMiejsce: ${opts.studioName}\n\nByłaś na liście rezerwowej, więc Twoje miejsce zostało zarezerwowane automatycznie.\n\n${action}\n\nJeśli nie możesz przyjść, odwołaj rezerwację (najpóźniej 24 h przed zajęciami), by zwolnić miejsce kolejnej osobie.`,
   };
 }
+
 
 export function formatWaitlistPromotedSms(opts: { className: string; startsAt: string }) {
   const d = new Date(opts.startsAt);
