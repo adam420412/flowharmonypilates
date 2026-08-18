@@ -10,6 +10,7 @@ interface Props {
   instructorName?: string
   startsAt?: string
   bookingsUrl?: string
+  mode?: 'payment' | 'package'
 }
 
 function formatDate(iso?: string) {
@@ -17,7 +18,7 @@ function formatDate(iso?: string) {
   try { return new Date(iso).toLocaleString('pl-PL', { timeZone: 'Europe/Warsaw', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) } catch { return iso }
 }
 
-const WaitlistPromoted = ({ name, className = 'zajęcia', classColor = '#c2725a', instructorName, startsAt, bookingsUrl = 'https://flowharmony.pl/moje-rezerwacje' }: Props) => (
+const WaitlistPromoted = ({ name, className = 'zajęcia', classColor = '#c2725a', instructorName, startsAt, bookingsUrl = 'https://flowharmony.pl/moje-rezerwacje', mode = 'payment' }: Props) => (
   <Html lang="pl" dir="ltr">
     <Head />
     <Preview>Masz miejsce na {className}!</Preview>
@@ -30,13 +31,19 @@ const WaitlistPromoted = ({ name, className = 'zajęcia', classColor = '#c2725a'
           <Heading style={{ ...s.h2, margin: '12px 0 8px' }}>{formatDate(startsAt)}</Heading>
           {instructorName ? <Text style={s.small}>Prowadzi: <strong>{instructorName}</strong></Text> : null}
         </div>
-        <Text style={s.text}>Do zobaczenia w Flow & Harmony 🌿</Text>
-        <Button style={s.button} href={bookingsUrl}>Moje rezerwacje</Button>
+        <Text style={s.text}>
+          {mode === 'package'
+            ? 'Zajęcia zostały pokryte z Twojego karnetu. Jeśli chcesz w nich uczestniczyć, potwierdź swoją obecność — masz na to 24 godziny. Bez potwierdzenia rezerwacja zostanie automatycznie odwołana, a wejście wróci na karnet.'
+            : 'Jeśli chcesz uczestniczyć w zajęciach, opłać je — masz na to 24 godziny. Brak płatności w tym czasie oznacza automatyczne odwołanie rezerwacji, a miejsce trafi do kolejnej osoby z listy rezerwowej.'}
+        </Text>
+        <Text style={s.text}>Do zobaczenia w Flow &amp; Harmony 🌿</Text>
+        <Button style={s.button} href={bookingsUrl}>{mode === 'package' ? 'Potwierdź obecność' : 'Zapłać za zajęcia'}</Button>
         <Text style={s.footer}>Jeśli nie możesz przyjść — odwołaj rezerwację w panelu, by zwolnić miejsce kolejnej osobie.</Text>
       </Container>
     </Body>
   </Html>
 )
+
 
 export const template = {
   component: WaitlistPromoted,
