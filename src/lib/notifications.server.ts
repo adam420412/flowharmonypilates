@@ -12,6 +12,7 @@ export type NotificationKind =
   | "reminder_24h"
   | "reminder_2h_sms"
   | "booking_cancelled"
+  | "waitlist_added"
   | "waitlist_promoted";
 
 export type NotificationChannel = "email" | "sms";
