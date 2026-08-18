@@ -148,7 +148,6 @@ function GrafikPage() {
         .lt("starts_at", to)
         .order("starts_at"),
 
-        .order("starts_at"),
       supabase.rpc("class_booked_counts", { _from: from, _to: to }),
       isAuthenticated && user
         ? supabase.from("bookings").select("id,class_id,status,payment_due_at").eq("user_id", user.id).neq("status", "cancelled")
