@@ -1,0 +1,1 @@
+DELETE FROM public.classes WHERE id IN ('26dbd503-4fe8-47e7-9ebf-93b59e2f3fe3','9f4bbe7d-8809-449b-81b6-0a2faeb87f71','68189122-df46-4340-aa0c-c25d13d904d4');
