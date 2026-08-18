@@ -267,7 +267,7 @@ function GrafikPage() {
       toast.error(error.message);
       return;
     }
-    const res = data as { ok: boolean; error?: string; hours_before?: number; voucher_granted?: boolean } | null;
+    const res = data as { ok: boolean; error?: string; hours_before?: number; voucher_granted?: boolean; promoted_user_id?: string | null } | null;
     if (!res?.ok) {
       if (res?.error === "too_late") {
         toast.error(`Rezerwację można odwołać najpóźniej ${res.hours_before} h przed zajęciami.`);
