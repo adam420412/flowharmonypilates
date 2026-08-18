@@ -109,14 +109,15 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
           </DialogTitle>
           <DialogDescription>
             {isWaitlist
-              ? "Brak wolnych miejsc. Dopisanie do rezerwy daje Ci szansę wejścia, gdy ktoś odwoła zajęcia."
+              ? "Na te zajęcia nie ma już wolnych miejsc — zapisz się na listę rezerwową."
               : "Sprawdź szczegóły zajęć przed potwierdzeniem."}
           </DialogDescription>
         </DialogHeader>
 
         {isWaitlist ? (
           <div className="rounded-md border border-terracotta/30 bg-terracotta/10 px-3 py-2 text-xs text-terracotta">
-            Komplet — limit miejsc wyczerpany. Możesz dołączyć do listy rezerwowej (bez opłaty).
+            Zapis na listę rezerwową jest bezpłatny i niezobowiązujący. Gdy ktoś odwoła rezerwację,
+            powiadomimy Cię SMS-em i e-mailem — z datą, godziną i rodzajem zajęć.
             {guestMode && <div className="mt-1">Lista rezerwowa wymaga konta — <Link to="/login" search={{ redirect: "/" }} className="underline">zaloguj się</Link> lub <Link to="/rejestracja" className="underline">załóż konto</Link>.</div>}
           </div>
         ) : usePackage ? (
@@ -234,7 +235,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
             Anuluj
           </Button>
           <Button onClick={handleConfirm} disabled={loading || (guestMode && isWaitlist)}>
-            {loading ? (usePackage ? "Zapisuję…" : "Przekierowuję…") : usePackage ? `Zapisz z karnetu (zostanie ${(slot.packageCreditsLeft ?? 1) - 1})` : isWaitlist ? "Dopisz na rezerwę" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
+            {loading ? (usePackage ? "Zapisuję…" : "Przekierowuję…") : usePackage ? `Zapisz z karnetu (zostanie ${(slot.packageCreditsLeft ?? 1) - 1})` : isWaitlist ? "Zapisz się na listę rezerwową" : slot.priceGrosz ? `Zapłać i zarezerwuj (${formatPln(slot.priceGrosz)})` : "Zapłać i zarezerwuj"}
           </Button>
         </DialogFooter>
       </DialogContent>

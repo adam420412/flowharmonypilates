@@ -212,7 +212,9 @@ function GrafikPage() {
       navigate({ to: "/rejestracja" });
       return;
     }
-    if (isAuthenticated && user && myBookings[c.id]) return;
+    // Osoba z listy rezerwowej może dokupić miejsce, gdy się zwolni — rezerwacja zastąpi wpis na liście
+    const existing = isAuthenticated && user ? myBookings[c.id] : null;
+    if (existing && !(existing.status === "waitlist" && status === "available")) return;
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
     const pkg = status === "available" ? packageFor(c) : null;
@@ -468,12 +470,18 @@ function GrafikPage() {
             Twoje konto i możesz zapisać się na inny termin bez ponownej płatności.
           </p>
           <p>
-            <strong>Zmiana terminu zajęć VIP:</strong> jeśli chcesz przenieść sesję VIP (Solo, Duo lub
-            Cadillac) na inny dzień, skontaktuj się z nami telefonicznie pod numerem{" "}
+            <strong>Nie ma pasującego terminu?</strong> Jeśli w grafiku nie znajdujesz godziny, która
+            Ci odpowiada (dotyczy to również sesji VIP — Solo, Duo i Cadillac), zadzwoń do nas:{" "}
             <a href="tel:+48501817979" className="font-semibold text-terracotta underline underline-offset-4">
               +48 501 817 979
             </a>{" "}
-            — ustalimy nowy termin indywidualnie.
+            — postaramy się dopasować termin indywidualnie.
+          </p>
+          <p>
+            <strong>Lista rezerwowa:</strong> gdy na zajęciach grupowych nie ma już wolnych miejsc,
+            możesz zapisać się na listę rezerwową — bezpłatnie i bez zobowiązań. Jeśli ktoś odwoła
+            rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie i rodzaju
+            zajęć, na które zwolniło się miejsce.
           </p>
         </div>
 
@@ -551,7 +559,7 @@ function GrafikPage() {
                       const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
                       const status = statusOf(c);
                       const mine = myBookings[c.id];
-                      const clickable = !(status === "full" || status === "cancelled" || !!mine);
+                      const clickable = !(status === "full" || status === "cancelled") && (!mine || (mine.status === "waitlist" && status === "available"));
                       return (
                         <div
                           key={c.id}
@@ -602,10 +610,20 @@ function GrafikPage() {
                               </span>
                             )}
                           </div>
+                          {!mine && status === "waitlist" && (
+                            <div className="mt-2 border-t border-foreground/10 pt-2">
+                              <span className="block text-[11px] font-medium text-terracotta">
+                                Zapisz się na listę rezerwową
+                              </span>
+                              <span className="mt-0.5 block text-[10px] text-muted-foreground">
+                                Bezpłatnie — powiadomimy Cię SMS-em, gdy zwolni się miejsce.
+                              </span>
+                            </div>
+                          )}
                           {mine && (
                             <div className="mt-2 border-t border-foreground/10 pt-2">
                               <span className="block text-[11px] font-medium text-terracotta">
-                                {mine.status === "confirmed" ? "✓ Zarezerwowane" : "⏳ Lista rezerwowa"}
+                                {mine.status === "confirmed" ? "✓ Zarezerwowane" : status === "available" ? "⏳ Lista rezerwowa · kliknij, by zająć wolne miejsce" : "⏳ Lista rezerwowa"}
                               </span>
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
