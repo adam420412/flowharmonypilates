@@ -667,11 +667,13 @@ function GrafikPage() {
                               </span>
                               {mine.status === "confirmed" && !c.is_cancelled && c.price_grosz > 0 && !settledBookingIds.has(mine.id) && new Date(c.starts_at) > new Date() && (
                                 <>
-                                  <span className="mt-1 block text-[10px] text-terracotta">
-                                    {mine.payment_due_at && new Date(mine.payment_due_at) > new Date()
-                                      ? `Nieopłacone — zapłać do ${format(new Date(mine.payment_due_at), "d MMM, HH:mm", { locale: pl })}`
-                                      : "Rezerwacja nieopłacona"}
-                                  </span>
+                                  {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
+                                    <span className="mt-1 block">
+                                      <PaymentCountdown dueAt={mine.payment_due_at} onExpire={() => { void refresh(); }} />
+                                    </span>
+                                  ) : (
+                                    <span className="mt-1 block text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
+                                  )}
                                   <button
                                     type="button"
                                     disabled={payingBookingId === mine.id}
@@ -682,6 +684,7 @@ function GrafikPage() {
                                   </button>
                                 </>
                               )}
+
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
                                   type="button"
