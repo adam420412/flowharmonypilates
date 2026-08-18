@@ -37,6 +37,7 @@ type BookingRow = {
   status: "confirmed" | "waitlist" | "cancelled";
   created_at: string;
   payment_due_at?: string | null;
+  confirm_due_at?: string | null;
   waitlist_position?: number | null;
   promotion_notices?: PromotionNotice[];
   classes: {
@@ -72,6 +73,20 @@ function MyBookingsPage() {
     }
   }
 
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
+  async function confirmPresence(bookingId: string) {
+    setConfirmingId(bookingId);
+    const { data, error } = await supabase.rpc("confirm_attendance", { _booking_id: bookingId });
+    const out = data as { ok: boolean; error?: string } | null;
+    setConfirmingId(null);
+    if (error || !out?.ok) {
+      toast.error(error?.message ?? out?.error ?? "Nie udało się potwierdzić obecności");
+      return;
+    }
+    toast.success("Obecność potwierdzona");
+    void load();
+  }
+
   async function load() {
     if (!user) return;
     setLoading(true);
@@ -80,7 +95,7 @@ function MyBookingsPage() {
       supabase
         .from("bookings")
         .select(`
-          id, status, created_at, payment_due_at,
+          id, status, created_at, payment_due_at, confirm_due_at,
           classes:class_id (
             id, starts_at, duration_minutes, is_cancelled,
             class_types:class_type_id (name, color),
@@ -193,6 +208,8 @@ function MyBookingsPage() {
                   onCancel={() => setConfirmId(b.id)}
                   onPay={() => pay(b.id)}
                   paying={payingId === b.id}
+                  onConfirm={() => void confirmPresence(b.id)}
+                  confirming={confirmingId === b.id}
                 />
               ))}
             </ul>
@@ -233,9 +250,10 @@ function MyBookingsPage() {
 }
 
 function BookingCard({
-  booking, hoursBefore, onCancel, onPay, paying, pastView,
+  booking, hoursBefore, onCancel, onPay, paying, pastView, onConfirm, confirming,
 }: {
   booking: BookingRow; hoursBefore: number; onCancel: () => void; onPay?: () => void; paying?: boolean; pastView?: boolean;
+  onConfirm?: () => void; confirming?: boolean;
 }) {
   const c = booking.classes;
   if (!c) return null;
@@ -245,6 +263,9 @@ function BookingCard({
   const dueAt = booking.payment_due_at ? new Date(booking.payment_due_at) : null;
   const needsPayment =
     !pastView && booking.status === "confirmed" && !c.is_cancelled && !!dueAt && dueAt.getTime() > Date.now();
+  const confirmDueAt = booking.confirm_due_at ? new Date(booking.confirm_due_at) : null;
+  const needsConfirmation =
+    !pastView && booking.status === "confirmed" && !c.is_cancelled && !!confirmDueAt && confirmDueAt.getTime() > Date.now();
 
   const statusBadge =
     c.is_cancelled ? { label: "Zajęcia odwołane", cls: "bg-destructive/15 text-destructive" }
@@ -290,6 +311,14 @@ function BookingCard({
           </p>
         )}
 
+        {needsConfirmation && confirmDueAt && (
+          <p className="mt-2 text-xs text-terracotta">
+            Zajęcia opłacone z karnetu — potwierdź obecność do{" "}
+            <strong>{format(confirmDueAt, "d MMM, HH:mm", { locale: pl })}</strong>,
+            inaczej rezerwacja zostanie automatycznie odwołana, a wejście wróci na karnet.
+          </p>
+        )}
+
         {booking.promotion_notices && booking.promotion_notices.length > 0 && (
           <div className="mt-2 rounded-lg border border-forest/30 bg-forest/10 p-2.5">
             <p className="text-[11px] font-medium uppercase tracking-widest text-forest">
@@ -329,6 +358,21 @@ function BookingCard({
                   dueAt={dueAt}
                   className="text-[10px] tabular-nums text-terracotta"
                 />
+              )}
+            </div>
+          )}
+
+          {needsConfirmation && onConfirm && (
+            <div className="flex flex-col items-end gap-1">
+              <button
+                onClick={onConfirm}
+                disabled={confirming}
+                className="rounded-full bg-terracotta px-5 py-2 text-xs font-semibold uppercase tracking-widest text-cream shadow-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {confirming ? "Potwierdzam…" : "Potwierdź obecność"}
+              </button>
+              {confirmDueAt && (
+                <PaymentCountdown dueAt={confirmDueAt} className="text-[10px] tabular-nums text-terracotta" />
               )}
             </div>
           )}
