@@ -553,9 +553,11 @@ function GrafikPage() {
             miejsc, możesz zapisać się na listę rezerwową bezpłatnie i bez zobowiązań. Jeśli ktoś
             odwoła rezerwację, powiadomimy Cię e-mailem z informacją o dacie, godzinie
             i rodzaju zajęć, na które zwolniło się miejsce. Po zwolnieniu się miejsca masz{" "}
-            <strong>24 godziny na opłacenie zajęć</strong> — w przeciwnym razie rezerwacja przepada
-            i miejsce trafia do kolejnej osoby z listy.
+            <strong>24 godziny na opłacenie zajęć</strong>, a jeśli korzystasz z karnetu —{" "}
+            <strong>24 godziny na potwierdzenie obecności</strong> (przycisk w grafiku).
+            W przeciwnym razie rezerwacja przepada i miejsce trafia do kolejnej osoby z listy.
           </p>
+
         </div>
 
 
