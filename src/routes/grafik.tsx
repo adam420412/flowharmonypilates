@@ -658,7 +658,7 @@ function GrafikPage() {
                                 Zapisz się na listę rezerwową
                               </span>
                               <span className="mt-0.5 block text-[10px] text-muted-foreground">
-                                Bezpłatnie — powiadomimy Cię SMS-em, gdy zwolni się miejsce.
+                                Bezpłatnie — powiadomimy Cię e-mailem, gdy zwolni się miejsce.
                               </span>
                             </div>
                           )}
