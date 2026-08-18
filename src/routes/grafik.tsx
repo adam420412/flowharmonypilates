@@ -733,6 +733,23 @@ function GrafikPage() {
                                 </>
                               )}
 
+                              {mine.status === "confirmed" && !c.is_cancelled && mine.confirm_due_at && new Date(mine.confirm_due_at) > new Date() && new Date(c.starts_at) > new Date() && (
+                                <>
+                                  <button
+                                    type="button"
+                                    disabled={confirmingBookingId === mine.id}
+                                    onClick={(e) => { e.stopPropagation(); void confirmAttendance(mine.id); }}
+                                    className="mt-2 w-full rounded-full bg-terracotta px-2 py-1.5 text-center text-[10px] font-semibold uppercase tracking-widest text-cream shadow-sm ring-1 ring-terracotta/40 transition-transform hover:scale-[1.02] disabled:cursor-wait"
+                                  >
+                                    {confirmingBookingId === mine.id ? "Potwierdzam…" : "Potwierdź obecność"}
+                                  </button>
+                                  <PaymentCountdown
+                                    dueAt={mine.confirm_due_at}
+                                    onExpire={() => { void refreshAll(); }}
+                                    className="mt-1 block text-center text-[10px] tabular-nums text-terracotta"
+                                  />
+                                </>
+                              )}
 
 
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
