@@ -50,6 +50,7 @@ type ClassRow = {
   price_grosz: number;
   class_type_id: string;
   instructor_id: string;
+  created_at?: string;
 };
 type Counts = Record<string, { confirmed: number; waitlist: number }>;
 type UserPackage = {
