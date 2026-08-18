@@ -148,28 +148,35 @@ export function formatWaitlistPromotedEmail(opts: {
   instructorName: string;
   startsAt: string;
 }) {
-  const date = new Date(opts.startsAt).toLocaleString("pl-PL", {
+  const d = new Date(opts.startsAt);
+  const day = d.toLocaleDateString("pl-PL", {
     timeZone: "Europe/Warsaw",
     weekday: "long",
     day: "numeric",
     month: "long",
+  });
+  const time = d.toLocaleTimeString("pl-PL", {
+    timeZone: "Europe/Warsaw",
     hour: "2-digit",
     minute: "2-digit",
   });
   return {
-    subject: `Świetna wiadomość – masz miejsce na ${opts.className}!`,
-    body: `Zwolniło się miejsce i Twoja rezerwacja z listy rezerwowej została automatycznie potwierdzona.\n\nZajęcia: ${opts.className}\nProwadzi: ${opts.instructorName}\nTermin: ${date}\n\nDo zobaczenia w ${opts.studioName} 🌿\n\nJeśli nie możesz przyjść — odwołaj rezerwację w panelu Moje rezerwacje, by zwolnić miejsce kolejnej osobie.`,
+    subject: `Zwolnił się termin – ${opts.className}, ${day} o ${time}`,
+    body: `Dnia ${day} o godz. ${time} zwolnił się termin na zajęcia ${opts.className} – zachęcamy do zapisu!\n\nProwadzi: ${opts.instructorName}\nMiejsce: ${opts.studioName}\n\nByłaś na liście rezerwowej, więc Twoje miejsce zostało zarezerwowane automatycznie – znajdziesz je w panelu Moje rezerwacje.\n\nJeśli nie możesz przyjść, odwołaj rezerwację (najpóźniej 24 h przed zajęciami), by zwolnić miejsce kolejnej osobie.`,
   };
 }
 
 export function formatWaitlistPromotedSms(opts: { className: string; startsAt: string }) {
-  const date = new Date(opts.startsAt).toLocaleString("pl-PL", {
+  const d = new Date(opts.startsAt);
+  const day = d.toLocaleDateString("pl-PL", {
     timeZone: "Europe/Warsaw",
-    weekday: "short",
     day: "numeric",
     month: "numeric",
+  });
+  const time = d.toLocaleTimeString("pl-PL", {
+    timeZone: "Europe/Warsaw",
     hour: "2-digit",
     minute: "2-digit",
   });
-  return `Flow & Harmony: zwolnilo sie miejsce! Twoja rezerwacja na ${opts.className} (${date}) zostala potwierdzona z listy rezerwowej.`;
+  return `Flow & Harmony: dnia ${day} o godz. ${time} zwolnil sie termin na ${opts.className} - zachecamy do zapisu! Twoje miejsce z listy rezerwowej zostalo potwierdzone.`;
 }
