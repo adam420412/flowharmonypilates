@@ -117,7 +117,7 @@ export function BookingConfirmModal({ open, onOpenChange, slot, onConfirm, loadi
         {isWaitlist ? (
           <div className="rounded-md border border-terracotta/30 bg-terracotta/10 px-3 py-2 text-xs text-terracotta">
             Zapis na listę rezerwową jest bezpłatny i niezobowiązujący. Gdy ktoś odwoła rezerwację,
-            powiadomimy Cię SMS-em i e-mailem — z datą, godziną i rodzajem zajęć.
+            powiadomimy Cię e-mailem — z datą, godziną i rodzajem zajęć.
             {guestMode && <div className="mt-1">Lista rezerwowa wymaga konta — <Link to="/login" search={{ redirect: "/" }} className="underline">zaloguj się</Link> lub <Link to="/rejestracja" className="underline">załóż konto</Link>.</div>}
           </div>
         ) : usePackage ? (
