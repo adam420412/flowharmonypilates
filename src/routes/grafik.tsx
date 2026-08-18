@@ -414,6 +414,10 @@ function GrafikPage() {
       }
       toast.success(`Zapisano z karnetu. Pozostało wejść: ${out.credits_left ?? 0}`);
       setPendingSlot(null);
+      if (out.booking_id) {
+        const bid = out.booking_id;
+        setSettledBookingIds((prev) => new Set(prev).add(bid));
+      }
       refreshAll();
       if (out.booking_id) {
         sendConfirm({ data: { bookingId: out.booking_id } }).catch(() => {});
@@ -689,7 +693,7 @@ function GrafikPage() {
                               <span className="block text-[11px] font-medium text-terracotta">
                                 {mine.status === "confirmed" ? "✓ Zarezerwowane" : status === "available" ? "⏳ Lista rezerwowa · kliknij, by zająć wolne miejsce" : "⏳ Lista rezerwowa"}
                               </span>
-                              {mine.status === "confirmed" && !c.is_cancelled && c.price_grosz > 0 && !settledBookingIds.has(mine.id) && new Date(c.starts_at) > new Date() && (
+                              {mine.status === "confirmed" && !c.is_cancelled && c.price_grosz > 0 && !settledBookingIds.has(mine.id) && mine.payment_due_at && new Date(mine.payment_due_at) > new Date() && new Date(c.starts_at) > new Date() && (
                                 <>
                                   <button
                                     type="button"
@@ -699,17 +703,14 @@ function GrafikPage() {
                                   >
                                     {payingBookingId === mine.id ? "Przekierowuję…" : `Zapłać ${(c.price_grosz / 100).toFixed(0)} zł`}
                                   </button>
-                                  {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
-                                    <PaymentCountdown
-                                      dueAt={mine.payment_due_at}
-                                      onExpire={() => { void refreshAll(); }}
-                                      className="mt-1 block text-center text-[10px] tabular-nums text-terracotta"
-                                    />
-                                  ) : (
-                                    <span className="mt-1 block text-center text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
-                                  )}
+                                  <PaymentCountdown
+                                    dueAt={mine.payment_due_at}
+                                    onExpire={() => { void refreshAll(); }}
+                                    className="mt-1 block text-center text-[10px] tabular-nums text-terracotta"
+                                  />
                                 </>
                               )}
+
 
 
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
