@@ -283,15 +283,13 @@ function BookingCard({
           </p>
         )}
         {!pastView && booking.status === "confirmed" && booking.payment_due_at && new Date(booking.payment_due_at).getTime() > Date.now() && (
-          <div className="mt-2 rounded-lg border border-terracotta/30 bg-terracotta/10 p-2.5 text-xs text-terracotta">
-            <PaymentCountdown dueAt={booking.payment_due_at} />
-            <p className="mt-1">
-              Rezerwacja nieopłacona — opłać do{" "}
-              <strong>{format(new Date(booking.payment_due_at), "d MMM, HH:mm", { locale: pl })}</strong>,
-              inaczej termin zostanie automatycznie zwolniony.
-            </p>
-          </div>
+          <p className="mt-2 text-xs text-terracotta">
+            Rezerwacja nieopłacona — opłać do{" "}
+            <strong>{format(new Date(booking.payment_due_at), "d MMM, HH:mm", { locale: pl })}</strong>,
+            inaczej termin zostanie automatycznie zwolniony.
+          </p>
         )}
+
         {booking.promotion_notices && booking.promotion_notices.length > 0 && (
           <div className="mt-2 rounded-lg border border-forest/30 bg-forest/10 p-2.5">
             <p className="text-[11px] font-medium uppercase tracking-widest text-forest">
@@ -318,14 +316,23 @@ function BookingCard({
       {!pastView && booking.status !== "cancelled" && (
         <div className="flex flex-col items-end gap-2">
           {needsPayment && onPay && (
-            <button
-              onClick={onPay}
-              disabled={paying}
-              className="rounded-full bg-terracotta px-5 py-2 text-xs uppercase tracking-widest text-cream transition-opacity hover:opacity-90 disabled:opacity-60"
-            >
-              {paying ? "Przekierowuję…" : "Zapłać"}
-            </button>
+            <div className="flex flex-col items-end gap-1">
+              <button
+                onClick={onPay}
+                disabled={paying}
+                className="rounded-full bg-terracotta px-5 py-2 text-xs font-semibold uppercase tracking-widest text-cream shadow-sm transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {paying ? "Przekierowuję…" : "Zapłać"}
+              </button>
+              {dueAt && (
+                <PaymentCountdown
+                  dueAt={dueAt}
+                  className="text-[10px] tabular-nums text-terracotta"
+                />
+              )}
+            </div>
           )}
+
           {canCancel ? (
             <button
               onClick={onCancel}

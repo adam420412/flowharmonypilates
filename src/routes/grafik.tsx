@@ -520,7 +520,7 @@ function GrafikPage() {
           <p>
             <strong>Lista rezerwowa:</strong> gdy na wybranym terminie nie ma już wolnych
             miejsc, możesz zapisać się na listę rezerwową bezpłatnie i bez zobowiązań. Jeśli ktoś
-            odwoła rezerwację, powiadomimy Cię SMS-em i e-mailem z informacją o dacie, godzinie
+            odwoła rezerwację, powiadomimy Cię e-mailem z informacją o dacie, godzinie
             i rodzaju zajęć, na które zwolniło się miejsce. Po zwolnieniu się miejsca masz{" "}
             <strong>24 godziny na opłacenie zajęć</strong> — w przeciwnym razie rezerwacja przepada
             i miejsce trafia do kolejnej osoby z listy.
@@ -658,7 +658,7 @@ function GrafikPage() {
                                 Zapisz się na listę rezerwową
                               </span>
                               <span className="mt-0.5 block text-[10px] text-muted-foreground">
-                                Bezpłatnie — powiadomimy Cię SMS-em, gdy zwolni się miejsce.
+                                Bezpłatnie — powiadomimy Cię e-mailem, gdy zwolni się miejsce.
                               </span>
                             </div>
                           )}
@@ -669,13 +669,6 @@ function GrafikPage() {
                               </span>
                               {mine.status === "confirmed" && !c.is_cancelled && c.price_grosz > 0 && !settledBookingIds.has(mine.id) && new Date(c.starts_at) > new Date() && (
                                 <>
-                                  {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
-                                    <span className="mt-1 block">
-                                      <PaymentCountdown dueAt={mine.payment_due_at} onExpire={() => { void refreshAll(); }} />
-                                    </span>
-                                  ) : (
-                                    <span className="mt-1 block text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
-                                  )}
                                   <button
                                     type="button"
                                     disabled={payingBookingId === mine.id}
@@ -684,8 +677,18 @@ function GrafikPage() {
                                   >
                                     {payingBookingId === mine.id ? "Przekierowuję…" : `Zapłać ${(c.price_grosz / 100).toFixed(0)} zł`}
                                   </button>
+                                  {mine.payment_due_at && new Date(mine.payment_due_at) > new Date() ? (
+                                    <PaymentCountdown
+                                      dueAt={mine.payment_due_at}
+                                      onExpire={() => { void refreshAll(); }}
+                                      className="mt-1 block text-center text-[10px] tabular-nums text-terracotta"
+                                    />
+                                  ) : (
+                                    <span className="mt-1 block text-center text-[10px] text-terracotta">Rezerwacja nieopłacona</span>
+                                  )}
                                 </>
                               )}
+
 
                               {!c.is_cancelled && new Date(c.starts_at) > new Date() && (
                                 <button
