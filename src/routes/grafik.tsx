@@ -281,6 +281,13 @@ function GrafikPage() {
         ? "Rezerwacja odwołana — opłacone wejście wróciło na Twoje konto (ważne 60 dni)."
         : "Rezerwacja odwołana",
     );
+    if (res.promoted_user_id && classId) {
+      try {
+        await notifyPromoted({ data: { classId, promotedUserId: res.promoted_user_id } });
+      } catch (e) {
+        console.error("notifyWaitlistPromoted failed", e);
+      }
+    }
     refreshAll();
   }
 
