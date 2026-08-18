@@ -68,6 +68,7 @@ function GrafikPage() {
   const [classes, setClasses] = useState<ClassRow[]>([]);
   const [counts, setCounts] = useState<Counts>({});
   const [myBookings, setMyBookings] = useState<Record<string, { id: string; status: string; payment_due_at: string | null }>>({});
+  const [settledBookingIds, setSettledBookingIds] = useState<Set<string>>(new Set());
   const [payingBookingId, setPayingBookingId] = useState<string | null>(null);
   const [cancelClassId, setCancelClassId] = useState<string | null>(null);
   const [cancelling, setCancelling] = useState(false);
