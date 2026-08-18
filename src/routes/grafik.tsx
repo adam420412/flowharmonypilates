@@ -615,7 +615,7 @@ function GrafikPage() {
                             }
                           }}
                           className={`group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all ${
-                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : "opacity-60"
+                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : mine ? "" : "opacity-60"
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
