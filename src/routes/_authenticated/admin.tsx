@@ -87,6 +87,9 @@ function typeCapBySlug(slug?: string | null): number {
       return 1;
     case "vip-duo":
       return 2;
+    case "reformer-basic":
+    case "reformer-flow":
+      return 4;
     default:
       return 20;
   }
@@ -352,7 +355,7 @@ function AddClassCard() {
     return toLocalInput(d);
   });
   const [duration, setDuration] = useState(55);
-  const [capacity, setCapacity] = useState(20);
+  const [capacity, setCapacity] = useState(4);
   const [waitlistCapacity, setWaitlistCapacity] = useState(4);
   const [notes, setNotes] = useState("");
   const [repeatWeeks, setRepeatWeeks] = useState(1);

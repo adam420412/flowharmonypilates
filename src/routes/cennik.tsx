@@ -134,17 +134,19 @@ function CennikPage() {
                 key={m.name}
                 className={`flex flex-col border p-8 ${m.highlight ? "border-terracotta bg-background" : "border-foreground/10 bg-background"}`}
               >
-                {m.highlight && (
-                  <span className="mb-4 inline-block self-start rounded-full bg-terracotta/10 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta">
-                    Najczęściej wybierany
-                  </span>
-                )}
-                <h3 className="font-display text-2xl">{m.name}</h3>
-                <div className="mt-6 flex items-baseline gap-1.5">
+                <div className="mb-4 h-6">
+                  {m.highlight && (
+                    <span className="inline-block rounded-full bg-terracotta/10 px-3 py-1 text-[10px] uppercase tracking-widest text-terracotta">
+                      Najczęściej wybierany
+                    </span>
+                  )}
+                </div>
+                <h3 className="flex min-h-[4rem] items-start font-display text-2xl">{m.name}</h3>
+                <div className="mt-4 flex items-baseline gap-1.5">
                   <span className="font-display text-5xl text-foreground">{m.price}</span>
                   <span className="text-sm text-foreground/80">zł</span>
                 </div>
-                <p className="mt-2 text-xs uppercase tracking-widest text-mocha">{m.note}</p>
+                <p className="mt-2 min-h-8 text-xs uppercase tracking-widest text-mocha">{m.note}</p>
                 <p className="mt-4 text-sm leading-relaxed text-foreground/80">{m.desc}</p>
                 <ul className="mt-6 space-y-2 border-t border-foreground/10 pt-6 text-sm text-foreground/75">
                   {m.perks.map((p) => (
