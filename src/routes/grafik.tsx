@@ -401,8 +401,9 @@ function GrafikPage() {
 
     // CONFIRMED z karnetu — bez płatności
     if (desired === "confirmed" && pendingSlot.slot.packageCreditsLeft) {
+      const bookedClassId = pendingSlot.classRow.id;
       const { data: res, error: rpcErr } = await supabase.rpc("book_with_package", {
-        _class_id: pendingSlot.classRow.id,
+        _class_id: bookedClassId,
         _package_id: pendingSlot.slot.packageId,
       });
       const out = res as { ok: boolean; error?: string; booking_id?: string; credits_left?: number } | null;
@@ -417,8 +418,12 @@ function GrafikPage() {
       if (out.booking_id) {
         const bid = out.booking_id;
         setSettledBookingIds((prev) => new Set(prev).add(bid));
+        setMyBookings((prev) => ({
+          ...prev,
+          [bookedClassId]: { id: bid, status: "confirmed", payment_due_at: null },
+        }));
       }
-      refreshAll();
+      await refreshAll();
       if (out.booking_id) {
         sendConfirm({ data: { bookingId: out.booking_id } }).catch(() => {});
       }
