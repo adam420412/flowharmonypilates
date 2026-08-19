@@ -156,14 +156,31 @@ function CennikPage() {
                   ))}
                 </ul>
                 <div className="mt-auto flex flex-col gap-2 pt-8">
-                  <BuyPackageButton
-                    packageCode={m.code}
-                    label={m.code === "intro" ? `Kup wejście — ${m.price} zł` : `Kup ${m.name.toLowerCase()} — ${m.price} zł`}
-                  />
-                  <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
-                    Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
-                  </p>
+                  {m.code === "intro" ? (
+                    <>
+                      <Link
+                        to="/grafik"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta"
+                      >
+                        Zarezerwuj termin
+                      </Link>
+                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                        Wybierz termin w grafiku i opłać zajęcia
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <BuyPackageButton
+                        packageCode={m.code}
+                        label={`Kup ${m.name.toLowerCase()} — ${m.price} zł`}
+                      />
+                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                        Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
+                      </p>
+                    </>
+                  )}
                 </div>
+
               </article>
             ))}
           </div>
