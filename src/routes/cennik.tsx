@@ -160,11 +160,11 @@ function CennikPage() {
                     <>
                       <Link
                         to="/grafik"
-                        className="inline-flex w-full items-center justify-center rounded-full bg-foreground px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-terracotta"
+                        className="inline-flex w-full items-center justify-center rounded-full bg-terracotta px-6 py-3 text-xs uppercase tracking-widest text-cream hover:bg-foreground"
                       >
                         Zarezerwuj termin
                       </Link>
-                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                      <p className="min-h-[2.25rem] text-center text-[11px] uppercase leading-snug tracking-widest text-foreground/60">
                         Wybierz termin w grafiku i opłać zajęcia
                       </p>
                     </>
@@ -174,12 +174,13 @@ function CennikPage() {
                         packageCode={m.code}
                         label={`Kup ${m.name.toLowerCase()} — ${m.price} zł`}
                       />
-                      <p className="text-center text-[11px] uppercase tracking-widest text-foreground/60">
+                      <p className="min-h-[2.25rem] text-center text-[11px] uppercase leading-snug tracking-widest text-foreground/60">
                         Po opłaceniu zapisujesz się w grafiku bez dodatkowych płatności
                       </p>
                     </>
                   )}
                 </div>
+
 
               </article>
             ))}
