@@ -787,12 +787,16 @@ function GrafikPage() {
                             )}
                           </div>
                           {locked && !mine && (
-                            <div className="mt-2 flex w-full min-w-0 items-start gap-1.5 rounded-md bg-foreground/[0.06] px-2 py-1.5">
-                              <Lock className="mt-[2px] h-3 w-3 shrink-0 text-mocha" />
-                              <span className="min-w-0 flex-1 break-words text-[10px] leading-snug text-muted-foreground">
-                                <span className="block font-medium text-foreground/80">Zapisy zamknięte</span>
-                                Zapisy trwały do 20:00 dnia poprzedzającego.
-                              </span>
+                            <div className="mt-2 w-full min-w-0 rounded-md bg-foreground/[0.06] px-2 py-1.5">
+                              <div className="flex min-w-0 items-center gap-1.5">
+                                <Lock className="h-3 w-3 shrink-0 text-mocha" />
+                                <span className="truncate text-[10px] font-medium leading-snug text-foreground/80">
+                                  Zapisy zamknięte
+                                </span>
+                              </div>
+                              <p className="mt-0.5 text-[10px] leading-snug text-muted-foreground">
+                                Zapisy trwały do 20:00 dnia przed.
+                              </p>
                             </div>
                           )}
                           {!mine && status === "waitlist" && (
