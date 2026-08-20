@@ -588,7 +588,18 @@ function GrafikPage() {
         )}
 
         <div className="mt-6 space-y-3 rounded-2xl border border-terracotta/30 bg-terracotta/10 px-5 py-4 text-sm leading-relaxed text-foreground/85">
+          <p className="flex items-start gap-2">
+            <Lock className="mt-1 h-4 w-4 shrink-0 text-terracotta" />
+            <span>
+              <strong>Termin zapisów:</strong> na wolne miejsca zapiszesz się najpóźniej na{" "}
+              <strong>24 godziny</strong> przed rozpoczęciem zajęć. Gdy do startu zostaje mniej czasu,
+              termin oznaczamy jako <em>„Zapisy zamknięte”</em> — dzięki temu instruktorka może w spokoju
+              przygotować salę dla zapisanych osób. <strong>Na listę rezerwową możesz dopisać się zawsze</strong>,
+              również w ostatniej chwili — jeśli ktoś odwoła rezerwację, powiadomimy Cię e-mailem.
+            </span>
+          </p>
           <p>
+
             <strong>Odwoływanie rezerwacji:</strong> zajęcia możesz odwołać najpóźniej na{" "}
             <strong>24 godziny</strong> przed ich rozpoczęciem — niezależnie od tego, czy korzystasz
             z karnetu, czy z pojedynczo opłaconych zajęć. Opłacone pojedyncze wejście wraca wtedy na
