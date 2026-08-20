@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { addDays, addWeeks, format, startOfWeek } from "date-fns";
 import { pl } from "date-fns/locale";
-import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, Filter, Calendar as CalendarIcon, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Navigation } from "@/components/site/Navigation";
 import { Footer } from "@/components/site/Footer";
@@ -60,6 +60,10 @@ type UserPackage = {
   class_type_slugs: string[];
   expires_at: string;
 };
+
+/** Zapisy na wolne miejsca zamykają się na tyle godzin przed startem zajęć. */
+const BOOKING_LOCK_HOURS = 24;
+
 
 function GrafikPage() {
   const { user, session, isAuthenticated } = useAuth();
@@ -130,6 +134,28 @@ function GrafikPage() {
       setInstructors(i.data ?? []);
     });
   }, []);
+
+  // Po wejściu pokaż tydzień z najbliższymi dostępnymi zajęciami
+  useEffect(() => {
+    let active = true;
+    supabase
+      .from("classes")
+      .select("starts_at")
+      .eq("is_cancelled", false)
+      .lt("created_at", new Date(Date.now() - 5 * 60_000).toISOString())
+      .gte("starts_at", new Date().toISOString())
+      .order("starts_at")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!active || !data?.starts_at) return;
+        const target = startOfWeek(new Date(data.starts_at), { weekStartsOn: 1 });
+        setWeekStart((cur) => (cur.getTime() === target.getTime() ? cur : target));
+      });
+    return () => { active = false; };
+  }, []);
+
+
 
   useEffect(() => {
     if (!isAuthenticated || !user || !session) { setPackages([]); setPackagesLoading(false); return; }
@@ -221,6 +247,7 @@ function GrafikPage() {
 
   const MAX_SEATS = 20;
 
+
   function typeCapBySlug(slug?: string): number {
     switch (slug) {
       case "intro":
@@ -253,9 +280,18 @@ function GrafikPage() {
     return "full";
   }
 
+  /** Zapisy na wolne miejsca zamykają się 24 h przed startem zajęć. */
+  function bookingLocked(c: ClassRow) {
+    return new Date(c.starts_at).getTime() - Date.now() < BOOKING_LOCK_HOURS * 3600_000;
+  }
+
   function openBooking(c: ClassRow) {
     const status = statusOf(c);
     if (status === "full" || status === "cancelled") return;
+    if (status === "available" && bookingLocked(c)) {
+      toast.info(`Zapisy na te zajęcia są już zamknięte — rezerwacja jest możliwa najpóźniej ${BOOKING_LOCK_HOURS} h przed startem.`);
+      return;
+    }
     // Lista rezerwowa wymaga konta
     if (status === "waitlist" && (!isAuthenticated || !user)) {
       toast.info("Lista rezerwowa wymaga konta. Zaloguj się lub załóż darmowe konto.");
@@ -265,6 +301,7 @@ function GrafikPage() {
     // Osoba z listy rezerwowej może dokupić miejsce, gdy się zwolni — rezerwacja zastąpi wpis na liście
     const existing = isAuthenticated && user ? myBookings[c.id] : null;
     if (existing && !(existing.status === "waitlist" && status === "available")) return;
+
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
     const pkg = status === "available" ? packageFor(c) : null;
@@ -551,7 +588,18 @@ function GrafikPage() {
         )}
 
         <div className="mt-6 space-y-3 rounded-2xl border border-terracotta/30 bg-terracotta/10 px-5 py-4 text-sm leading-relaxed text-foreground/85">
+          <p className="flex items-start gap-2">
+            <Lock className="mt-1 h-4 w-4 shrink-0 text-terracotta" />
+            <span>
+              <strong>Termin zapisów:</strong> na wolne miejsca zapiszesz się najpóźniej na{" "}
+              <strong>24 godziny</strong> przed rozpoczęciem zajęć. Gdy do startu zostaje mniej czasu,
+              termin oznaczamy jako <em>„Zapisy zamknięte”</em> — dzięki temu instruktorka może w spokoju
+              przygotować salę dla zapisanych osób. <strong>Na listę rezerwową możesz dopisać się zawsze</strong>,
+              również w ostatniej chwili — jeśli ktoś odwoła rezerwację, powiadomimy Cię e-mailem.
+            </span>
+          </p>
           <p>
+
             <strong>Odwoływanie rezerwacji:</strong> zajęcia możesz odwołać najpóźniej na{" "}
             <strong>24 godziny</strong> przed ich rozpoczęciem — niezależnie od tego, czy korzystasz
             z karnetu, czy z pojedynczo opłaconych zajęć. Opłacone pojedyncze wejście wraca wtedy na
@@ -652,7 +700,8 @@ function GrafikPage() {
                       const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
                       const status = statusOf(c);
                       const mine = myBookings[c.id];
-                      const clickable = !(status === "full" || status === "cancelled") && (!mine || (mine.status === "waitlist" && status === "available"));
+                      const locked = status === "available" && bookingLocked(c);
+                      const clickable = !locked && !(status === "full" || status === "cancelled") && (!mine || (mine.status === "waitlist" && status === "available"));
                       return (
                         <div
                           key={c.id}
@@ -665,10 +714,15 @@ function GrafikPage() {
                               openBooking(c);
                             }
                           }}
-                          className={`group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all ${
-                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : mine ? "" : "opacity-60"
+                          className={`group block w-full rounded-lg border p-3 text-left transition-all ${
+                            locked && !mine
+                              ? "border-dashed border-foreground/20 bg-foreground/[0.04]"
+                              : "border-foreground/10 bg-cream/40"
+                          } ${
+                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : mine ? "" : locked ? "" : "opacity-60"
                           }`}
                         >
+
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium text-sm text-foreground">
                               {format(new Date(c.starts_at), "HH:mm")}
@@ -703,7 +757,17 @@ function GrafikPage() {
                               </span>
                             )}
                           </div>
+                          {locked && !mine && (
+                            <div className="mt-2 flex items-start gap-1.5 rounded-md bg-foreground/[0.06] px-2 py-1.5">
+                              <Lock className="mt-[1px] h-3 w-3 shrink-0 text-mocha" />
+                              <span className="text-[10px] leading-snug text-muted-foreground">
+                                <span className="block font-medium text-foreground/80">Zapisy zamknięte</span>
+                                Zostało mniej niż 24 h do startu.
+                              </span>
+                            </div>
+                          )}
                           {!mine && status === "waitlist" && (
+
                             <div className="mt-2 border-t border-foreground/10 pt-2">
                               <span className="block text-[11px] font-medium text-terracotta">
                                 Zapisz się na listę rezerwową
