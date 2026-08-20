@@ -135,6 +135,28 @@ function GrafikPage() {
     });
   }, []);
 
+  // Po wejściu pokaż tydzień z najbliższymi dostępnymi zajęciami
+  useEffect(() => {
+    let active = true;
+    supabase
+      .from("classes")
+      .select("starts_at")
+      .eq("is_cancelled", false)
+      .lt("created_at", new Date(Date.now() - 5 * 60_000).toISOString())
+      .gte("starts_at", new Date().toISOString())
+      .order("starts_at")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!active || !data?.starts_at) return;
+        const target = startOfWeek(new Date(data.starts_at), { weekStartsOn: 1 });
+        setWeekStart((cur) => (cur.getTime() === target.getTime() ? cur : target));
+      });
+    return () => { active = false; };
+  }, []);
+
+
+
   useEffect(() => {
     if (!isAuthenticated || !user || !session) { setPackages([]); setPackagesLoading(false); return; }
     let active = true;
