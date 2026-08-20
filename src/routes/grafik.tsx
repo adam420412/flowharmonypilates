@@ -746,7 +746,17 @@ function GrafikPage() {
                               </span>
                             )}
                           </div>
+                          {locked && !mine && (
+                            <div className="mt-2 flex items-start gap-1.5 rounded-md bg-foreground/[0.06] px-2 py-1.5">
+                              <Lock className="mt-[1px] h-3 w-3 shrink-0 text-mocha" />
+                              <span className="text-[10px] leading-snug text-muted-foreground">
+                                <span className="block font-medium text-foreground/80">Zapisy zamknięte</span>
+                                Zostało mniej niż 24 h do startu.
+                              </span>
+                            </div>
+                          )}
                           {!mine && status === "waitlist" && (
+
                             <div className="mt-2 border-t border-foreground/10 pt-2">
                               <span className="block text-[11px] font-medium text-terracotta">
                                 Zapisz się na listę rezerwową
