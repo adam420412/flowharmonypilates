@@ -791,7 +791,7 @@ function GrafikPage() {
                               <Lock className="mt-[1px] h-3 w-3 shrink-0 text-mocha" />
                               <span className="text-[10px] leading-snug text-muted-foreground">
                                 <span className="block font-medium text-foreground/80">Zapisy zamknięte</span>
-                                Zostało mniej niż 24 h do startu.
+                                Zapisy trwały do 20:00 dnia poprzedzającego.
                               </span>
                             </div>
                           )}
