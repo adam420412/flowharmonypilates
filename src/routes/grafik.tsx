@@ -301,16 +301,21 @@ function GrafikPage() {
     return "full";
   }
 
-  /** Zapisy na wolne miejsca zamykają się 24 h przed startem zajęć. */
+  /**
+   * Zapisy na zajęcia, na które nikt jeszcze się nie zapisał, zamykają się o 20:00
+   * dnia poprzedzającego. Gdy jest już choć jedna osoba — można dopisać się zawsze.
+   */
   function bookingLocked(c: ClassRow) {
-    return new Date(c.starts_at).getTime() - Date.now() < BOOKING_LOCK_HOURS * 3600_000;
+    const confirmed = counts[c.id]?.confirmed ?? 0;
+    if (confirmed > 0) return false;
+    return Date.now() > bookingCutoffMs(c.starts_at);
   }
 
   function openBooking(c: ClassRow) {
     const status = statusOf(c);
     if (status === "full" || status === "cancelled") return;
     if (status === "available" && bookingLocked(c)) {
-      toast.info(`Zapisy na te zajęcia są już zamknięte — rezerwacja jest możliwa najpóźniej ${BOOKING_LOCK_HOURS} h przed startem.`);
+      toast.info("Zapisy na te zajęcia są zamknięte — na zajęcia bez zapisanych osób można zapisać się do godz. 20:00 dnia poprzedzającego.");
       return;
     }
     // Lista rezerwowa wymaga konta
