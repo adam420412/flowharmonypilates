@@ -61,8 +61,29 @@ type UserPackage = {
   expires_at: string;
 };
 
-/** Zapisy na wolne miejsca zamykają się na tyle godzin przed startem zajęć. */
-const BOOKING_LOCK_HOURS = 24;
+/** Zapisy na puste zajęcia zamykają się o tej godzinie (czasu polskiego) dnia poprzedzającego. */
+const BOOKING_CUTOFF_HOUR = 20;
+
+/** Przesunięcie strefy Europe/Warsaw względem UTC w danym momencie (ms). */
+function warsawOffsetMs(at: Date) {
+  const utc = new Date(at.toLocaleString("en-US", { timeZone: "UTC" })).getTime();
+  const local = new Date(at.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })).getTime();
+  return local - utc;
+}
+
+/** Moment (ms), do którego można zapisać się na zajęcia bez zapisanych osób. */
+function bookingCutoffMs(startsAt: string) {
+  const start = new Date(startsAt);
+  const day = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Warsaw",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(start);
+  const naive = Date.parse(`${day}T${String(BOOKING_CUTOFF_HOUR).padStart(2, "0")}:00:00Z`) - 86_400_000;
+  return naive - warsawOffsetMs(new Date(naive));
+}
+
 
 
 function GrafikPage() {
