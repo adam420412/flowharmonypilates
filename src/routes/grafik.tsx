@@ -689,7 +689,8 @@ function GrafikPage() {
                       const cnt = counts[c.id] ?? { confirmed: 0, waitlist: 0 };
                       const status = statusOf(c);
                       const mine = myBookings[c.id];
-                      const clickable = !(status === "full" || status === "cancelled") && (!mine || (mine.status === "waitlist" && status === "available"));
+                      const locked = status === "available" && bookingLocked(c);
+                      const clickable = !locked && !(status === "full" || status === "cancelled") && (!mine || (mine.status === "waitlist" && status === "available"));
                       return (
                         <div
                           key={c.id}
@@ -702,10 +703,15 @@ function GrafikPage() {
                               openBooking(c);
                             }
                           }}
-                          className={`group block w-full rounded-lg border border-foreground/10 bg-cream/40 p-3 text-left transition-all ${
-                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : mine ? "" : "opacity-60"
+                          className={`group block w-full rounded-lg border p-3 text-left transition-all ${
+                            locked && !mine
+                              ? "border-dashed border-foreground/20 bg-foreground/[0.04]"
+                              : "border-foreground/10 bg-cream/40"
+                          } ${
+                            clickable ? "cursor-pointer hover:border-terracotta/40 hover:bg-cream" : mine ? "" : locked ? "" : "opacity-60"
                           }`}
                         >
+
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium text-sm text-foreground">
                               {format(new Date(c.starts_at), "HH:mm")}
