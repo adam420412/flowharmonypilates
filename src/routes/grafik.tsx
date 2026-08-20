@@ -221,6 +221,7 @@ function GrafikPage() {
 
   const MAX_SEATS = 20;
 
+
   function typeCapBySlug(slug?: string): number {
     switch (slug) {
       case "intro":
