@@ -617,11 +617,14 @@ function GrafikPage() {
           <p className="flex items-start gap-2">
             <Lock className="mt-1 h-4 w-4 shrink-0 text-terracotta" />
             <span>
-              <strong>Termin zapisów:</strong> na wolne miejsca zapiszesz się najpóźniej na{" "}
-              <strong>24 godziny</strong> przed rozpoczęciem zajęć. Gdy do startu zostaje mniej czasu,
-              termin oznaczamy jako <em>„Zapisy zamknięte”</em> — dzięki temu instruktorka może w spokoju
-              przygotować salę dla zapisanych osób. <strong>Na listę rezerwową możesz dopisać się zawsze</strong>,
-              również w ostatniej chwili — jeśli ktoś odwoła rezerwację, powiadomimy Cię e-mailem.
+              <strong>Termin zapisów:</strong> na zajęcia, na które nie zapisał się jeszcze nikt,
+              możesz zapisać się <strong>do godz. 20:00 dnia poprzedzającego</strong> (np. na zajęcia jutro
+              — dziś do 20:00, niezależnie od ich godziny). Później termin oznaczamy jako{" "}
+              <em>„Zapisy zamknięte”</em>. Jeśli na zajęciach jest już choć jedna zapisana osoba,{" "}
+              <strong>dołączysz do nich w dowolnym momencie</strong> — nawet tuż przed startem.{" "}
+              <strong>Na listę rezerwową możesz dopisać się zawsze</strong> — jeśli ktoś odwoła rezerwację,
+              powiadomimy Cię e-mailem.
+
             </span>
           </p>
           <p>
