@@ -61,8 +61,29 @@ type UserPackage = {
   expires_at: string;
 };
 
-/** Zapisy na wolne miejsca zamykają się na tyle godzin przed startem zajęć. */
-const BOOKING_LOCK_HOURS = 24;
+/** Zapisy na puste zajęcia zamykają się o tej godzinie (czasu polskiego) dnia poprzedzającego. */
+const BOOKING_CUTOFF_HOUR = 20;
+
+/** Przesunięcie strefy Europe/Warsaw względem UTC w danym momencie (ms). */
+function warsawOffsetMs(at: Date) {
+  const utc = new Date(at.toLocaleString("en-US", { timeZone: "UTC" })).getTime();
+  const local = new Date(at.toLocaleString("en-US", { timeZone: "Europe/Warsaw" })).getTime();
+  return local - utc;
+}
+
+/** Moment (ms), do którego można zapisać się na zajęcia bez zapisanych osób. */
+function bookingCutoffMs(startsAt: string) {
+  const start = new Date(startsAt);
+  const day = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Warsaw",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(start);
+  const naive = Date.parse(`${day}T${String(BOOKING_CUTOFF_HOUR).padStart(2, "0")}:00:00Z`) - 86_400_000;
+  return naive - warsawOffsetMs(new Date(naive));
+}
+
 
 
 function GrafikPage() {
@@ -280,16 +301,21 @@ function GrafikPage() {
     return "full";
   }
 
-  /** Zapisy na wolne miejsca zamykają się 24 h przed startem zajęć. */
+  /**
+   * Zapisy na zajęcia, na które nikt jeszcze się nie zapisał, zamykają się o 20:00
+   * dnia poprzedzającego. Gdy jest już choć jedna osoba — można dopisać się zawsze.
+   */
   function bookingLocked(c: ClassRow) {
-    return new Date(c.starts_at).getTime() - Date.now() < BOOKING_LOCK_HOURS * 3600_000;
+    const confirmed = counts[c.id]?.confirmed ?? 0;
+    if (confirmed > 0) return false;
+    return Date.now() > bookingCutoffMs(c.starts_at);
   }
 
   function openBooking(c: ClassRow) {
     const status = statusOf(c);
     if (status === "full" || status === "cancelled") return;
     if (status === "available" && bookingLocked(c)) {
-      toast.info(`Zapisy na te zajęcia są już zamknięte — rezerwacja jest możliwa najpóźniej ${BOOKING_LOCK_HOURS} h przed startem.`);
+      toast.info("Zapisy na te zajęcia są zamknięte — na zajęcia bez zapisanych osób można zapisać się do godz. 20:00 dnia poprzedzającego.");
       return;
     }
     // Lista rezerwowa wymaga konta
@@ -591,11 +617,14 @@ function GrafikPage() {
           <p className="flex items-start gap-2">
             <Lock className="mt-1 h-4 w-4 shrink-0 text-terracotta" />
             <span>
-              <strong>Termin zapisów:</strong> na wolne miejsca zapiszesz się najpóźniej na{" "}
-              <strong>24 godziny</strong> przed rozpoczęciem zajęć. Gdy do startu zostaje mniej czasu,
-              termin oznaczamy jako <em>„Zapisy zamknięte”</em> — dzięki temu instruktorka może w spokoju
-              przygotować salę dla zapisanych osób. <strong>Na listę rezerwową możesz dopisać się zawsze</strong>,
-              również w ostatniej chwili — jeśli ktoś odwoła rezerwację, powiadomimy Cię e-mailem.
+              <strong>Termin zapisów:</strong> na zajęcia, na które nie zapisał się jeszcze nikt,
+              możesz zapisać się <strong>do godz. 20:00 dnia poprzedzającego</strong> (np. na zajęcia jutro
+              — dziś do 20:00, niezależnie od ich godziny). Później termin oznaczamy jako{" "}
+              <em>„Zapisy zamknięte”</em>. Jeśli na zajęciach jest już choć jedna zapisana osoba,{" "}
+              <strong>dołączysz do nich w dowolnym momencie</strong> — nawet tuż przed startem.{" "}
+              <strong>Na listę rezerwową możesz dopisać się zawsze</strong> — jeśli ktoś odwoła rezerwację,
+              powiadomimy Cię e-mailem.
+
             </span>
           </p>
           <p>
@@ -762,7 +791,7 @@ function GrafikPage() {
                               <Lock className="mt-[1px] h-3 w-3 shrink-0 text-mocha" />
                               <span className="text-[10px] leading-snug text-muted-foreground">
                                 <span className="block font-medium text-foreground/80">Zapisy zamknięte</span>
-                                Zostało mniej niż 24 h do startu.
+                                Zapisy trwały do 20:00 dnia poprzedzającego.
                               </span>
                             </div>
                           )}
