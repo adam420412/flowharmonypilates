@@ -253,9 +253,18 @@ function GrafikPage() {
     return "full";
   }
 
+  /** Zapisy na wolne miejsca zamykają się 24 h przed startem zajęć. */
+  function bookingLocked(c: ClassRow) {
+    return new Date(c.starts_at).getTime() - Date.now() < BOOKING_LOCK_HOURS * 3600_000;
+  }
+
   function openBooking(c: ClassRow) {
     const status = statusOf(c);
     if (status === "full" || status === "cancelled") return;
+    if (status === "available" && bookingLocked(c)) {
+      toast.info(`Zapisy na te zajęcia są już zamknięte — rezerwacja jest możliwa najpóźniej ${BOOKING_LOCK_HOURS} h przed startem.`);
+      return;
+    }
     // Lista rezerwowa wymaga konta
     if (status === "waitlist" && (!isAuthenticated || !user)) {
       toast.info("Lista rezerwowa wymaga konta. Zaloguj się lub załóż darmowe konto.");
@@ -265,6 +274,7 @@ function GrafikPage() {
     // Osoba z listy rezerwowej może dokupić miejsce, gdy się zwolni — rezerwacja zastąpi wpis na liście
     const existing = isAuthenticated && user ? myBookings[c.id] : null;
     if (existing && !(existing.status === "waitlist" && status === "available")) return;
+
     const ct = ctMap[c.class_type_id];
     const ins = inMap[c.instructor_id];
     const pkg = status === "available" ? packageFor(c) : null;
