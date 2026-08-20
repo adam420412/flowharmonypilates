@@ -61,6 +61,10 @@ type UserPackage = {
   expires_at: string;
 };
 
+/** Zapisy na wolne miejsca zamykają się na tyle godzin przed startem zajęć. */
+const BOOKING_LOCK_HOURS = 24;
+
+
 function GrafikPage() {
   const { user, session, isAuthenticated } = useAuth();
   const navigate = useNavigate();
