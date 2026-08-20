@@ -790,7 +790,7 @@ function GrafikPage() {
                             <div className="mt-2 w-full min-w-0 rounded-md bg-foreground/[0.06] px-2 py-1.5">
                               <div className="flex min-w-0 items-center gap-1.5">
                                 <Lock className="h-3 w-3 shrink-0 text-mocha" />
-                                <span className="truncate text-[10px] font-medium leading-snug text-foreground/80">
+                                <span className="whitespace-nowrap text-[11px] font-semibold leading-snug text-foreground/80">
                                   Zapisy zamknięte
                                 </span>
                               </div>

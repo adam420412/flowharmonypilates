@@ -1,0 +1,1 @@
+UPDATE public.classes SET class_type_id = (SELECT id FROM public.class_types WHERE slug='reformer-basic') WHERE id='908534ab-93eb-4726-a152-733fbf50a953';
